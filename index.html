@@ -513,8 +513,9 @@ function updateHeader() {
 //  NAVEGACAO
 // ══════════════════════════════════════════
 let currentScreen = 'sMenu';
+let backLocked = false; // evita clique duplo rapido
 
-// Mapa de cada tela: onde vai ao clicar voltar
+// Mapa de cada tela: para onde vai ao pressionar voltar
 const BACK_MAP = {
     'sStudySelect': () => goToMenu(),
     'sStudy':       () => { renderStudyGrid(); _show('sStudySelect','Estudar','Escolha uma tabuada'); },
@@ -532,7 +533,7 @@ const BACK_MAP = {
     'sStats':       () => goToMenu(),
 };
 
-// Exibe tela sem animacao extra (uso interno)
+// Exibe tela e empurra estado no history (para o botao nativo funcionar)
 function _show(id, title, sub) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
@@ -541,16 +542,35 @@ function _show(id, title, sub) {
     document.getElementById('hTitle').textContent = title || 'Tabuada Divertida';
     document.getElementById('hSub').textContent   = sub   || 'Aprenda brincando!';
     window.scrollTo(0, 0);
+
+    // Empurra estado no history para o botao voltar nativo do Android capturar
+    if (id === 'sMenu') {
+        history.replaceState({ screen: 'sMenu' }, '');
+    } else {
+        history.pushState({ screen: id }, '');
+    }
 }
 
-// Navega para nova tela
 function showScreen(id, title, sub) { _show(id, title, sub); }
 function navigateTo(id, title, sub) { _show(id, title, sub); }
 
-// Botao voltar — chamado uma unica vez por clique
+// Logica central do botao voltar (botao do header OU nativo do celular)
 function handleBack() {
+    if (backLocked) return;
+    backLocked = true;
+    setTimeout(() => { backLocked = false; }, 400);
+
     stopChallenge();
     cancelQuizTimeout();
+
+    if (currentScreen === 'sMenu') {
+        // No menu principal: fechar app no Android
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+            window.Capacitor.Plugins.App.exitApp();
+        }
+        return;
+    }
+
     const fn = BACK_MAP[currentScreen];
     if (fn) fn(); else goToMenu();
 }
@@ -1066,15 +1086,22 @@ function launchConfetti() {
 // ══════════════════════════════════════════
 //  SISTEMA DE ATUALIZACAO
 // ══════════════════════════════════════════
-const APP_VERSION = '1.3.0';
+const APP_VERSION = '1.4.0';
 const VERSION_URL = 'https://madrugagg.github.io/tabuada-divertida/version.json';
 let latestApkUrl = null;
+
+let remoteVersion = null;
 
 function checkForUpdate() {
     fetch(VERSION_URL + '?t=' + Date.now())
         .then(r => r.json())
         .then(data => {
-            if (data.version && data.version !== APP_VERSION) {
+            if (!data.version) return;
+            remoteVersion = data.version;
+            // So mostra se: versao remota diferente do app atual
+            // E o usuario nao dispensou ESTA versao remota antes
+            const dismissed = localStorage.getItem('update_dismissed_ver');
+            if (data.version !== APP_VERSION && dismissed !== data.version) {
                 latestApkUrl = 'https://madrugagg.github.io/tabuada-divertida/' + (data.apk || 'tabuada-divertida.apk');
                 document.getElementById('updateBanner').classList.add('show');
             }
@@ -1083,17 +1110,21 @@ function checkForUpdate() {
 }
 
 function doUpdate() {
+    // Ao clicar em atualizar, limpa o "dispensado" para proxima versao aparecer
+    localStorage.removeItem('update_dismissed_ver');
     if (latestApkUrl) {
-        // APK: redirecionar para download
-        window.location.href = latestApkUrl;
+        window.open(latestApkUrl, '_blank') || (window.location.href = latestApkUrl);
     } else {
-        // PWA: forcar reload para pegar versao nova do service worker
         window.location.reload(true);
     }
 }
 
 function dismissUpdate() {
     document.getElementById('updateBanner').classList.remove('show');
+    // Lembra qual versao foi dispensada — nao mostra mais ate sair outra versao
+    if (remoteVersion) {
+        localStorage.setItem('update_dismissed_ver', remoteVersion);
+    }
 }
 
 // ══════════════════════════════════════════
@@ -1127,6 +1158,31 @@ if ('serviceWorker' in navigator) {
 
 // Verificar versao remota ao abrir
 setTimeout(checkForUpdate, 2000);
+
+// ── BOTAO VOLTAR NATIVO DO ANDROID (popstate) ──
+// Quando o usuario pressiona o botao fisico/nativo de voltar,
+// o browser dispara 'popstate'. Capturamos e usamos nossa logica.
+window.addEventListener('popstate', function(e) {
+    if (currentScreen !== 'sMenu') {
+        handleBack();
+        // Re-empurra estado para o proximo clique ainda funcionar
+        history.pushState({ screen: currentScreen }, '');
+    }
+    // Se ja esta no menu, nao faz nada — o app fecha naturalmente
+});
+
+// ── CAPACITOR: listener nativo para botao voltar do Android ──
+document.addEventListener('deviceready', function() {
+    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+        window.Capacitor.Plugins.App.addListener('backButton', function() {
+            if (currentScreen !== 'sMenu') {
+                handleBack();
+            } else {
+                window.Capacitor.Plugins.App.exitApp();
+            }
+        });
+    }
+}, false);
 </script>
 </body>
 </html>
