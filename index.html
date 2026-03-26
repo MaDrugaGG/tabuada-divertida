@@ -385,7 +385,7 @@
                 </div>
             </div>
 
-            <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;</div>
+            <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><span style="font-size:.85em;color:#aaa;font-weight:normal;" id="versionBadge1"></span></div>
         </div>
 
         <!-- ══ ESTUDO: ESCOLHER TABUADA ══ -->
@@ -438,7 +438,7 @@
                 <button class="btn btn-primary" id="rRetry"  onclick="retryQuiz()">&#128260; Tentar Novamente</button>
                 <button class="btn btn-success" id="rContinue" onclick="resultContinue()">&#10003; Continuar</button>
             </div>
-            <div class="creator-badge">Criado por <span>David Duarte</span></div>
+            <div class="creator-badge">Criado por <span>David Duarte</span><br><span style="font-size:.85em;color:#aaa;font-weight:normal;" class="versionBadgeExtra"></span></div>
         </div>
 
         <!-- ══ DESAFIO ══ -->
@@ -466,7 +466,7 @@
             <div class="section-title">Tabuadas Dominadas</div>
             <div class="tabuada-grid" id="statsGrid"></div>
             <button class="btn btn-danger" style="margin-top:18px" onclick="resetProgress()">&#128465; Resetar Progresso</button>
-            <div class="creator-badge">Criado por <span>David Duarte</span></div>
+            <div class="creator-badge">Criado por <span>David Duarte</span><br><span style="font-size:.85em;color:#aaa;font-weight:normal;" class="versionBadgeExtra"></span></div>
         </div>
     </div>
 </div>
@@ -1155,6 +1155,11 @@ if ('serviceWorker' in navigator) {
         }
     });
 }
+
+// Mostrar versao atual nos badges de credito
+const versionLabel = 'v' + APP_VERSION;
+document.getElementById('versionBadge1').textContent = versionLabel;
+document.querySelectorAll('.versionBadgeExtra').forEach(el => el.textContent = versionLabel);
 
 // Verificar versao remota ao abrir
 setTimeout(checkForUpdate, 2000);
