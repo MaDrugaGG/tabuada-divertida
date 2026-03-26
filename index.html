@@ -69,13 +69,18 @@
             background: rgba(255,255,255,.2); padding: 3px 12px; border-radius: 20px;
         }
         .back-btn {
-            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-            background: rgba(255,255,255,.2); border: none; color: white;
-            font-size: 1.4em; width: 38px; height: 38px;
+            position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,.25); border: none; color: white;
+            font-size: 1.6em; width: 48px; height: 48px;
             border-radius: 50%; cursor: pointer; display: none;
-            transition: background .2s;
+            transition: background .15s, transform .1s;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(255,255,255,.3);
         }
-        .back-btn:active { background: rgba(255,255,255,.35); }
+        .back-btn:active {
+            background: rgba(255,255,255,.45);
+            transform: translateY(-50%) scale(.92);
+        }
         .back-btn.visible { display: flex; align-items: center; justify-content: center; }
 
         /* ── LAYOUT ── */
@@ -513,7 +518,7 @@ function updateHeader() {
 //  NAVEGACAO
 // ══════════════════════════════════════════
 let currentScreen = 'sMenu';
-let backLocked = false; // evita clique duplo rapido
+let backLocked = false;
 
 // Mapa de cada tela: para onde vai ao pressionar voltar
 const BACK_MAP = {
@@ -554,22 +559,17 @@ function _show(id, title, sub) {
 function showScreen(id, title, sub) { _show(id, title, sub); }
 function navigateTo(id, title, sub) { _show(id, title, sub); }
 
-// Logica central do botao voltar (botao do header OU nativo do celular)
+// Logica central do botao voltar
 function handleBack() {
     if (backLocked) return;
     backLocked = true;
-    setTimeout(() => { backLocked = false; }, 400);
+    setTimeout(() => { backLocked = false; }, 250);
 
     stopChallenge();
     cancelQuizTimeout();
 
-    if (currentScreen === 'sMenu') {
-        // No menu principal: fechar app no Android
-        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
-            window.Capacitor.Plugins.App.exitApp();
-        }
-        return;
-    }
+    // Se ja esta no menu, nao faz nada (nao fecha o app)
+    if (currentScreen === 'sMenu') return;
 
     const fn = BACK_MAP[currentScreen];
     if (fn) fn(); else goToMenu();
@@ -1086,7 +1086,7 @@ function launchConfetti() {
 // ══════════════════════════════════════════
 //  SISTEMA DE ATUALIZACAO
 // ══════════════════════════════════════════
-const APP_VERSION = '1.4.0';
+const APP_VERSION = '1.5.0';
 const VERSION_URL = 'https://madrugagg.github.io/tabuada-divertida/version.json';
 let latestApkUrl = null;
 
@@ -1164,30 +1164,41 @@ document.querySelectorAll('.versionBadgeExtra').forEach(el => el.textContent = v
 // Verificar versao remota ao abrir
 setTimeout(checkForUpdate, 2000);
 
-// ── BOTAO VOLTAR NATIVO DO ANDROID (popstate) ──
-// Quando o usuario pressiona o botao fisico/nativo de voltar,
-// o browser dispara 'popstate'. Capturamos e usamos nossa logica.
-window.addEventListener('popstate', function(e) {
-    if (currentScreen !== 'sMenu') {
-        handleBack();
-        // Re-empurra estado para o proximo clique ainda funcionar
-        history.pushState({ screen: currentScreen }, '');
-    }
-    // Se ja esta no menu, nao faz nada — o app fecha naturalmente
-});
-
-// ── CAPACITOR: listener nativo para botao voltar do Android ──
-document.addEventListener('deviceready', function() {
-    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
-        window.Capacitor.Plugins.App.addListener('backButton', function() {
-            if (currentScreen !== 'sMenu') {
+// ── BOTAO VOLTAR NATIVO DO ANDROID ──
+// O Capacitor intercepta o evento antes do browser.
+// Registramos o listener diretamente — sem deviceready (isso e Cordova, nao Capacitor).
+(function setupNativeBack() {
+    // Metodo 1: Capacitor App plugin (APK)
+    // Disponivel imediatamente apos o carregamento da pagina no Capacitor
+    function tryCapacitor() {
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+            window.Capacitor.Plugins.App.addListener('backButton', function(info) {
+                // Sempre chama handleBack — nunca fecha o app automaticamente
                 handleBack();
-            } else {
-                window.Capacitor.Plugins.App.exitApp();
-            }
-        });
+            });
+            return true;
+        }
+        return false;
     }
-}, false);
+
+    // Tenta imediatamente; se nao estiver pronto, tenta apos 500ms
+    if (!tryCapacitor()) {
+        setTimeout(tryCapacitor, 500);
+    }
+
+    // Metodo 2: popstate (PWA/navegador + fallback WebView)
+    // Mantemos sempre pelo menos 2 entradas no history
+    // para o back button nunca "esvaziar" e fechar o app
+    history.replaceState({ screen: 'sMenu' }, '');
+    history.pushState({ screen: 'sMenu' }, ''); // entrada extra de seguranca
+
+    window.addEventListener('popstate', function(e) {
+        // Sempre empurra de volta para manter historico vivo
+        history.pushState({ screen: currentScreen }, '');
+        // Executa navegacao interna
+        handleBack();
+    });
+})();
 </script>
 </body>
 </html>

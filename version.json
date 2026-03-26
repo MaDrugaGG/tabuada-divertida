@@ -1,5 +1,5 @@
 {
-  "version": "1.4.0",
-  "notes": "Nova imagem principal, notificacao de update centralizada",
+  "version": "1.5.0",
+  "notes": "Botao voltar corrigido, botao header maior e mais sensivel",
   "apk": "tabuada-divertida.apk"
 }
