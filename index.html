@@ -69,17 +69,27 @@
             background: rgba(255,255,255,.2); padding: 3px 12px; border-radius: 20px;
         }
         .back-btn {
-            position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
-            background: rgba(255,255,255,.25); border: none; color: white;
-            font-size: 1.6em; width: 48px; height: 48px;
+            position: absolute; left: 6px; top: 55%; transform: translateY(-50%);
+            background: rgba(255,255,255,.30); border: none; color: white;
+            font-size: 1.7em; width: 56px; height: 56px;
             border-radius: 50%; cursor: pointer; display: none;
-            transition: background .15s, transform .1s;
+            transition: background .1s, transform .08s;
             touch-action: manipulation;
             -webkit-tap-highlight-color: rgba(255,255,255,.3);
+            box-shadow: 0 4px 14px rgba(0,0,0,.35), 0 2px 5px rgba(0,0,0,.25),
+                        inset 0 1px 0 rgba(255,255,255,.4);
+            /* Aumenta area de toque sem mudar o visual */
+            padding: 0;
+        }
+        /* Pseudo-elemento para area de toque maior (44px minimo Apple HIG) */
+        .back-btn::before {
+            content: ''; position: absolute;
+            inset: -10px; border-radius: 50%;
         }
         .back-btn:active {
-            background: rgba(255,255,255,.45);
-            transform: translateY(-50%) scale(.92);
+            background: rgba(255,255,255,.50);
+            transform: translateY(-50%) scale(.90);
+            box-shadow: 0 2px 6px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.3);
         }
         .back-btn.visible { display: flex; align-items: center; justify-content: center; }
 
@@ -563,7 +573,7 @@ function navigateTo(id, title, sub) { _show(id, title, sub); }
 function handleBack() {
     if (backLocked) return;
     backLocked = true;
-    setTimeout(() => { backLocked = false; }, 250);
+    setTimeout(() => { backLocked = false; }, 120);
 
     stopChallenge();
     cancelQuizTimeout();
@@ -1086,7 +1096,7 @@ function launchConfetti() {
 // ══════════════════════════════════════════
 //  SISTEMA DE ATUALIZACAO
 // ══════════════════════════════════════════
-const APP_VERSION = '1.5.0';
+const APP_VERSION = '1.6.0';
 const VERSION_URL = 'https://madrugagg.github.io/tabuada-divertida/version.json';
 let latestApkUrl = null;
 
@@ -1173,7 +1183,7 @@ setTimeout(checkForUpdate, 2000);
     function tryCapacitor() {
         if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
             window.Capacitor.Plugins.App.addListener('backButton', function(info) {
-                // Sempre chama handleBack — nunca fecha o app automaticamente
+                // Nunca deixa o app fechar — sempre navega internamente
                 handleBack();
             });
             return true;
@@ -1181,22 +1191,27 @@ setTimeout(checkForUpdate, 2000);
         return false;
     }
 
-    // Tenta imediatamente; se nao estiver pronto, tenta apos 500ms
+    // Tenta imediatamente; se nao estiver pronto, tenta apos 300ms e 800ms
     if (!tryCapacitor()) {
-        setTimeout(tryCapacitor, 500);
+        setTimeout(function() {
+            if (!tryCapacitor()) { setTimeout(tryCapacitor, 800); }
+        }, 300);
     }
 
-    // Metodo 2: popstate (PWA/navegador + fallback WebView)
-    // Mantemos sempre pelo menos 2 entradas no history
-    // para o back button nunca "esvaziar" e fechar o app
+    // Metodo 2: popstate (PWA/navegador)
+    // Mantemos sempre entradas no history para nunca "esvaziar" e fechar o app
     history.replaceState({ screen: 'sMenu' }, '');
-    history.pushState({ screen: 'sMenu' }, ''); // entrada extra de seguranca
+    history.pushState({ screen: 'sMenu' }, '');
+    history.pushState({ screen: 'sMenu' }, ''); // terceira entrada de seguranca
 
+    var _popLock = false;
     window.addEventListener('popstate', function(e) {
-        // Sempre empurra de volta para manter historico vivo
+        if (_popLock) return;
+        _popLock = true;
+        // Reempurra imediatamente para manter historico
         history.pushState({ screen: currentScreen }, '');
-        // Executa navegacao interna
         handleBack();
+        setTimeout(function() { _popLock = false; }, 150);
     });
 })();
 </script>
