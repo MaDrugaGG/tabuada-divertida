@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#6C63FF">
+    <title>Tabuada Divertida</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+        :root {
+            --primary: #6C63FF;
+            --success: #4CAF50;
+            --danger: #FF5252;
+            --warning: #FFB74D;
+            --bg: #F0F2FF;
+            --card: #FFFFFF;
+            --text: #333333;
+            --muted: #777777;
+        }
+
+        html, body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            background: linear-gradient(135deg, #6C63FF, #FF6584);
+            color: white;
+            padding: 16px 20px 14px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(108,99,255,.3);
+        }
+        .header h1 { font-size: 1.6em; }
+        .header .subtitle { font-size: .85em; opacity: .9; margin-top: 2px; }
+        .score-bar {
+            display: flex; justify-content: center; gap: 14px;
+            margin-top: 8px; font-size: .9em;
+        }
+        .score-bar span {
+            background: rgba(255,255,255,.2);
+            padding: 3px 12px; border-radius: 20px;
+        }
+        .back-btn {
+            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,.2); border: none; color: white;
+            font-size: 1.4em; width: 38px; height: 38px;
+            border-radius: 50%; cursor: pointer; display: none;
+        }
+        .back-btn.visible { display: block; }
+
+        /* ── SCREENS ── */
+        .screen { display: none; padding: 16px; max-width: 480px; margin: 0 auto; }
+        .screen.active { display: block; animation: fadeIn .25s ease; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── MENU ── */
+        .menu-card {
+            background: var(--card); border-radius: 18px; padding: 18px 20px;
+            margin-bottom: 12px; box-shadow: 0 3px 12px rgba(0,0,0,.07);
+            cursor: pointer; display: flex; align-items: center; gap: 14px;
+            transition: transform .15s;
+        }
+        .menu-card:active { transform: scale(.97); }
+        .menu-card .icon {
+            font-size: 2.2em; width: 54px; height: 54px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 14px; flex-shrink: 0;
+        }
+        .menu-card .info h2 { font-size: 1.1em; margin-bottom: 3px; }
+        .menu-card .info p  { font-size: .82em; color: var(--muted); }
+        .icon-study     { background: linear-gradient(135deg,#E8F5E9,#C8E6C9); }
+        .icon-lesson    { background: linear-gradient(135deg,#E3F2FD,#BBDEFB); }
+        .icon-challenge { background: linear-gradient(135deg,#FFF3E0,#FFE0B2); }
+        .icon-stats     { background: linear-gradient(135deg,#F3E5F5,#E1BEE7); }
+
+        .creator-badge {
+            text-align: center; margin-top: 10px; padding: 10px;
+            color: var(--muted); font-size: .78em;
+        }
+        .creator-badge span { font-weight: bold; color: var(--primary); }
+
+        /* ── SECTION TITLE ── */
+        .section-title {
+            font-size: 1.1em; font-weight: bold;
+            margin: 16px 0 12px; color: var(--text);
+        }
+
+        /* ── TABUADA GRID ── */
+        .tabuada-grid {
+            display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin: 12px 0;
+        }
+        .tabuada-btn {
+            background: var(--card); border: 3px solid #E0E0E0;
+            border-radius: 14px; padding: 14px 4px;
+            font-size: 1.2em; font-weight: bold; color: var(--primary);
+            cursor: pointer; transition: all .18s; position: relative;
+        }
+        .tabuada-btn:active { background: var(--primary); color: white; border-color: var(--primary); }
+        .tabuada-btn.completed { border-color: var(--success); }
+        .tabuada-btn.completed::after {
+            content: '⭐'; position: absolute; top: -5px; right: -5px; font-size: .55em;
+        }
+
+        /* ── STUDY TABLE ── */
+        .study-table {
+            background: var(--card); border-radius: 18px; padding: 16px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.07);
+        }
+        .study-row {
+            display: flex; justify-content: center; align-items: center;
+            gap: 8px; padding: 11px; font-size: 1.25em;
+            border-bottom: 1px solid #F0F0F0;
+        }
+        .study-row:last-child { border-bottom: none; }
+        .study-row .result { color: var(--primary); font-weight: bold; min-width: 36px; text-align: right; }
+
+        /* ── LESSONS ── */
+        .level-info { display: flex; justify-content: space-between; font-size: .82em; color: var(--muted); }
+        .level-bar { background: #E0E0E0; height: 9px; border-radius: 5px; overflow: hidden; margin: 7px 0 14px; }
+        .level-bar-fill { height: 100%; background: linear-gradient(90deg,var(--primary),#FF6584); border-radius: 5px; transition: width .5s ease; }
+
+        .lesson-card {
+            background: var(--card); border-radius: 18px; padding: 16px 18px;
+            margin-bottom: 10px; box-shadow: 0 3px 10px rgba(0,0,0,.06);
+            display: flex; align-items: center; gap: 14px;
+            cursor: pointer; transition: transform .15s;
+        }
+        .lesson-card:active { transform: scale(.97); }
+        .lesson-card.locked { opacity: .45; cursor: not-allowed; }
+        .lesson-number {
+            width: 46px; height: 46px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2em; font-weight: bold; color: white; flex-shrink: 0;
+        }
+        .lesson-info h3 { font-size: .95em; margin-bottom: 2px; }
+        .lesson-info p  { font-size: .78em; color: var(--muted); }
+        .lesson-stars   { margin-left: auto; font-size: 1.1em; white-space: nowrap; }
+
+        /* ── QUIZ ── */
+        .quiz-area { text-align: center; padding: 10px 0; }
+        .quiz-progress { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .quiz-dot { width: 11px; height: 11px; border-radius: 50%; background: #E0E0E0; transition: all .25s; }
+        .quiz-dot.correct { background: var(--success); }
+        .quiz-dot.wrong   { background: var(--danger); }
+        .quiz-dot.current { background: var(--primary); transform: scale(1.35); }
+
+        .quiz-question { font-size: 2.4em; font-weight: bold; margin: 22px 0; }
+        .quiz-question .hl { color: var(--primary); }
+
+        .quiz-options {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+            max-width: 300px; margin: 0 auto;
+        }
+        .quiz-option {
+            background: var(--card); border: 3px solid #E0E0E0;
+            border-radius: 14px; padding: 16px; font-size: 1.4em; font-weight: bold;
+            cursor: pointer; transition: all .18s;
+        }
+        .quiz-option:active { transform: scale(.94); }
+        .quiz-option.correct { background: #E8F5E9; border-color: var(--success); color: var(--success); }
+        .quiz-option.wrong   { background: #FFEBEE; border-color: var(--danger);  color: var(--danger);  }
+        .quiz-option.disabled { pointer-events: none; }
+
+        /* ── NUMPAD ── */
+        .numpad-wrap { margin-top: 14px; }
+        .quiz-input {
+            font-size: 1.9em; text-align: center; width: 140px; padding: 10px;
+            border: 3px solid #E0E0E0; border-radius: 14px; outline: none;
+            color: var(--text); background: var(--card); transition: border-color .25s;
+            display: block; margin: 0 auto 12px;
+        }
+        .quiz-input.correct { border-color: var(--success); background: #E8F5E9; }
+        .quiz-input.wrong   { border-color: var(--danger);  background: #FFEBEE; }
+
+        .numpad {
+            display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+            max-width: 260px; margin: 0 auto;
+        }
+        .numpad-btn {
+            background: var(--card); border: 2px solid #E0E0E0; border-radius: 11px;
+            padding: 13px; font-size: 1.3em; font-weight: bold; cursor: pointer;
+            transition: all .13s; color: var(--text);
+        }
+        .numpad-btn:active { background: var(--primary); color: white; border-color: var(--primary); transform: scale(.93); }
+        .numpad-btn.confirm { background: var(--success); color: white; border-color: var(--success); }
+        .numpad-btn.delete  { background: var(--danger);  color: white; border-color: var(--danger);  }
+
+        /* ── DESAFIO ── */
+        .challenge-info {
+            font-size: 1.1em; color: var(--muted); margin-bottom: 8px;
+            display: flex; justify-content: center; gap: 20px;
+        }
+        .challenge-info .val { font-weight: bold; color: var(--primary); }
+
+        /* ── RESULTADO ── */
+        .result-wrap { text-align: center; padding: 20px 0; }
+        .result-stars  { font-size: 2.8em; margin: 14px 0; }
+        .result-score  { font-size: 1.9em; font-weight: bold; color: var(--primary); margin: 8px 0; }
+        .result-detail { font-size: 1em; color: var(--muted); margin: 4px 0; }
+        .result-msg {
+            font-size: 1.2em; margin: 16px 0; padding: 14px;
+            border-radius: 14px; font-weight: bold;
+            background: #E8F5E9; color: var(--success);
+        }
+        .result-msg.warn { background: #FFF3E0; color: #E65100; }
+
+        .result-errors { margin: 12px 0; text-align: left; }
+
+        /* ── ESTATISTICAS ── */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-card {
+            background: var(--card); border-radius: 14px; padding: 16px;
+            box-shadow: 0 3px 10px rgba(0,0,0,.06); text-align: center;
+        }
+        .stat-card h3 { color: var(--muted); font-size: .82em; margin-bottom: 6px; font-weight: 500; }
+        .stat-card .val { font-size: 1.9em; font-weight: bold; color: var(--primary); }
+
+        /* ── BOTOES ── */
+        .btn {
+            display: block; width: 100%; padding: 14px; border: none;
+            border-radius: 14px; font-size: 1.05em; font-weight: bold;
+            cursor: pointer; margin: 8px 0; transition: transform .15s, opacity .15s;
+        }
+        .btn:active { transform: scale(.96); opacity: .9; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger  { background: var(--danger);  color: white; }
+
+        /* ── FEEDBACK ── */
+        .feedback-overlay {
+            position: fixed; inset: 0; display: flex;
+            align-items: center; justify-content: center;
+            z-index: 200; pointer-events: none;
+            opacity: 0; transition: opacity .2s;
+        }
+        .feedback-overlay.show { opacity: 1; }
+        .feedback-emoji { font-size: 5em; animation: popIn .45s ease; }
+        @keyframes popIn {
+            0%  { transform: scale(0); }
+            55% { transform: scale(1.3); }
+            100%{ transform: scale(1); }
+        }
+
+        /* ── CONFETTI ── */
+        .confetti-container {
+            position: fixed; inset: 0; pointer-events: none;
+            z-index: 190; overflow: hidden;
+        }
+        .confetti-piece {
+            position: absolute; top: -12px;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to { top: 110%; transform: rotate(720deg); }
+        }
+
+        /* ── SCROLLABLE SCREENS ── */
+        .screen { padding-bottom: 30px; }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <button class="back-btn" id="backBtn" onclick="goBack()">&#8592;</button>
+    <h1 id="hTitle">Tabuada Divertida</h1>
+    <p class="subtitle" id="hSub">Aprenda brincando!</p>
+    <div class="score-bar">
+        <span id="hStars">0 &#11088;</span>
+        <span id="hPoints">0 pts</span>
+    </div>
+</div>
+
+<!-- OVERLAYS -->
+<div class="feedback-overlay" id="feedbackOverlay">
+    <div class="feedback-emoji" id="feedbackEmoji"></div>
+</div>
+<div class="confetti-container" id="confettiBox"></div>
+
+<!-- ══ MENU ══ -->
+<div class="screen active" id="sMenu">
+    <div class="section-title">O que vamos fazer?</div>
+
+    <div class="menu-card" onclick="openStudy()">
+        <div class="icon icon-study">&#128218;</div>
+        <div class="info">
+            <h2>Estudar</h2>
+            <p>Veja a tabuada completa de cada numero</p>
+        </div>
+    </div>
+    <div class="menu-card" onclick="openLessons()">
+        <div class="icon icon-lesson">&#127891;</div>
+        <div class="info">
+            <h2>Licoes</h2>
+            <p>Complete licoes e ganhe estrelas!</p>
+        </div>
+    </div>
+    <div class="menu-card" onclick="openChallenge()">
+        <div class="icon icon-challenge">&#9889;</div>
+        <div class="info">
+            <h2>Desafio Relampago</h2>
+            <p>Responda o maximo que puder em 60 segundos!</p>
+        </div>
+    </div>
+    <div class="menu-card" onclick="openStats()">
+        <div class="icon icon-stats">&#128200;</div>
+        <div class="info">
+            <h2>Meu Progresso</h2>
+            <p>Veja suas estatisticas e conquistas</p>
+        </div>
+    </div>
+
+    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;</div>
+</div>
+
+<!-- ══ ESTUDO: ESCOLHER TABUADA ══ -->
+<div class="screen" id="sStudySelect">
+    <div class="section-title">Escolha a tabuada:</div>
+    <div class="tabuada-grid" id="studyGrid"></div>
+</div>
+
+<!-- ══ ESTUDO: VER TABUADA ══ -->
+<div class="screen" id="sStudy">
+    <div class="section-title" id="studyTitle">Tabuada do 1</div>
+    <div class="study-table" id="studyTable"></div>
+    <button class="btn btn-primary" style="margin-top:14px" onclick="startPractice()">
+        &#9654; Praticar esta tabuada
+    </button>
+</div>
+
+<!-- ══ LICOES ══ -->
+<div class="screen" id="sLessons">
+    <div class="section-title">Licoes</div>
+    <div class="level-info">
+        <span id="lvlText">Nivel 1</span>
+        <span id="lvlXP">0 / 100 XP</span>
+    </div>
+    <div class="level-bar"><div class="level-bar-fill" id="lvlBar" style="width:0%"></div></div>
+    <div id="lessonsList"></div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div class="screen" id="sQuiz">
+    <div class="quiz-area">
+        <div class="quiz-progress" id="qProgress"></div>
+        <div class="quiz-question" id="qQuestion"></div>
+        <div class="quiz-options" id="qOptions"></div>
+        <div id="qInputWrap" style="display:none">
+            <input type="text" class="quiz-input" id="qInput" inputmode="numeric" readonly>
+            <div class="numpad" id="qNumpad"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ══ RESULTADO ══ -->
+<div class="screen" id="sResult">
+    <div class="result-wrap">
+        <div class="result-stars"  id="rStars"></div>
+        <div class="result-score"  id="rScore"></div>
+        <div class="result-detail" id="rDetail"></div>
+        <div class="result-msg"    id="rMsg"></div>
+        <div class="result-errors" id="rErrors"></div>
+        <button class="btn btn-primary" id="rRetry"  onclick="retryQuiz()">&#128260; Tentar Novamente</button>
+        <button class="btn btn-success" id="rContinue" onclick="resultContinue()">&#10003; Continuar</button>
+    </div>
+    <div class="creator-badge">Criado por <span>David Duarte</span></div>
+</div>
+
+<!-- ══ DESAFIO ══ -->
+<div class="screen" id="sChallenge">
+    <div class="quiz-area">
+        <div class="challenge-info">
+            <span>&#9201; <span class="val" id="cTime">60</span>s</span>
+            <span>&#127942; <span class="val" id="cScore">0</span> pts</span>
+        </div>
+        <div class="quiz-question" id="cQuestion"></div>
+        <input type="text" class="quiz-input" id="cInput" inputmode="numeric" readonly>
+        <div class="numpad" id="cNumpad"></div>
+    </div>
+</div>
+
+<!-- ══ ESTATISTICAS ══ -->
+<div class="screen" id="sStats">
+    <div class="section-title">Suas Estatisticas</div>
+    <div class="stats-grid">
+        <div class="stat-card"><h3>Estrelas</h3><div class="val" id="stStars">0</div></div>
+        <div class="stat-card"><h3>Pontos</h3><div class="val" id="stPoints">0</div></div>
+        <div class="stat-card"><h3>Licoes Completas</h3><div class="val" id="stLessons">0</div></div>
+        <div class="stat-card"><h3>Recorde Desafio</h3><div class="val" id="stChallenge">0</div></div>
+    </div>
+    <div class="section-title">Tabuadas Dominadas</div>
+    <div class="tabuada-grid" id="statsGrid"></div>
+    <button class="btn btn-danger" style="margin-top:18px" onclick="resetProgress()">&#128465; Resetar Progresso</button>
+    <div class="creator-badge">Criado por <span>David Duarte</span></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  ESTADO
+// ══════════════════════════════════════════
+function defaultState() {
+    return {
+        points: 0, stars: 0, xp: 0, level: 1,
+        lessonsCompleted: {}, lessonStars: {},
+        tabuadasMastered: {}, challengeRecord: 0,
+        totalCorrect: 0, totalWrong: 0
+    };
+}
+
+let state = (function() {
+    try {
+        const s = localStorage.getItem('tabuada_v2');
+        if (s) return Object.assign(defaultState(), JSON.parse(s));
+    } catch(e) {}
+    return defaultState();
+})();
+
+function saveState() {
+    localStorage.setItem('tabuada_v2', JSON.stringify(state));
+    updateHeader();
+}
+
+function resetProgress() {
+    if (!confirm('Tem certeza que quer apagar todo o progresso?')) return;
+    state = defaultState();
+    saveState();
+    goToMenu();
+}
+
+function updateHeader() {
+    document.getElementById('hStars').textContent  = state.stars  + ' \u2B50';
+    document.getElementById('hPoints').textContent = state.points + ' pts';
+}
+
+// ══════════════════════════════════════════
+//  NAVEGACAO
+// ══════════════════════════════════════════
+let currentScreen = 'sMenu';
+
+function showScreen(id, title, sub) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    currentScreen = id;
+
+    document.getElementById('backBtn').classList.toggle('visible', id !== 'sMenu');
+    document.getElementById('hTitle').textContent = title || 'Tabuada Divertida';
+    document.getElementById('hSub').textContent   = sub   || 'Aprenda brincando!';
+
+    // Rolar para o topo
+    window.scrollTo(0, 0);
+}
+
+function goToMenu() {
+    stopChallenge();
+    cancelQuizTimeout();
+    showScreen('sMenu');
+}
+
+function goBack() {
+    stopChallenge();
+    cancelQuizTimeout();
+
+    const map = {
+        'sStudySelect': () => showScreen('sMenu'),
+        'sStudy':       () => { showScreen('sStudySelect','Estudar','Escolha uma tabuada'); renderStudyGrid(); },
+        'sLessons':     () => showScreen('sMenu'),
+        'sQuiz':        () => {
+            if (quizOrigin === 'lesson') { showScreen('sLessons','Licoes','Complete todas!'); renderLessons(); }
+            else { showScreen('sStudy', 'Tabuada do ' + currentTabuada, 'Estude e memorize!'); }
+        },
+        'sResult':      () => {
+            if (quizOrigin === 'lesson') { showScreen('sLessons','Licoes','Complete todas!'); renderLessons(); }
+            else if (quizOrigin === 'challenge') showScreen('sMenu');
+            else { showScreen('sStudy', 'Tabuada do ' + currentTabuada, 'Estude e memorize!'); }
+        },
+        'sChallenge':   () => showScreen('sMenu'),
+        'sStats':       () => showScreen('sMenu'),
+    };
+    const fn = map[currentScreen];
+    if (fn) fn(); else showScreen('sMenu');
+}
+
+// ══════════════════════════════════════════
+//  ESTUDO
+// ══════════════════════════════════════════
+let currentTabuada = 1;
+
+function openStudy() {
+    renderStudyGrid();
+    showScreen('sStudySelect','Estudar','Escolha uma tabuada');
+}
+
+function renderStudyGrid() {
+    const grid = document.getElementById('studyGrid');
+    grid.innerHTML = '';
+    for (let i = 1; i <= 10; i++) {
+        const b = document.createElement('button');
+        b.className = 'tabuada-btn' + (state.tabuadasMastered[i] ? ' completed' : '');
+        b.textContent = i;
+        b.onclick = () => showStudyTable(i);
+        grid.appendChild(b);
+    }
+}
+
+function showStudyTable(n) {
+    currentTabuada = n;
+    document.getElementById('studyTitle').textContent = 'Tabuada do ' + n;
+    const table = document.getElementById('studyTable');
+    table.innerHTML = '';
+    for (let i = 1; i <= 10; i++) {
+        const row = document.createElement('div');
+        row.className = 'study-row';
+        row.innerHTML = `${n} &times; ${i} = <span class="result">${n * i}</span>`;
+        table.appendChild(row);
+    }
+    showScreen('sStudy','Tabuada do ' + n,'Estude e memorize!');
+}
+
+function startPractice() {
+    startQuiz('practice', [currentTabuada], null);
+}
+
+// ══════════════════════════════════════════
+//  LICOES
+// ══════════════════════════════════════════
+const LESSONS = [
+    { id:1,  title:'Tabuada do 1',   desc:'Comece pelo mais facil!',        tables:[1],              color:'#4CAF50' },
+    { id:2,  title:'Tabuada do 2',   desc:'Dobrando os numeros',            tables:[2],              color:'#2196F3' },
+    { id:3,  title:'Tabuada do 3',   desc:'Tres vezes mais!',               tables:[3],              color:'#9C27B0' },
+    { id:4,  title:'Tabuada do 4',   desc:'Quatro por quatro',              tables:[4],              color:'#FF9800' },
+    { id:5,  title:'Tabuada do 5',   desc:'De cinco em cinco',              tables:[5],              color:'#E91E63' },
+    { id:6,  title:'Revisao 1-5',    desc:'Mistura das tabuadas 1 a 5',     tables:[1,2,3,4,5],      color:'#607D8B' },
+    { id:7,  title:'Tabuada do 6',   desc:'Ficando mais dificil!',          tables:[6],              color:'#00BCD4' },
+    { id:8,  title:'Tabuada do 7',   desc:'Sete, o numero da sorte',        tables:[7],              color:'#8BC34A' },
+    { id:9,  title:'Tabuada do 8',   desc:'Oito vezes mais forte',          tables:[8],              color:'#FF5722' },
+    { id:10, title:'Tabuada do 9',   desc:'Quase la!',                      tables:[9],              color:'#3F51B5' },
+    { id:11, title:'Tabuada do 10',  desc:'O mais facil dos grandes!',      tables:[10],             color:'#009688' },
+    { id:12, title:'Revisao 6-10',   desc:'Mistura das tabuadas 6 a 10',    tables:[6,7,8,9,10],     color:'#795548' },
+    { id:13, title:'Desafio Mestre', desc:'Todas as tabuadas misturadas!',  tables:[1,2,3,4,5,6,7,8,9,10], color:'#FFD700' },
+];
+
+function openLessons() {
+    renderLessons();
+    showScreen('sLessons','Licoes','Complete todas!');
+}
+
+function renderLessons() {
+    const xpProgress = state.xp % 100;
+    document.getElementById('lvlText').textContent = 'Nivel ' + state.level;
+    document.getElementById('lvlXP').textContent   = xpProgress + ' / 100 XP';
+    document.getElementById('lvlBar').style.width  = xpProgress + '%';
+
+    const list = document.getElementById('lessonsList');
+    list.innerHTML = '';
+    LESSONS.forEach((lesson, idx) => {
+        const unlocked = idx === 0 || state.lessonsCompleted[LESSONS[idx-1].id];
+        const stars    = state.lessonStars[lesson.id] || 0;
+        const card     = document.createElement('div');
+        card.className = 'lesson-card' + (unlocked ? '' : ' locked');
+        card.innerHTML = `
+            <div class="lesson-number" style="background:${lesson.color}">${lesson.id}</div>
+            <div class="lesson-info">
+                <h3>${lesson.title}</h3>
+                <p>${lesson.desc}</p>
+            </div>
+            <div class="lesson-stars">${unlocked ? starDisplay(stars) : '&#128274;'}</div>
+        `;
+        if (unlocked) card.onclick = () => startQuiz('lesson', lesson.tables, lesson.id);
+        list.appendChild(card);
+    });
+}
+
+function starDisplay(n) {
+    let s = '';
+    for (let i = 0; i < 3; i++) s += i < n ? '\u2B50' : '\u2606';
+    return s;
+}
+
+// ══════════════════════════════════════════
+//  QUIZ ENGINE
+// ══════════════════════════════════════════
+let quizQuestions  = [];
+let quizIndex      = 0;
+let quizCorrect    = 0;
+let quizErrors     = [];
+let quizAnswered   = false;
+let quizOrigin     = 'practice'; // 'practice' | 'lesson' | 'challenge'
+let quizLessonId   = null;
+let pendingTimeout = null;
+
+function cancelQuizTimeout() {
+    if (pendingTimeout) { clearTimeout(pendingTimeout); pendingTimeout = null; }
+}
+
+function startQuiz(type, tables, lessonId) {
+    cancelQuizTimeout();
+    quizOrigin   = type;
+    quizLessonId = lessonId || null;
+    quizIndex    = 0;
+    quizCorrect  = 0;
+    quizErrors   = [];
+    quizAnswered = false;
+
+    quizQuestions = [];
+    tables.forEach(t => {
+        for (let i = 1; i <= 10; i++) quizQuestions.push({ a:t, b:i, answer:t*i });
+    });
+    shuffleArr(quizQuestions);
+    quizQuestions = quizQuestions.slice(0, 10);
+
+    showScreen('sQuiz', type === 'lesson' ? 'Licao' : 'Pratica', 'Pergunta 1 de 10');
+    renderQuiz();
+}
+
+function renderQuiz() {
+    if (quizIndex >= quizQuestions.length) { showResult(); return; }
+
+    quizAnswered = false;
+    const q = quizQuestions[quizIndex];
+    document.getElementById('hSub').textContent = `Pergunta ${quizIndex+1} de ${quizQuestions.length}`;
+
+    // Dots
+    const prog = document.getElementById('qProgress');
+    prog.innerHTML = '';
+    quizQuestions.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'quiz-dot';
+        if      (i < quizIndex) d.classList.add(quizErrors.some(e => e.qi === i) ? 'wrong' : 'correct');
+        else if (i === quizIndex) d.classList.add('current');
+        prog.appendChild(d);
+    });
+
+    document.getElementById('qQuestion').innerHTML =
+        `<span class="hl">${q.a}</span> &times; <span class="hl">${q.b}</span> = ?`;
+
+    if (quizOrigin === 'lesson') {
+        document.getElementById('qOptions').style.display = 'grid';
+        document.getElementById('qInputWrap').style.display = 'none';
+        renderOptions(q);
+    } else {
+        document.getElementById('qOptions').style.display = 'none';
+        document.getElementById('qInputWrap').style.display = 'block';
+        buildNumpad('qInput', 'qNumpad', val => checkPracticeAnswer(parseInt(val), q));
+    }
+}
+
+function renderOptions(q) {
+    const wrap = document.getElementById('qOptions');
+    wrap.innerHTML = '';
+
+    // Gerar 4 opcoes unicas
+    const choices = new Set([q.answer]);
+    let attempts = 0;
+    while (choices.size < 4 && attempts < 200) {
+        attempts++;
+        const delta = Math.floor(Math.random() * 19) - 9; // -9 a +9
+        const fake  = q.answer + delta;
+        if (fake > 0 && fake !== q.answer) choices.add(fake);
+    }
+    const arr = shuffleArr([...choices]);
+
+    arr.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option';
+        btn.textContent = c;
+        btn.onclick = () => {
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            // Desabilitar todos
+            wrap.querySelectorAll('.quiz-option').forEach(b => b.classList.add('disabled'));
+
+            if (c === q.answer) {
+                btn.classList.add('correct');
+                doCorrect();
+            } else {
+                btn.classList.add('wrong');
+                wrap.querySelectorAll('.quiz-option').forEach(b => {
+                    if (Number(b.textContent) === q.answer) b.classList.add('correct');
+                });
+                doWrong(q);
+            }
+            pendingTimeout = setTimeout(() => { quizIndex++; renderQuiz(); }, 1000);
+        };
+        wrap.appendChild(btn);
+    });
+}
+
+function buildNumpad(inputId, padId, onConfirm) {
+    const input = document.getElementById(inputId);
+    input.value = '';
+    input.className = 'quiz-input';
+
+    const pad = document.getElementById(padId);
+    pad.innerHTML = '';
+
+    [1,2,3,4,5,6,7,8,9].forEach(n => {
+        const b = document.createElement('button');
+        b.className = 'numpad-btn';
+        b.textContent = n;
+        b.onclick = () => { if (input.value.length < 4) input.value += n; };
+        pad.appendChild(b);
+    });
+
+    const del = document.createElement('button');
+    del.className = 'numpad-btn delete';
+    del.textContent = '\u2190';
+    del.onclick = () => { input.value = input.value.slice(0, -1); };
+    pad.appendChild(del);
+
+    const zero = document.createElement('button');
+    zero.className = 'numpad-btn';
+    zero.textContent = '0';
+    zero.onclick = () => { if (input.value.length < 4) input.value += '0'; };
+    pad.appendChild(zero);
+
+    const ok = document.createElement('button');
+    ok.className = 'numpad-btn confirm';
+    ok.textContent = '\u2713';
+    ok.onclick = () => {
+        if (!input.value || quizAnswered) return;
+        onConfirm(input.value);
+    };
+    pad.appendChild(ok);
+}
+
+function checkPracticeAnswer(val, q) {
+    if (quizAnswered) return;
+    quizAnswered = true;
+    const input = document.getElementById('qInput');
+
+    // Desabilitar numpad
+    document.getElementById('qNumpad').querySelectorAll('button').forEach(b => b.style.pointerEvents = 'none');
+
+    if (val === q.answer) {
+        input.classList.add('correct');
+        doCorrect();
+    } else {
+        input.classList.add('wrong');
+        doWrong(q);
+    }
+    pendingTimeout = setTimeout(() => { quizIndex++; renderQuiz(); }, 1000);
+}
+
+function doCorrect() {
+    quizCorrect++;
+    state.totalCorrect++;
+    state.points += 10;
+    showFeedback('\u2705');
+    saveState();
+}
+
+function doWrong(q) {
+    quizErrors.push({ qi: quizIndex, a: q.a, b: q.b, answer: q.answer });
+    state.totalWrong++;
+    showFeedback('\u274C');
+    saveState();
+}
+
+function showFeedback(emoji) {
+    const el = document.getElementById('feedbackOverlay');
+    document.getElementById('feedbackEmoji').textContent = emoji;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 700);
+}
+
+// ══════════════════════════════════════════
+//  RESULTADO
+// ══════════════════════════════════════════
+function showResult() {
+    cancelQuizTimeout();
+    const total = quizQuestions.length;
+    const pct   = total > 0 ? Math.round((quizCorrect / total) * 100) : 0;
+    let stars   = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0;
+
+    if (quizOrigin === 'lesson' && quizLessonId) {
+        const prev = state.lessonStars[quizLessonId] || 0;
+        if (stars > prev) { state.stars += stars - prev; state.lessonStars[quizLessonId] = stars; }
+        if (stars >= 1) state.lessonsCompleted[quizLessonId] = true;
+        const xpGain = quizCorrect * 5 + stars * 10;
+        state.xp += xpGain;
+        state.level = Math.floor(state.xp / 100) + 1;
+    }
+    if (quizOrigin === 'practice' && pct >= 90) {
+        state.tabuadasMastered[currentTabuada] = true;
+    }
+    saveState();
+
+    document.getElementById('rStars').textContent  = starDisplay(stars);
+    document.getElementById('rScore').textContent  = `${quizCorrect} / ${total} corretas`;
+    document.getElementById('rDetail').textContent = `${pct}% de acerto \u2022 +${quizCorrect * 10} pts`;
+
+    const msg = document.getElementById('rMsg');
+    if (pct >= 90) {
+        msg.textContent = 'Incrivel! Voce e um genio da tabuada! \uD83C\uDF89';
+        msg.className = 'result-msg';
+        launchConfetti();
+    } else if (pct >= 70) {
+        msg.textContent = 'Muito bom! Continue assim! \uD83D\uDCAA';
+        msg.className = 'result-msg';
+    } else if (pct >= 50) {
+        msg.textContent = 'Bom trabalho! Pratique mais um pouco! \uD83D\uDE0A';
+        msg.className = 'result-msg warn';
+    } else {
+        msg.textContent = 'Nao desista! Estude e tente de novo! \uD83D\uDCDA';
+        msg.className = 'result-msg warn';
+    }
+
+    // Erros para revisar
+    const errDiv = document.getElementById('rErrors');
+    if (quizErrors.length > 0) {
+        let html = '<div class="section-title">Revise estes:</div>';
+        quizErrors.forEach(e => {
+            html += `<div class="study-row" style="justify-content:center;font-size:1.1em;">
+                ${e.a} &times; ${e.b} = <span class="result">${e.answer}</span>
+            </div>`;
+        });
+        errDiv.innerHTML = html;
+    } else {
+        errDiv.innerHTML = '';
+    }
+
+    // Botoes
+    document.getElementById('rRetry').style.display    = quizOrigin !== 'challenge' ? 'block' : 'none';
+    document.getElementById('rContinue').textContent   = quizOrigin === 'challenge' ? '\uD83C\uDFE0 Voltar ao Menu' : '\u2714 Continuar';
+
+    showScreen('sResult', 'Resultado', '');
+}
+
+function retryQuiz() {
+    if (quizOrigin === 'lesson' && quizLessonId) {
+        const lesson = LESSONS.find(l => l.id === quizLessonId);
+        if (lesson) startQuiz('lesson', lesson.tables, lesson.id);
+    } else if (quizOrigin === 'practice') {
+        startQuiz('practice', [currentTabuada], null);
+    }
+}
+
+function resultContinue() {
+    if (quizOrigin === 'lesson') {
+        renderLessons();
+        showScreen('sLessons','Licoes','Complete todas!');
+    } else if (quizOrigin === 'challenge') {
+        showScreen('sMenu');
+    } else {
+        showScreen('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!');
+    }
+}
+
+// ══════════════════════════════════════════
+//  DESAFIO RELAMPAGO
+// ══════════════════════════════════════════
+let challengeTimer    = null;
+let challengeTimeLeft = 60;
+let challengePts      = 0;
+let challengeQ        = null;
+
+function openChallenge() {
+    cancelQuizTimeout();
+    challengeTimeLeft = 60;
+    challengePts      = 0;
+    document.getElementById('cTime').textContent  = 60;
+    document.getElementById('cScore').textContent = 0;
+
+    showScreen('sChallenge','Desafio Relampago','60 segundos!');
+    nextChallengeQ();
+
+    challengeTimer = setInterval(() => {
+        challengeTimeLeft--;
+        document.getElementById('cTime').textContent = challengeTimeLeft;
+        if (challengeTimeLeft <= 10) document.getElementById('cTime').style.color = '#FF5252';
+        if (challengeTimeLeft <= 0) endChallenge();
+    }, 1000);
+}
+
+function nextChallengeQ() {
+    const a = Math.floor(Math.random() * 10) + 1;
+    const b = Math.floor(Math.random() * 10) + 1;
+    challengeQ = { a, b, answer: a * b };
+    document.getElementById('cQuestion').innerHTML =
+        `<span class="hl">${a}</span> &times; <span class="hl">${b}</span> = ?`;
+    buildNumpad('cInput', 'cNumpad', val => {
+        if (parseInt(val) === challengeQ.answer) {
+            challengePts += 10;
+            state.totalCorrect++;
+            showFeedback('\u2705');
+        } else {
+            state.totalWrong++;
+            showFeedback('\u274C');
+        }
+        document.getElementById('cScore').textContent = challengePts;
+        saveState();
+        nextChallengeQ();
+    });
+}
+
+function stopChallenge() {
+    if (challengeTimer) { clearInterval(challengeTimer); challengeTimer = null; }
+    document.getElementById('cTime').style.color = 'var(--primary)';
+}
+
+function endChallenge() {
+    stopChallenge();
+    state.points += challengePts;
+    if (challengePts > state.challengeRecord) state.challengeRecord = challengePts;
+    saveState();
+
+    quizOrigin    = 'challenge';
+    quizQuestions = new Array(Math.max(Math.round(challengePts / 10), 1));
+    quizCorrect   = Math.round(challengePts / 10);
+    quizErrors    = [];
+
+    document.getElementById('rStars').textContent  =
+        challengePts >= 100 ? '\u2B50\u2B50\u2B50' : challengePts >= 50 ? '\u2B50\u2B50' : '\u2B50';
+    document.getElementById('rScore').textContent  = challengePts + ' pontos!';
+    document.getElementById('rDetail').textContent = quizCorrect + ' respostas certas em 60 segundos';
+
+    const msg = document.getElementById('rMsg');
+    if (challengePts >= 100) {
+        msg.textContent = 'Velocidade incrivel! \uD83D\uDE80';
+        msg.className = 'result-msg';
+        launchConfetti();
+    } else if (challengePts >= 50) {
+        msg.textContent = 'Muito rapido! Consegue mais? \uD83D\uDD25';
+        msg.className = 'result-msg';
+    } else {
+        msg.textContent = 'Continue praticando! \uD83D\uDCAA';
+        msg.className = 'result-msg warn';
+    }
+
+    document.getElementById('rErrors').innerHTML = '';
+    document.getElementById('rRetry').style.display  = 'none';
+    document.getElementById('rContinue').textContent = '\uD83C\uDFE0 Voltar ao Menu';
+
+    showScreen('sResult','Resultado do Desafio','');
+}
+
+// ══════════════════════════════════════════
+//  ESTATISTICAS
+// ══════════════════════════════════════════
+function openStats() {
+    document.getElementById('stStars').textContent    = state.stars;
+    document.getElementById('stPoints').textContent   = state.points;
+    document.getElementById('stLessons').textContent  = Object.keys(state.lessonsCompleted).length;
+    document.getElementById('stChallenge').textContent= state.challengeRecord;
+
+    const grid = document.getElementById('statsGrid');
+    grid.innerHTML = '';
+    for (let i = 1; i <= 10; i++) {
+        const d = document.createElement('div');
+        d.className  = 'tabuada-btn' + (state.tabuadasMastered[i] ? ' completed' : '');
+        d.textContent = i;
+        d.style.cursor = 'default';
+        grid.appendChild(d);
+    }
+    showScreen('sStats','Meu Progresso','Veja como esta indo!');
+}
+
+// ══════════════════════════════════════════
+//  UTILIDADES
+// ══════════════════════════════════════════
+function shuffleArr(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function launchConfetti() {
+    const box    = document.getElementById('confettiBox');
+    const colors = ['#FF6584','#6C63FF','#4CAF50','#FFD700','#FF9800','#2196F3'];
+    box.innerHTML = '';
+    for (let i = 0; i < 55; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        const size = 6 + Math.random() * 8;
+        p.style.cssText = `
+            left: ${Math.random() * 100}%;
+            width: ${size}px; height: ${size}px;
+            background: ${colors[Math.floor(Math.random() * colors.length)]};
+            border-radius: ${Math.random() > .5 ? '50%' : '2px'};
+            animation-duration: ${2 + Math.random() * 2}s;
+            animation-delay: ${Math.random() * .6}s;
+        `;
+        box.appendChild(p);
+    }
+    setTimeout(() => { box.innerHTML = ''; }, 5000);
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+updateHeader();
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
