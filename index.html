@@ -9,6 +9,34 @@
     <title>Tabuada Divertida</title>
     <link rel="manifest" href="manifest.json">
     <style>
+        /* ── UPDATE BANNER ── */
+        .update-banner {
+            display: none;
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(135deg, #6C63FF, #FF6584);
+            color: white; padding: 14px 16px;
+            z-index: 999; box-shadow: 0 -4px 20px rgba(0,0,0,.2);
+            animation: slideUp .3s ease;
+        }
+        .update-banner.show { display: flex; align-items: center; gap: 12px; }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to   { transform: translateY(0); }
+        }
+        .update-banner .update-text { flex: 1; font-size: .9em; }
+        .update-banner .update-text b { display: block; font-size: 1em; }
+        .update-banner .btn-update {
+            background: white; color: #6C63FF; border: none;
+            padding: 8px 16px; border-radius: 10px; font-weight: bold;
+            cursor: pointer; font-size: .85em; white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .update-banner .btn-dismiss {
+            background: none; border: none; color: rgba(255,255,255,.7);
+            font-size: 1.3em; cursor: pointer; padding: 4px; flex-shrink: 0;
+        }
+    </style>
+    <style>
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         html, body { height:100%; }
         :root {
@@ -260,6 +288,16 @@
     </style>
 </head>
 <body>
+
+<!-- UPDATE BANNER -->
+<div class="update-banner" id="updateBanner">
+    <div class="update-text">
+        <b>&#128640; Nova versao disponivel!</b>
+        Toque para baixar e instalar a atualizacao
+    </div>
+    <button class="btn-update" id="updateBtn" onclick="doUpdate()">Atualizar</button>
+    <button class="btn-dismiss" onclick="dismissUpdate()">&#215;</button>
+</div>
 
 <div id="app">
     <!-- HEADER -->
@@ -1003,13 +1041,69 @@ function launchConfetti() {
 }
 
 // ══════════════════════════════════════════
+//  SISTEMA DE ATUALIZACAO
+// ══════════════════════════════════════════
+const APP_VERSION = '1.1.0';
+const VERSION_URL = 'https://madrugagg.github.io/tabuada-divertida/version.json';
+let latestApkUrl = null;
+
+function checkForUpdate() {
+    fetch(VERSION_URL + '?t=' + Date.now())
+        .then(r => r.json())
+        .then(data => {
+            if (data.version && data.version !== APP_VERSION) {
+                latestApkUrl = 'https://madrugagg.github.io/tabuada-divertida/' + (data.apk || 'tabuada-divertida.apk');
+                document.getElementById('updateBanner').classList.add('show');
+            }
+        })
+        .catch(() => {});
+}
+
+function doUpdate() {
+    if (latestApkUrl) {
+        // APK: redirecionar para download
+        window.location.href = latestApkUrl;
+    } else {
+        // PWA: forcar reload para pegar versao nova do service worker
+        window.location.reload(true);
+    }
+}
+
+function dismissUpdate() {
+    document.getElementById('updateBanner').classList.remove('show');
+}
+
+// ══════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════
 updateHeader();
 
+// Registrar Service Worker e escutar atualizacoes
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+    navigator.serviceWorker.register('sw.js')
+        .then(reg => {
+            // Verificar atualizacao quando o SW instalar novo
+            reg.addEventListener('updatefound', () => {
+                const newWorker = reg.installing;
+                newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        document.getElementById('updateBanner').classList.add('show');
+                    }
+                });
+            });
+        })
+        .catch(() => {});
+
+    // Escutar mensagem do SW sobre atualizacao
+    navigator.serviceWorker.addEventListener('message', e => {
+        if (e.data && e.data.type === 'SW_UPDATED') {
+            document.getElementById('updateBanner').classList.add('show');
+        }
+    });
 }
+
+// Verificar versao remota ao abrir
+setTimeout(checkForUpdate, 2000);
 </script>
 </body>
 </html>
