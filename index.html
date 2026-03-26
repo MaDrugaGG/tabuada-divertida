@@ -1415,7 +1415,10 @@ function checkForUpdate() {
             remoteVersion = data.version;
             var dismissed = localStorage.getItem('update_dismissed_ver');
             if (data.version !== APP_VERSION && dismissed !== data.version) {
-                latestApkUrl = 'https://madrugagg.github.io/tabuada-divertida/' + (data.apk || 'tabuada-divertida.apk');
+                // Se apk ja e URL completa usa direto; senao monta URL do Pages
+                latestApkUrl = (data.apk && data.apk.startsWith('http'))
+                    ? data.apk
+                    : 'https://madrugagg.github.io/tabuada-divertida/' + (data.apk || 'tabuada-divertida.apk');
                 document.getElementById('updateBanner').classList.add('show');
             }
         })
