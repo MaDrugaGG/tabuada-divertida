@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tabuada-v1.6.0';
+const CACHE_NAME = 'tabuada-v1.7.0';
 const ASSETS = ['/', '/index.html', '/manifest.json'];
 
 self.addEventListener('install', event => {

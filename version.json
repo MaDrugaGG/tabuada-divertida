@@ -1,5 +1,5 @@
 {
-  "version": "1.6.0",
-  "notes": "Botao voltar maior, mais sensivel e com alto relevo. Botao nativo corrigido.",
+  "version": "1.7.0",
+  "notes": "Botao voltar ultra-responsivo: touchstart instantaneo, area de toque maior",
   "apk": "tabuada-divertida.apk"
 }
