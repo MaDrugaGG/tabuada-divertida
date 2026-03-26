@@ -477,63 +477,55 @@ function updateHeader() {
 }
 
 // ══════════════════════════════════════════
-//  NAVEGACAO - CORRIGIDA
+//  NAVEGACAO
 // ══════════════════════════════════════════
 let currentScreen = 'sMenu';
-let screenStack = ['sMenu'];
 
-function showScreen(id, title, sub) {
+// Mapa de cada tela: onde vai ao clicar voltar
+const BACK_MAP = {
+    'sStudySelect': () => goToMenu(),
+    'sStudy':       () => { renderStudyGrid(); _show('sStudySelect','Estudar','Escolha uma tabuada'); },
+    'sLessons':     () => goToMenu(),
+    'sQuiz':        () => {
+        if (quizOrigin === 'lesson') { renderLessons(); _show('sLessons','Licoes','Complete todas!'); }
+        else { _show('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!'); }
+    },
+    'sResult':      () => {
+        if (quizOrigin === 'lesson') { renderLessons(); _show('sLessons','Licoes','Complete todas!'); }
+        else if (quizOrigin === 'challenge') goToMenu();
+        else { _show('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!'); }
+    },
+    'sChallenge':   () => goToMenu(),
+    'sStats':       () => goToMenu(),
+};
+
+// Exibe tela sem animacao extra (uso interno)
+function _show(id, title, sub) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     currentScreen = id;
-
     document.getElementById('backBtn').classList.toggle('visible', id !== 'sMenu');
     document.getElementById('hTitle').textContent = title || 'Tabuada Divertida';
     document.getElementById('hSub').textContent   = sub   || 'Aprenda brincando!';
-
     window.scrollTo(0, 0);
 }
 
-function navigateTo(id, title, sub) {
-    screenStack.push(id);
-    showScreen(id, title, sub);
-}
+// Navega para nova tela
+function showScreen(id, title, sub) { _show(id, title, sub); }
+function navigateTo(id, title, sub) { _show(id, title, sub); }
 
+// Botao voltar — chamado uma unica vez por clique
 function handleBack() {
     stopChallenge();
     cancelQuizTimeout();
-
-    if (screenStack.length <= 1) {
-        showScreen('sMenu');
-        return;
-    }
-
-    screenStack.pop();
-    const prev = screenStack[screenStack.length - 1];
-
-    // Restaurar estado anterior
-    if (prev === 'sMenu') {
-        showScreen('sMenu');
-    } else if (prev === 'sStudySelect') {
-        renderStudyGrid();
-        showScreen('sStudySelect','Estudar','Escolha uma tabuada');
-    } else if (prev === 'sStudy') {
-        showScreen('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!');
-    } else if (prev === 'sLessons') {
-        renderLessons();
-        showScreen('sLessons','Licoes','Complete todas!');
-    } else if (prev === 'sStats') {
-        showScreen('sStats','Meu Progresso','Veja como esta indo!');
-    } else {
-        showScreen('sMenu');
-    }
+    const fn = BACK_MAP[currentScreen];
+    if (fn) fn(); else goToMenu();
 }
 
 function goToMenu() {
-    screenStack = ['sMenu'];
     stopChallenge();
     cancelQuizTimeout();
-    showScreen('sMenu');
+    _show('sMenu');
 }
 
 // ══════════════════════════════════════════
@@ -889,13 +881,11 @@ function retryQuiz() {
 function resultContinue() {
     if (quizOrigin === 'lesson') {
         renderLessons();
-        showScreen('sLessons','Licoes','Complete todas!');
-        screenStack = ['sMenu', 'sLessons'];
+        _show('sLessons','Licoes','Complete todas!');
     } else if (quizOrigin === 'challenge') {
         goToMenu();
     } else {
-        showScreen('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!');
-        screenStack = ['sMenu', 'sStudySelect', 'sStudy'];
+        _show('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!');
     }
 }
 
@@ -1043,7 +1033,7 @@ function launchConfetti() {
 // ══════════════════════════════════════════
 //  SISTEMA DE ATUALIZACAO
 // ══════════════════════════════════════════
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 const VERSION_URL = 'https://madrugagg.github.io/tabuada-divertida/version.json';
 let latestApkUrl = null;
 
