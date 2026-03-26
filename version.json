@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
-  "notes": "Novo: Adicao, Subtracao e Divisao! App totalmente redesenhado.",
+  "version": "2.0.1",
+  "notes": "Correcao: notificacao de atualizacao nao aparece mais repetidamente",
   "apk": "https://github.com/MaDrugaGG/tabuada-divertida/releases/download/v2.0.0/tabuada-divertida.apk"
 }

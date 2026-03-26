@@ -1242,6 +1242,7 @@ var challengeOp       = 'mult';
 
 function openChallenge() {
     cancelQuizTimeout();
+    quizAnswered      = false; // garante que o numpad funciona mesmo apos quiz
     challengeOp       = currentOp;
     challengeTimeLeft = 60;
     challengePts      = 0;
@@ -1402,7 +1403,7 @@ function launchConfetti() {
 // ══════════════════════════════════════════
 //  SISTEMA DE ATUALIZACAO
 // ══════════════════════════════════════════
-var APP_VERSION = '2.0.0';
+var APP_VERSION = '2.0.1';
 var VERSION_URL = 'https://madrugagg.github.io/tabuada-divertida/version.json';
 var latestApkUrl  = null;
 var remoteVersion = null;
@@ -1426,7 +1427,9 @@ function checkForUpdate() {
 }
 
 function doUpdate() {
-    localStorage.removeItem('update_dismissed_ver');
+    // Salva a versao como "ja vista" para nao aparecer novamente ao reabrir
+    if (remoteVersion) localStorage.setItem('update_dismissed_ver', remoteVersion);
+    document.getElementById('updateBanner').classList.remove('show');
     if (latestApkUrl) {
         window.open(latestApkUrl,'_blank') || (window.location.href = latestApkUrl);
     } else {
@@ -1446,22 +1449,7 @@ updateHeader();
 selectOp('mult');
 
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-        .then(function(reg) {
-            reg.addEventListener('updatefound', function() {
-                var nw = reg.installing;
-                nw.addEventListener('statechange', function() {
-                    if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-                        document.getElementById('updateBanner').classList.add('show');
-                    }
-                });
-            });
-        }).catch(function() {});
-    navigator.serviceWorker.addEventListener('message', function(e) {
-        if (e.data && e.data.type === 'SW_UPDATED') {
-            document.getElementById('updateBanner').classList.add('show');
-        }
-    });
+    navigator.serviceWorker.register('sw.js').catch(function() {});
 }
 
 var versionLabel = 'v' + APP_VERSION;
