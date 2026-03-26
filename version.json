@@ -1,5 +1,5 @@
 {
-  "version": "1.7.0",
-  "notes": "Botao voltar ultra-responsivo: touchstart instantaneo, area de toque maior",
+  "version": "2.0.0",
+  "notes": "Novo: Adicao, Subtracao e Divisao! App totalmente redesenhado.",
   "apk": "tabuada-divertida.apk"
 }

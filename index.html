@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#6C63FF">
+    <meta name="theme-color" content="#6C63FF" id="themeColor">
     <title>Tabuada Divertida</title>
     <link rel="manifest" href="manifest.json">
     <style>
@@ -17,261 +17,324 @@
         }
         .update-overlay.show { display: flex; animation: fadeIn .25s ease; }
         .update-modal {
-            background: white; border-radius: 24px; padding: 32px 24px;
+            background: white; border-radius: 24px; padding: 28px 22px;
             text-align: center; max-width: 340px; width: 100%;
             box-shadow: 0 20px 60px rgba(0,0,0,.3);
             animation: popIn .3s ease;
         }
-        .update-modal .update-icon { font-size: 3.5em; margin-bottom: 12px; }
-        .update-modal h2 { font-size: 1.3em; color: #333; margin-bottom: 8px; }
-        .update-modal p  { font-size: .9em; color: #777; margin-bottom: 24px; line-height: 1.5; }
-        .update-modal .btn-update {
+        .update-modal .update-icon { font-size: 3em; margin-bottom: 10px; }
+        .update-modal h2 { font-size: 1.25em; color: #333; margin-bottom: 7px; }
+        .update-modal p  { font-size: .88em; color: #777; margin-bottom: 20px; line-height: 1.5; }
+        .btn-update {
             display: block; width: 100%; padding: 14px;
-            background: linear-gradient(135deg, #6C63FF, #FF6584);
+            background: var(--op-gradient, linear-gradient(135deg,#6C63FF,#FF6584));
             color: white; border: none; border-radius: 14px;
-            font-size: 1.05em; font-weight: bold; cursor: pointer;
+            font-size: 1em; font-weight: bold; cursor: pointer;
             margin-bottom: 10px; transition: transform .15s;
         }
-        .update-modal .btn-update:active { transform: scale(.97); }
-        .update-modal .btn-dismiss {
+        .btn-update:active { transform: scale(.97); }
+        .btn-dismiss {
             display: block; width: 100%; padding: 10px;
             background: none; border: none; color: #aaa;
-            font-size: .9em; cursor: pointer;
+            font-size: .88em; cursor: pointer;
         }
-    </style>
-    <style>
+
+        /* ── RESET & BASE ── */
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-        html, body { height:100%; }
+        html, body { height: 100%; }
         :root {
-            --primary: #6C63FF; --success: #4CAF50; --danger: #FF5252;
-            --warning: #FFB74D; --bg: #F0F2FF; --card: #FFFFFF;
-            --text: #333333; --muted: #777777;
+            --op-color:    #6C63FF;
+            --op-gradient: linear-gradient(135deg, #6C63FF, #FF6584);
+            --op-light:    rgba(108,99,255,.12);
+            --success: #43A047; --danger: #E53935;
+            --warning: #FB8C00; --bg: #F4F6FF;
+            --card: #FFFFFF; --text: #2D3142; --muted: #8892A4;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg); color: var(--text);
             min-height: 100vh; overflow-x: hidden;
         }
+
         /* ── HEADER ── */
         .header {
-            background: linear-gradient(135deg, #6C63FF, #FF6584);
-            color: white; padding: 16px 20px 14px; text-align: center;
-            position: relative; box-shadow: 0 4px 15px rgba(108,99,255,.3);
+            background: var(--op-gradient);
+            color: white; padding: 13px 20px 11px; text-align: center;
+            position: relative; box-shadow: 0 4px 20px rgba(0,0,0,.2);
             flex-shrink: 0;
         }
-        .header h1 { font-size: 1.6em; }
-        .header .subtitle { font-size: .85em; opacity: .9; margin-top: 2px; }
+        .header h1 { font-size: 1.45em; font-weight: 800; }
+        .header .subtitle { font-size: .8em; opacity: .92; margin-top: 2px; }
         .score-bar {
-            display: flex; justify-content: center; gap: 14px;
-            margin-top: 8px; font-size: .9em;
+            display: flex; justify-content: center; gap: 10px;
+            margin-top: 7px; font-size: .83em;
         }
-        .score-bar span {
-            background: rgba(255,255,255,.2); padding: 3px 12px; border-radius: 20px;
-        }
+        .score-bar span { background: rgba(255,255,255,.22); padding: 3px 11px; border-radius: 20px; }
+
+        /* ── BACK BUTTON ── */
         .back-btn {
             position: absolute; left: 4px; top: 50%; transform: translateY(-50%);
-            background: rgba(255,255,255,.32); border: none; color: white;
+            background: rgba(255,255,255,.28); border: none; color: white;
             font-size: 1.9em; width: 64px; height: 64px;
             border-radius: 50%; cursor: pointer; display: none;
-            /* Sem transition para resposta instantanea */
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
             user-select: none; -webkit-user-select: none;
-            box-shadow: 0 5px 16px rgba(0,0,0,.38), 0 2px 6px rgba(0,0,0,.28),
-                        inset 0 1px 0 rgba(255,255,255,.45);
+            box-shadow: 0 5px 16px rgba(0,0,0,.3), 0 2px 6px rgba(0,0,0,.2),
+                        inset 0 1px 0 rgba(255,255,255,.4);
         }
-        /* Area de toque muito maior — invisivel mas tocavel */
-        .back-btn::before {
-            content: ''; position: absolute;
-            inset: -20px; border-radius: 50%;
-        }
+        .back-btn::before { content:''; position:absolute; inset:-20px; border-radius:50%; }
         .back-btn.pressing {
-            background: rgba(255,255,255,.55);
+            background: rgba(255,255,255,.52);
             transform: translateY(-50%) scale(.88);
-            box-shadow: 0 2px 6px rgba(0,0,0,.22);
         }
         .back-btn.visible { display: flex; align-items: center; justify-content: center; }
 
         /* ── LAYOUT ── */
         #app { display: flex; flex-direction: column; min-height: 100vh; }
         .content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-        .screen { display: none; padding: 16px; max-width: 480px; margin: 0 auto; padding-bottom: 30px; }
-        .screen.active { display: block; animation: fadeIn .25s ease; }
+        .screen { display: none; padding: 16px; max-width: 480px; margin: 0 auto; padding-bottom: 40px; }
+        .screen.active { display: block; animation: fadeIn .22s ease; }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from { opacity:0; transform:translateY(10px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        @keyframes popIn {
+            0%   { transform: scale(.5); opacity:0; }
+            60%  { transform: scale(1.12); }
+            100% { transform: scale(1); opacity:1; }
         }
 
-        /* ── MENU ── */
-        .menu-card {
-            background: var(--card); border-radius: 18px; padding: 18px 20px;
-            margin-bottom: 12px; box-shadow: 0 3px 12px rgba(0,0,0,.07);
-            cursor: pointer; display: flex; align-items: center; gap: 14px;
-            transition: transform .15s;
+        /* ── OP SELECTOR TABS ── */
+        .op-tabs {
+            display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 16px;
         }
-        .menu-card:active { transform: scale(.97); }
+        .op-tab {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            padding: 12px 4px; background: var(--card); border: 2.5px solid #E8EAED;
+            border-radius: 16px; cursor: pointer; transition: all .18s;
+            touch-action: manipulation; box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        }
+        .op-tab .op-symbol { font-size: 1.5em; font-weight: 900; line-height: 1; color: #999; }
+        .op-tab .op-name   { font-size: .62em; font-weight: 600; color: var(--muted); white-space: nowrap; }
+        .op-tab.active {
+            border-color: var(--op-color); background: var(--op-light);
+            transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.12);
+        }
+        .op-tab.active .op-symbol { color: var(--op-color); }
+        .op-tab.active .op-name   { color: var(--op-color); }
+        .op-tab:active { transform: scale(.95) !important; }
+
+        /* ── MENU BANNER ── */
+        .menu-banner {
+            border-radius: 22px; padding: 22px 20px; margin-bottom: 16px;
+            text-align: center; color: white; position: relative; overflow: hidden;
+            box-shadow: 0 6px 24px rgba(0,0,0,.2);
+        }
+        .menu-banner .deco {
+            position: absolute; border-radius: 50%; background: rgba(255,255,255,.1);
+        }
+        .menu-banner .op-big { font-size: 3.2em; font-weight: 900; position: relative; margin-bottom: 5px; }
+        .menu-banner .app-name { font-size: 1.35em; font-weight: 800; position: relative; margin-bottom: 4px; }
+        .menu-banner .app-sub  { font-size: .8em; opacity: .9; position: relative; }
+
+        /* ── MENU CARDS ── */
+        .menu-card {
+            background: var(--card); border-radius: 18px; padding: 15px 17px;
+            margin-bottom: 10px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+            cursor: pointer; display: flex; align-items: center; gap: 13px;
+            transition: transform .15s, box-shadow .15s; touch-action: manipulation;
+        }
+        .menu-card:active { transform: scale(.97); box-shadow: 0 1px 5px rgba(0,0,0,.06); }
         .menu-card .icon {
-            font-size: 2.2em; width: 54px; height: 54px;
+            font-size: 1.9em; width: 50px; height: 50px;
             display: flex; align-items: center; justify-content: center;
             border-radius: 14px; flex-shrink: 0;
         }
-        .menu-card .info h2 { font-size: 1.1em; margin-bottom: 3px; }
-        .menu-card .info p  { font-size: .82em; color: var(--muted); }
+        .menu-card .info h2 { font-size: 1em; margin-bottom: 2px; font-weight: 700; }
+        .menu-card .info p  { font-size: .78em; color: var(--muted); }
         .icon-study     { background: linear-gradient(135deg,#E8F5E9,#C8E6C9); }
         .icon-lesson    { background: linear-gradient(135deg,#E3F2FD,#BBDEFB); }
         .icon-challenge { background: linear-gradient(135deg,#FFF3E0,#FFE0B2); }
         .icon-stats     { background: linear-gradient(135deg,#F3E5F5,#E1BEE7); }
-        .creator-badge {
-            text-align: center; margin-top: 10px; padding: 10px;
-            color: var(--muted); font-size: .78em;
-        }
-        .creator-badge span { font-weight: bold; color: var(--primary); }
+
+        .creator-badge { text-align:center; margin-top:10px; padding:8px; color:var(--muted); font-size:.76em; }
+        .creator-badge strong { color: var(--op-color); }
 
         /* ── SECTION TITLE ── */
         .section-title {
-            font-size: 1.1em; font-weight: bold;
-            margin: 16px 0 12px; color: var(--text);
+            font-size: .95em; font-weight: 700; letter-spacing: .02em;
+            margin: 14px 0 10px; color: var(--text);
+            display: flex; align-items: center; gap: 7px;
+        }
+        .section-title::after {
+            content: ''; flex: 1; height: 1.5px;
+            background: linear-gradient(to right, var(--op-color), transparent);
+            opacity: .3; border-radius: 2px;
         }
 
-        /* ── TABUADA GRID ── */
-        .tabuada-grid {
-            display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin: 12px 0;
+        /* ── NUMBER GRID ── */
+        .number-grid {
+            display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin: 10px 0;
         }
-        .tabuada-btn {
-            background: var(--card); border: 3px solid #E0E0E0;
+        .number-btn {
+            background: var(--card); border: 2.5px solid #E8EAED;
             border-radius: 14px; padding: 14px 4px;
-            font-size: 1.2em; font-weight: bold; color: var(--primary);
+            font-size: 1.2em; font-weight: 700; color: var(--op-color);
             cursor: pointer; transition: all .18s; position: relative;
+            touch-action: manipulation;
         }
-        .tabuada-btn:active { background: var(--primary); color: white; border-color: var(--primary); }
-        .tabuada-btn.completed { border-color: var(--success); }
-        .tabuada-btn.completed::after {
-            content: '⭐'; position: absolute; top: -5px; right: -5px; font-size: .55em;
+        .number-btn:active { background: var(--op-color); color: white; border-color: var(--op-color); }
+        .number-btn.mastered { border-color: var(--success); }
+        .number-btn.mastered::after {
+            content: '⭐'; position: absolute; top: -5px; right: -5px; font-size: .5em;
         }
 
         /* ── STUDY TABLE ── */
         .study-table {
-            background: var(--card); border-radius: 18px; padding: 16px;
-            box-shadow: 0 3px 12px rgba(0,0,0,.07);
+            background: var(--card); border-radius: 18px; padding: 10px 14px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06); overflow: hidden;
         }
         .study-row {
             display: flex; justify-content: center; align-items: center;
-            gap: 8px; padding: 11px; font-size: 1.25em;
-            border-bottom: 1px solid #F0F0F0;
+            gap: 10px; padding: 11px 6px; font-size: 1.18em;
+            border-bottom: 1px solid #F5F5F5;
         }
         .study-row:last-child { border-bottom: none; }
-        .study-row .result { color: var(--primary); font-weight: bold; min-width: 36px; text-align: right; }
+        .study-row .result { color: var(--op-color); font-weight: 700; min-width: 40px; text-align: right; }
+        .study-row .op-sym { color: var(--muted); }
 
-        /* ── LESSONS ── */
-        .level-info { display: flex; justify-content: space-between; font-size: .82em; color: var(--muted); }
-        .level-bar { background: #E0E0E0; height: 9px; border-radius: 5px; overflow: hidden; margin: 7px 0 14px; }
-        .level-bar-fill { height: 100%; background: linear-gradient(90deg,var(--primary),#FF6584); border-radius: 5px; transition: width .5s ease; }
+        /* ── LEVEL BAR ── */
+        .level-info { display:flex; justify-content:space-between; font-size:.82em; color:var(--muted); }
+        .level-bar { background:#E8EAED; height:8px; border-radius:6px; overflow:hidden; margin:6px 0 12px; }
+        .level-bar-fill { height:100%; background:var(--op-gradient); border-radius:6px; transition:width .5s ease; }
 
+        /* ── LESSON CARDS ── */
         .lesson-card {
-            background: var(--card); border-radius: 18px; padding: 16px 18px;
-            margin-bottom: 10px; box-shadow: 0 3px 10px rgba(0,0,0,.06);
-            display: flex; align-items: center; gap: 14px;
-            cursor: pointer; transition: transform .15s;
+            background: var(--card); border-radius: 18px; padding: 14px 16px;
+            margin-bottom: 9px; box-shadow: 0 2px 10px rgba(0,0,0,.05);
+            display: flex; align-items: center; gap: 12px;
+            cursor: pointer; transition: transform .15s; touch-action: manipulation;
         }
         .lesson-card:active { transform: scale(.97); }
         .lesson-card.locked { opacity: .45; cursor: not-allowed; }
         .lesson-number {
-            width: 46px; height: 46px; border-radius: 50%;
+            width: 44px; height: 44px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.2em; font-weight: bold; color: white; flex-shrink: 0;
+            font-size: 1.1em; font-weight: 700; color: white; flex-shrink: 0;
         }
-        .lesson-info h3 { font-size: .95em; margin-bottom: 2px; }
-        .lesson-info p  { font-size: .78em; color: var(--muted); }
-        .lesson-stars   { margin-left: auto; font-size: 1.1em; white-space: nowrap; }
+        .lesson-info h3 { font-size: .9em; margin-bottom: 2px; font-weight: 600; }
+        .lesson-info p  { font-size: .75em; color: var(--muted); }
+        .lesson-stars { margin-left: auto; font-size: 1em; white-space: nowrap; }
 
         /* ── QUIZ ── */
-        .quiz-area { text-align: center; padding: 10px 0; }
-        .quiz-progress { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
-        .quiz-dot { width: 11px; height: 11px; border-radius: 50%; background: #E0E0E0; transition: all .25s; }
+        .quiz-area { text-align: center; padding: 8px 0; }
+        .quiz-progress { display:flex; gap:5px; justify-content:center; flex-wrap:wrap; margin-bottom:18px; }
+        .quiz-dot { width:11px; height:11px; border-radius:50%; background:#E0E0E0; transition:all .25s; }
         .quiz-dot.correct { background: var(--success); }
         .quiz-dot.wrong   { background: var(--danger); }
-        .quiz-dot.current { background: var(--primary); transform: scale(1.35); }
+        .quiz-dot.current { background: var(--op-color); transform: scale(1.35); }
 
-        .quiz-question { font-size: 2.4em; font-weight: bold; margin: 22px 0; }
-        .quiz-question .hl { color: var(--primary); }
+        .quiz-question {
+            font-size: 2.3em; font-weight: 800; margin: 18px 0; line-height: 1.3;
+        }
+        .quiz-question .hl  { color: var(--op-color); }
+        .quiz-question .sym { color: var(--muted); font-size: .75em; font-weight: 400; }
+        .quiz-question .eq  { color: var(--muted); font-size: .55em; font-weight: 400; }
 
         .quiz-options {
             display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-            max-width: 300px; margin: 0 auto;
+            max-width: 320px; margin: 0 auto;
         }
         .quiz-option {
-            background: var(--card); border: 3px solid #E0E0E0;
-            border-radius: 14px; padding: 16px; font-size: 1.4em; font-weight: bold;
-            cursor: pointer; transition: all .18s; min-height: 60px;
+            background: var(--card); border: 2.5px solid #E8EAED;
+            border-radius: 16px; padding: 16px; font-size: 1.4em; font-weight: 700;
+            cursor: pointer; min-height: 60px;
             display: flex; align-items: center; justify-content: center;
+            touch-action: manipulation; transition: border-color .15s, background .15s;
         }
         .quiz-option:active { transform: scale(.94); }
-        .quiz-option.correct { background: #E8F5E9; border-color: var(--success); color: var(--success); }
-        .quiz-option.wrong   { background: #FFEBEE; border-color: var(--danger);  color: var(--danger);  }
-        .quiz-option.disabled { pointer-events: none; opacity: .6; }
+        .quiz-option.correct { background:#E8F5E9; border-color:var(--success); color:var(--success); }
+        .quiz-option.wrong   { background:#FFEBEE; border-color:var(--danger);  color:var(--danger); }
+        .quiz-option.disabled { pointer-events:none; opacity:.6; }
 
         /* ── NUMPAD ── */
         .quiz-input {
             font-size: 1.9em; text-align: center; width: 140px; padding: 10px;
-            border: 3px solid #E0E0E0; border-radius: 14px; outline: none;
+            border: 3px solid #E8EAED; border-radius: 14px; outline: none;
             color: var(--text); background: var(--card); transition: border-color .25s;
             display: block; margin: 0 auto 12px; font-family: monospace;
         }
         .quiz-input.correct { border-color: var(--success); background: #E8F5E9; }
         .quiz-input.wrong   { border-color: var(--danger);  background: #FFEBEE; }
 
-        .numpad {
-            display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
-            max-width: 260px; margin: 0 auto;
-        }
+        .numpad { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; max-width:260px; margin:0 auto; }
         .numpad-btn {
-            background: var(--card); border: 2px solid #E0E0E0; border-radius: 11px;
-            padding: 13px; font-size: 1.3em; font-weight: bold; cursor: pointer;
-            transition: all .13s; color: var(--text); min-height: 50px;
-            display: flex; align-items: center; justify-content: center;
+            background: var(--card); border: 2px solid #E8EAED; border-radius: 12px;
+            padding: 14px; font-size: 1.25em; font-weight: 700; cursor: pointer;
+            min-height: 52px; display: flex; align-items: center; justify-content: center;
+            touch-action: manipulation; color: var(--text);
+            transition: background .1s, border-color .1s;
         }
-        .numpad-btn:active { background: var(--primary); color: white; border-color: var(--primary); transform: scale(.93); }
+        .numpad-btn:active { background: var(--op-color); color: white; border-color: var(--op-color); transform: scale(.93); }
         .numpad-btn.confirm { background: var(--success); color: white; border-color: var(--success); }
-        .numpad-btn.delete  { background: var(--danger);  color: white; border-color: var(--danger);  }
+        .numpad-btn.delete  { background: var(--danger);  color: white; border-color: var(--danger); }
 
-        /* ── DESAFIO ── */
+        /* ── CHALLENGE ── */
         .challenge-info {
-            font-size: 1.1em; color: var(--muted); margin-bottom: 8px;
-            display: flex; justify-content: center; gap: 20px;
+            display: flex; justify-content: center; gap: 24px;
+            font-size: 1.05em; color: var(--muted); margin-bottom: 8px;
         }
-        .challenge-info .val { font-weight: bold; color: var(--primary); }
+        .challenge-info .val { font-weight: 700; color: var(--op-color); }
+        .op-badge {
+            display: inline-block; background: var(--op-light); color: var(--op-color);
+            font-weight: 700; font-size: .82em; padding: 4px 14px;
+            border-radius: 20px; margin-bottom: 10px; border: 1.5px solid var(--op-color);
+        }
 
         /* ── RESULTADO ── */
-        .result-wrap { text-align: center; padding: 20px 0; }
-        .result-stars  { font-size: 2.8em; margin: 14px 0; }
-        .result-score  { font-size: 1.9em; font-weight: bold; color: var(--primary); margin: 8px 0; }
-        .result-detail { font-size: 1em; color: var(--muted); margin: 4px 0; }
+        .result-wrap { text-align: center; padding: 14px 0; }
+        .result-stars  { font-size: 2.5em; margin: 12px 0; }
+        .result-score  { font-size: 1.85em; font-weight: 800; color: var(--op-color); margin: 7px 0; }
+        .result-detail { font-size: .92em; color: var(--muted); margin: 4px 0; }
         .result-msg {
-            font-size: 1.2em; margin: 16px 0; padding: 14px;
-            border-radius: 14px; font-weight: bold;
-            background: #E8F5E9; color: var(--success);
+            font-size: 1.05em; margin: 14px 0; padding: 14px 16px;
+            border-radius: 16px; font-weight: 600;
+            background: #E8F5E9; color: #2E7D32;
         }
-        .result-msg.warn { background: #FFF3E0; color: #E65100; }
-        .result-errors { margin: 12px 0; text-align: left; }
+        .result-msg.warn { background: #FFF3E0; color: #BF360C; }
+        .result-errors  { margin: 10px 0; text-align: left; }
 
-        /* ── ESTATISTICAS ── */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        /* ── STATS ── */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
         .stat-card {
-            background: var(--card); border-radius: 14px; padding: 16px;
-            box-shadow: 0 3px 10px rgba(0,0,0,.06); text-align: center;
+            background: var(--card); border-radius: 16px; padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.05); text-align: center;
         }
-        .stat-card h3 { color: var(--muted); font-size: .82em; margin-bottom: 6px; font-weight: 500; }
-        .stat-card .val { font-size: 1.9em; font-weight: bold; color: var(--primary); }
+        .stat-card h3 {
+            color: var(--muted); font-size: .74em; margin-bottom: 5px;
+            font-weight: 500; text-transform: uppercase; letter-spacing: .04em;
+        }
+        .stat-card .val { font-size: 1.75em; font-weight: 800; color: var(--op-color); }
 
-        /* ── BOTOES ── */
+        .op-stat-tabs { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:12px; }
+        .op-stat-tab {
+            background: var(--card); border: 2px solid #E8EAED; border-radius: 10px;
+            padding: 8px 4px; text-align: center; font-size: .73em; font-weight: 700;
+            cursor: pointer; touch-action: manipulation; transition: all .15s; color: var(--muted);
+        }
+        .op-stat-tab.active { border-color: var(--op-color); background: var(--op-light); color: var(--op-color); }
+
+        /* ── BUTTONS ── */
         .btn {
             display: block; width: 100%; padding: 14px; border: none;
-            border-radius: 14px; font-size: 1.05em; font-weight: bold;
-            cursor: pointer; margin: 8px 0; transition: transform .15s, opacity .15s;
+            border-radius: 16px; font-size: 1.05em; font-weight: 700;
+            cursor: pointer; margin: 8px 0; transition: transform .13s, opacity .13s;
             touch-action: manipulation;
         }
         .btn:active { transform: scale(.96); opacity: .9; }
-        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary { background: var(--op-gradient); color: white; }
         .btn-success { background: var(--success); color: white; }
         .btn-danger  { background: var(--danger);  color: white; }
 
@@ -280,28 +343,15 @@
             position: fixed; inset: 0; display: flex;
             align-items: center; justify-content: center;
             z-index: 200; pointer-events: none;
-            opacity: 0; transition: opacity .2s;
+            opacity: 0; transition: opacity .18s;
         }
         .feedback-overlay.show { opacity: 1; }
-        .feedback-emoji { font-size: 5em; animation: popIn .45s ease; }
-        @keyframes popIn {
-            0%  { transform: scale(0); }
-            55% { transform: scale(1.3); }
-            100%{ transform: scale(1); }
-        }
+        .feedback-emoji { font-size: 5em; animation: popIn .4s ease; }
 
         /* ── CONFETTI ── */
-        .confetti-container {
-            position: fixed; inset: 0; pointer-events: none;
-            z-index: 190; overflow: hidden;
-        }
-        .confetti-piece {
-            position: absolute; top: -12px;
-            animation: fall linear forwards;
-        }
-        @keyframes fall {
-            to { top: 110%; transform: rotate(720deg); }
-        }
+        .confetti-container { position:fixed; inset:0; pointer-events:none; z-index:190; overflow:hidden; }
+        .confetti-piece { position:absolute; top:-12px; animation:fall linear forwards; }
+        @keyframes fall { to { top:110%; transform:rotate(720deg); } }
     </style>
 </head>
 <body>
@@ -311,7 +361,7 @@
     <div class="update-modal">
         <div class="update-icon">&#128640;</div>
         <h2>Nova versao disponivel!</h2>
-        <p>Uma atualizacao com melhorias esta pronta. Baixe agora e instale por cima do app atual!</p>
+        <p>Uma atualizacao com melhorias esta pronta. Baixe agora!</p>
         <button class="btn-update" onclick="doUpdate()">&#11015; Baixar Atualizacao</button>
         <button class="btn-dismiss" onclick="dismissUpdate()">Agora nao</button>
     </div>
@@ -337,44 +387,41 @@
 
     <!-- CONTENT -->
     <div class="content">
+
         <!-- ══ MENU ══ -->
         <div class="screen active" id="sMenu">
-            <!-- BANNER PRINCIPAL -->
-            <div style="
-                background: linear-gradient(135deg, #6C63FF 0%, #9C63FF 50%, #FF6584 100%);
-                border-radius: 22px; padding: 24px 20px; margin-bottom: 18px;
-                text-align: center; color: white; position: relative; overflow: hidden;
-                box-shadow: 0 6px 24px rgba(108,99,255,.35);
-            ">
-                <!-- circulos decorativos -->
-                <div style="position:absolute;width:120px;height:120px;border-radius:50%;
-                    background:rgba(255,255,255,.08);top:-30px;left:-30px;"></div>
-                <div style="position:absolute;width:80px;height:80px;border-radius:50%;
-                    background:rgba(255,255,255,.08);bottom:-20px;right:-10px;"></div>
-
-                <div style="font-size:3.2em;margin-bottom:8px;position:relative;">&#10006;&#65039;</div>
-                <div style="font-size:1.5em;font-weight:bold;margin-bottom:4px;position:relative;">
-                    Tabuada Divertida
-                </div>
-                <div style="font-size:.85em;opacity:.85;margin-bottom:16px;position:relative;">
-                    Aprenda multiplicacao de um jeito divertido!
-                </div>
-                <!-- mini numeros decorativos -->
-                <div style="display:flex;justify-content:center;gap:8px;position:relative;">
-                    <span style="background:rgba(255,255,255,.2);border-radius:10px;padding:5px 10px;font-size:.85em;font-weight:bold;">1&#215;1</span>
-                    <span style="background:rgba(255,255,255,.2);border-radius:10px;padding:5px 10px;font-size:.85em;font-weight:bold;">5&#215;5</span>
-                    <span style="background:rgba(255,255,255,.2);border-radius:10px;padding:5px 10px;font-size:.85em;font-weight:bold;">9&#215;9</span>
-                    <span style="background:rgba(255,255,255,.2);border-radius:10px;padding:5px 10px;font-size:.85em;font-weight:bold;">&#11088;&#11088;&#11088;</span>
-                </div>
+            <!-- Banner dinamico -->
+            <div class="menu-banner" id="menuBanner">
+                <div class="deco" style="width:110px;height:110px;top:-30px;left:-25px;"></div>
+                <div class="deco" style="width:70px;height:70px;bottom:-15px;right:-10px;"></div>
+                <div class="op-big" id="menuOpBig">&#215;</div>
+                <div class="app-name">Tabuada Divertida</div>
+                <div class="app-sub" id="menuOpSub">Aprenda multiplicacao de um jeito divertido!</div>
             </div>
 
-            <div class="section-title" style="margin-top:4px;">O que vamos fazer?</div>
+            <!-- Seletor de operacao -->
+            <div class="section-title">Escolha a operacao</div>
+            <div class="op-tabs" id="opTabs">
+                <button class="op-tab active" data-op="mult" onclick="selectOp('mult')">
+                    <span class="op-symbol">&#215;</span><span class="op-name">Multiplicar</span>
+                </button>
+                <button class="op-tab" data-op="add" onclick="selectOp('add')">
+                    <span class="op-symbol">+</span><span class="op-name">Adicao</span>
+                </button>
+                <button class="op-tab" data-op="sub" onclick="selectOp('sub')">
+                    <span class="op-symbol">&#8722;</span><span class="op-name">Subtracao</span>
+                </button>
+                <button class="op-tab" data-op="div" onclick="selectOp('div')">
+                    <span class="op-symbol">&#247;</span><span class="op-name">Divisao</span>
+                </button>
+            </div>
 
+            <div class="section-title">Modo de jogo</div>
             <div class="menu-card" onclick="openStudy()">
                 <div class="icon icon-study">&#128218;</div>
                 <div class="info">
                     <h2>Estudar</h2>
-                    <p>Veja a tabuada completa de cada numero</p>
+                    <p>Veja a tabela completa de cada numero</p>
                 </div>
             </div>
             <div class="menu-card" onclick="openLessons()">
@@ -388,7 +435,7 @@
                 <div class="icon icon-challenge">&#9889;</div>
                 <div class="info">
                     <h2>Desafio Relampago</h2>
-                    <p>Responda o maximo que puder em 60 segundos!</p>
+                    <p>Responda o maximo em 60 segundos!</p>
                 </div>
             </div>
             <div class="menu-card" onclick="openStats()">
@@ -399,27 +446,30 @@
                 </div>
             </div>
 
-            <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><span style="font-size:.85em;color:#aaa;font-weight:normal;" id="versionBadge1"></span></div>
+            <div class="creator-badge">
+                Criado por <strong>David Duarte</strong> &#127891;<br>
+                <span style="font-size:.85em;color:#ccc;" id="versionBadge1"></span>
+            </div>
         </div>
 
-        <!-- ══ ESTUDO: ESCOLHER TABUADA ══ -->
+        <!-- ══ ESTUDO: ESCOLHER NUMERO ══ -->
         <div class="screen" id="sStudySelect">
-            <div class="section-title">Escolha a tabuada:</div>
-            <div class="tabuada-grid" id="studyGrid"></div>
+            <div class="section-title" id="studySelectTitle">Escolha o numero:</div>
+            <div class="number-grid" id="studyGrid"></div>
         </div>
 
-        <!-- ══ ESTUDO: VER TABUADA ══ -->
+        <!-- ══ ESTUDO: VER TABELA ══ -->
         <div class="screen" id="sStudy">
             <div class="section-title" id="studyTitle">Tabuada do 1</div>
             <div class="study-table" id="studyTable"></div>
             <button class="btn btn-primary" style="margin-top:14px" onclick="startPractice()">
-                &#9654; Praticar esta tabuada
+                &#9654; Praticar esta tabela
             </button>
         </div>
 
         <!-- ══ LICOES ══ -->
         <div class="screen" id="sLessons">
-            <div class="section-title">Licoes</div>
+            <div class="section-title" id="lessonTitle">Licoes</div>
             <div class="level-info">
                 <span id="lvlText">Nivel 1</span>
                 <span id="lvlXP">0 / 100 XP</span>
@@ -449,10 +499,12 @@
                 <div class="result-detail" id="rDetail"></div>
                 <div class="result-msg"    id="rMsg"></div>
                 <div class="result-errors" id="rErrors"></div>
-                <button class="btn btn-primary" id="rRetry"  onclick="retryQuiz()">&#128260; Tentar Novamente</button>
+                <button class="btn btn-primary" id="rRetry"   onclick="retryQuiz()">&#128260; Tentar Novamente</button>
                 <button class="btn btn-success" id="rContinue" onclick="resultContinue()">&#10003; Continuar</button>
             </div>
-            <div class="creator-badge">Criado por <span>David Duarte</span><br><span style="font-size:.85em;color:#aaa;font-weight:normal;" class="versionBadgeExtra"></span></div>
+            <div class="creator-badge">Criado por <strong>David Duarte</strong><br>
+                <span style="font-size:.85em;color:#ccc;" class="versionBadgeExtra"></span>
+            </div>
         </div>
 
         <!-- ══ DESAFIO ══ -->
@@ -462,6 +514,7 @@
                     <span>&#9201; <span class="val" id="cTime">60</span>s</span>
                     <span>&#127942; <span class="val" id="cScore">0</span> pts</span>
                 </div>
+                <div class="op-badge" id="cOpBadge">Multiplicacao</div>
                 <div class="quiz-question" id="cQuestion"></div>
                 <input type="text" class="quiz-input" id="cInput" inputmode="numeric" readonly>
                 <div class="numpad" id="cNumpad"></div>
@@ -470,44 +523,146 @@
 
         <!-- ══ ESTATISTICAS ══ -->
         <div class="screen" id="sStats">
-            <div class="section-title">Suas Estatisticas</div>
+            <div class="section-title">Resumo Geral</div>
             <div class="stats-grid">
                 <div class="stat-card"><h3>Estrelas</h3><div class="val" id="stStars">0</div></div>
                 <div class="stat-card"><h3>Pontos</h3><div class="val" id="stPoints">0</div></div>
-                <div class="stat-card"><h3>Licoes Completas</h3><div class="val" id="stLessons">0</div></div>
-                <div class="stat-card"><h3>Recorde Desafio</h3><div class="val" id="stChallenge">0</div></div>
+                <div class="stat-card"><h3>Licoes</h3><div class="val" id="stLessons">0</div></div>
+                <div class="stat-card"><h3>Corretas</h3><div class="val" id="stCorrect">0</div></div>
             </div>
-            <div class="section-title">Tabuadas Dominadas</div>
-            <div class="tabuada-grid" id="statsGrid"></div>
-            <button class="btn btn-danger" style="margin-top:18px" onclick="resetProgress()">&#128465; Resetar Progresso</button>
-            <div class="creator-badge">Criado por <span>David Duarte</span><br><span style="font-size:.85em;color:#aaa;font-weight:normal;" class="versionBadgeExtra"></span></div>
+
+            <div class="section-title">Por Operacao</div>
+            <div class="op-stat-tabs" id="opStatTabs">
+                <div class="op-stat-tab active" data-op="mult" onclick="showOpStats('mult')">&#215; Mult</div>
+                <div class="op-stat-tab" data-op="add"  onclick="showOpStats('add')">+ Soma</div>
+                <div class="op-stat-tab" data-op="sub"  onclick="showOpStats('sub')">&#8722; Sub</div>
+                <div class="op-stat-tab" data-op="div"  onclick="showOpStats('div')">&#247; Div</div>
+            </div>
+
+            <div class="section-title" id="statsMasteryTitle">Tabelas Dominadas</div>
+            <div class="number-grid" id="statsGrid"></div>
+
+            <div class="section-title">Recordes Desafio</div>
+            <div class="stats-grid" id="opRecords"></div>
+
+            <button class="btn btn-danger" style="margin-top:16px" onclick="resetProgress()">&#128465; Resetar Progresso</button>
+            <div class="creator-badge">Criado por <strong>David Duarte</strong><br>
+                <span style="font-size:.85em;color:#ccc;" class="versionBadgeExtra"></span>
+            </div>
         </div>
+
     </div>
 </div>
 
 <script>
+// ══════════════════════════════════════════
+//  CONFIGURACAO DE OPERACOES
+// ══════════════════════════════════════════
+const OPS = {
+    mult: {
+        symbol: '\u00D7', name: 'Multiplicacao', short: 'Multiplicar',
+        sub: 'Aprenda multiplicacao de um jeito divertido!',
+        color: '#6C63FF', gradient: 'linear-gradient(135deg,#6C63FF,#FF6584)',
+        light: 'rgba(108,99,255,.12)', theme: '#6C63FF'
+    },
+    add: {
+        symbol: '+', name: 'Adicao', short: 'Somar',
+        sub: 'Aprenda adicao de um jeito divertido!',
+        color: '#2E7D32', gradient: 'linear-gradient(135deg,#43A047,#00ACC1)',
+        light: 'rgba(67,160,71,.12)', theme: '#43A047'
+    },
+    sub: {
+        symbol: '\u2212', name: 'Subtracao', short: 'Subtrair',
+        sub: 'Aprenda subtracao de um jeito divertido!',
+        color: '#E65100', gradient: 'linear-gradient(135deg,#FF9800,#F4511E)',
+        light: 'rgba(255,152,0,.12)', theme: '#FF9800'
+    },
+    div: {
+        symbol: '\u00F7', name: 'Divisao', short: 'Dividir',
+        sub: 'Aprenda divisao de um jeito divertido!',
+        color: '#1565C0', gradient: 'linear-gradient(135deg,#1E88E5,#5E35B1)',
+        light: 'rgba(30,136,229,.12)', theme: '#1E88E5'
+    }
+};
+
+let currentOp = 'mult';
+
+function selectOp(op) {
+    currentOp = op;
+    const cfg = OPS[op];
+    const root = document.documentElement;
+    root.style.setProperty('--op-color',    cfg.color);
+    root.style.setProperty('--op-gradient', cfg.gradient);
+    root.style.setProperty('--op-light',    cfg.light);
+    document.getElementById('themeColor').setAttribute('content', cfg.theme);
+
+    // Update tab highlights
+    document.querySelectorAll('.op-tab').forEach(function(t) {
+        t.classList.toggle('active', t.dataset.op === op);
+    });
+
+    // Update menu banner
+    document.getElementById('menuOpBig').textContent = cfg.symbol;
+    document.getElementById('menuOpSub').textContent = cfg.sub;
+    document.getElementById('menuBanner').style.background = cfg.gradient;
+}
+
 // ══════════════════════════════════════════
 //  ESTADO
 // ══════════════════════════════════════════
 function defaultState() {
     return {
         points: 0, stars: 0, xp: 0, level: 1,
-        lessonsCompleted: {}, lessonStars: {},
-        tabuadasMastered: {}, challengeRecord: 0,
-        totalCorrect: 0, totalWrong: 0
+        totalCorrect: 0, totalWrong: 0,
+        mastered:       { mult:{}, add:{}, sub:{}, div:{} },
+        lessonsDone:    { mult:{}, add:{}, sub:{}, div:{} },
+        lessonStars:    { mult:{}, add:{}, sub:{}, div:{} },
+        challengeRec:   { mult:0,  add:0,  sub:0,  div:0  }
     };
 }
 
 let state = (function() {
     try {
-        const s = localStorage.getItem('tabuada_v2');
-        if (s) return Object.assign(defaultState(), JSON.parse(s));
+        var raw = localStorage.getItem('tabuada_v3');
+        if (raw) {
+            var parsed = JSON.parse(raw);
+            var s = defaultState();
+            // Merge top-level numerics
+            ['points','stars','xp','level','totalCorrect','totalWrong'].forEach(function(k) {
+                if (parsed[k] != null) s[k] = parsed[k];
+            });
+            // Merge per-op objects safely
+            ['mastered','lessonsDone','lessonStars','challengeRec'].forEach(function(key) {
+                if (parsed[key]) {
+                    ['mult','add','sub','div'].forEach(function(op) {
+                        if (parsed[key][op] != null) s[key][op] = parsed[key][op];
+                    });
+                }
+            });
+            return s;
+        }
+    } catch(e) {}
+    // Migrate from old v2 save
+    try {
+        var old = localStorage.getItem('tabuada_v2');
+        if (old) {
+            var o = JSON.parse(old);
+            var s2 = defaultState();
+            s2.points = o.points || 0; s2.stars = o.stars || 0;
+            s2.xp = o.xp || 0; s2.level = o.level || 1;
+            s2.totalCorrect = o.totalCorrect || 0; s2.totalWrong = o.totalWrong || 0;
+            s2.mastered.mult = o.tabuadasMastered || {};
+            s2.challengeRec.mult = o.challengeRecord || 0;
+            Object.keys(o.lessonsCompleted || {}).forEach(function(k) { s2.lessonsDone.mult[k] = true; });
+            Object.keys(o.lessonStars || {}).forEach(function(k) { s2.lessonStars.mult[k] = o.lessonStars[k]; });
+            return s2;
+        }
     } catch(e) {}
     return defaultState();
 })();
 
 function saveState() {
-    localStorage.setItem('tabuada_v2', JSON.stringify(state));
+    localStorage.setItem('tabuada_v3', JSON.stringify(state));
     updateHeader();
 }
 
@@ -526,89 +681,79 @@ function updateHeader() {
 // ══════════════════════════════════════════
 //  NAVEGACAO
 // ══════════════════════════════════════════
-let currentScreen = 'sMenu';
-let backLocked = false;
+var currentScreen = 'sMenu';
+var backLocked    = false;
+var currentNumber = 1;
+var quizOp        = 'mult';
 
-// Mapa de cada tela: para onde vai ao pressionar voltar
+function studyTitle() {
+    var labels = { mult:'Tabuada do ', add:'Adicao com ', sub:'Subtracao de ', div:'Divisao por ' };
+    return (labels[currentOp] || '') + currentNumber;
+}
+
 const BACK_MAP = {
-    'sStudySelect': () => goToMenu(),
-    'sStudy':       () => { renderStudyGrid(); _show('sStudySelect','Estudar','Escolha uma tabuada'); },
-    'sLessons':     () => goToMenu(),
-    'sQuiz':        () => {
+    sStudySelect: function() { goToMenu(); },
+    sStudy:       function() { renderStudyGrid(); _show('sStudySelect', OPS[currentOp].name, 'Escolha um numero'); },
+    sLessons:     function() { goToMenu(); },
+    sQuiz: function() {
         if (quizOrigin === 'lesson') { renderLessons(); _show('sLessons','Licoes','Complete todas!'); }
-        else { _show('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!'); }
+        else { _show('sStudy', studyTitle(), 'Estude e memorize!'); }
     },
-    'sResult':      () => {
+    sResult: function() {
         if (quizOrigin === 'lesson') { renderLessons(); _show('sLessons','Licoes','Complete todas!'); }
-        else if (quizOrigin === 'challenge') goToMenu();
-        else { _show('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!'); }
+        else if (quizOrigin === 'challenge') { goToMenu(); }
+        else { _show('sStudy', studyTitle(), 'Estude e memorize!'); }
     },
-    'sChallenge':   () => goToMenu(),
-    'sStats':       () => goToMenu(),
+    sChallenge: function() { goToMenu(); },
+    sStats:     function() { goToMenu(); }
 };
 
-// Exibe tela e empurra estado no history (para o botao nativo funcionar)
 function _show(id, title, sub) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
     document.getElementById(id).classList.add('active');
     currentScreen = id;
     document.getElementById('backBtn').classList.toggle('visible', id !== 'sMenu');
     document.getElementById('hTitle').textContent = title || 'Tabuada Divertida';
     document.getElementById('hSub').textContent   = sub   || 'Aprenda brincando!';
     window.scrollTo(0, 0);
-
-    // Empurra estado no history para o botao voltar nativo do Android capturar
     if (id === 'sMenu') {
-        history.replaceState({ screen: 'sMenu' }, '');
+        history.replaceState({ screen:'sMenu' }, '');
     } else {
-        history.pushState({ screen: id }, '');
+        history.pushState({ screen:id }, '');
     }
 }
 
-function showScreen(id, title, sub) { _show(id, title, sub); }
 function navigateTo(id, title, sub) { _show(id, title, sub); }
 
-// Logica central do botao voltar
 function handleBack() {
     if (backLocked) return;
     backLocked = true;
-    setTimeout(() => { backLocked = false; }, 80);
-
+    setTimeout(function() { backLocked = false; }, 80);
     stopChallenge();
     cancelQuizTimeout();
-
-    // Se ja esta no menu, nao faz nada (nao fecha o app)
     if (currentScreen === 'sMenu') return;
-
-    const fn = BACK_MAP[currentScreen];
+    var fn = BACK_MAP[currentScreen];
     if (fn) fn(); else goToMenu();
 }
 
-// Botao de voltar: touchstart para resposta instantanea (sem delay de click)
+// Back button: touchstart para resposta instantanea
 (function wireBackBtn() {
     var btn = document.getElementById('backBtn');
     if (!btn) return;
     var _pressed = false;
-
     btn.addEventListener('touchstart', function(e) {
-        e.preventDefault(); // evita o click posterior (300ms delay)
+        e.preventDefault();
         if (_pressed) return;
         _pressed = true;
         btn.classList.add('pressing');
         handleBack();
     }, { passive: false });
-
     btn.addEventListener('touchend', function() {
-        _pressed = false;
-        btn.classList.remove('pressing');
+        _pressed = false; btn.classList.remove('pressing');
     }, { passive: true });
-
     btn.addEventListener('touchcancel', function() {
-        _pressed = false;
-        btn.classList.remove('pressing');
+        _pressed = false; btn.classList.remove('pressing');
     }, { passive: true });
-
-    // Fallback para desktop/mouse
     btn.addEventListener('click', function() {
         if (!_pressed) handleBack();
     });
@@ -621,63 +766,155 @@ function goToMenu() {
 }
 
 // ══════════════════════════════════════════
+//  GERACAO DE QUESTOES
+// ══════════════════════════════════════════
+function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Gera uma questao aleatoria para a operacao dada
+function genQuestion(op) {
+    var a, b, answer, html;
+    var sym = OPS[op].symbol;
+    if (op === 'mult') {
+        a = randInt(1,10); b = randInt(1,10); answer = a * b;
+    } else if (op === 'add') {
+        a = randInt(1,10); b = randInt(1,10); answer = a + b;
+    } else if (op === 'sub') {
+        a = randInt(1,20); b = randInt(0, Math.min(a,10)); answer = a - b;
+    } else { // div
+        b = randInt(1,10); answer = randInt(1,10); a = b * answer;
+    }
+    html = '<span class="hl">' + a + '</span> <span class="sym">' + sym +
+           '</span> <span class="hl">' + b + '</span> <span class="eq">= ?</span>';
+    return { a:a, b:b, answer:answer, html:html };
+}
+
+// Gera questoes para a tabela de um numero especifico
+function genTableQuestions(op, n) {
+    var qs = [];
+    var sym = OPS[op].symbol;
+    function mkQ(a, b, ans) {
+        return {
+            a:a, b:b, answer:ans,
+            html: '<span class="hl">'+a+'</span> <span class="sym">'+sym+
+                  '</span> <span class="hl">'+b+'</span> <span class="eq">= ?</span>'
+        };
+    }
+    if (op === 'mult') {
+        for (var i=1;i<=10;i++) qs.push(mkQ(n, i, n*i));
+    } else if (op === 'add') {
+        for (var i=1;i<=10;i++) qs.push(mkQ(n, i, n+i));
+    } else if (op === 'sub') {
+        // (n+i) - n = i, for i = 10..0 (11 questions, slice to 10)
+        for (var i=10;i>=0;i--) qs.push(mkQ(n+i, n, i));
+    } else { // div
+        // (i*n) / n = i, for i = 1..10
+        for (var i=1;i<=10;i++) qs.push(mkQ(n*i, n, i));
+    }
+    shuffleArr(qs);
+    return qs.slice(0, 10);
+}
+
+// Gera questoes para uma licao com multiplos numeros
+function genLessonQuestions(op, numbers) {
+    var pool = [];
+    numbers.forEach(function(n) {
+        var qs = genTableQuestions(op, n);
+        pool = pool.concat(qs);
+    });
+    shuffleArr(pool);
+    return pool.slice(0, 10);
+}
+
+// ══════════════════════════════════════════
 //  ESTUDO
 // ══════════════════════════════════════════
-let currentTabuada = 1;
-
 function openStudy() {
     renderStudyGrid();
-    navigateTo('sStudySelect','Estudar','Escolha uma tabuada');
+    navigateTo('sStudySelect', OPS[currentOp].name, 'Escolha um numero');
 }
 
 function renderStudyGrid() {
-    const grid = document.getElementById('studyGrid');
+    var grid = document.getElementById('studyGrid');
     grid.innerHTML = '';
-    for (let i = 1; i <= 10; i++) {
-        const b = document.createElement('button');
-        b.className = 'tabuada-btn' + (state.tabuadasMastered[i] ? ' completed' : '');
-        b.textContent = i;
-        b.onclick = () => showStudyTable(i);
-        grid.appendChild(b);
+    for (var i=1; i<=10; i++) {
+        (function(n) {
+            var b = document.createElement('button');
+            b.className = 'number-btn' + (state.mastered[currentOp][n] ? ' mastered' : '');
+            b.textContent = n;
+            b.onclick = function() { showStudyTable(n); };
+            grid.appendChild(b);
+        })(i);
     }
 }
 
 function showStudyTable(n) {
-    currentTabuada = n;
-    document.getElementById('studyTitle').textContent = 'Tabuada do ' + n;
-    const table = document.getElementById('studyTable');
+    currentNumber = n;
+    var op  = currentOp;
+    var sym = OPS[op].symbol;
+    var labels = { mult:'Tabuada do ', add:'Adicao com ', sub:'Subtracao de ', div:'Divisao por ' };
+    var title  = (labels[op] || '') + n;
+
+    document.getElementById('studyTitle').textContent = title;
+    var table = document.getElementById('studyTable');
     table.innerHTML = '';
-    for (let i = 1; i <= 10; i++) {
-        const row = document.createElement('div');
-        row.className = 'study-row';
-        row.innerHTML = `${n} &times; ${i} = <span class="result">${n * i}</span>`;
-        table.appendChild(row);
+
+    var rows = [];
+    if (op === 'mult') {
+        for (var i=1;i<=10;i++) rows.push({ left: n+' '+sym+' '+i, result: n*i });
+    } else if (op === 'add') {
+        for (var i=1;i<=10;i++) rows.push({ left: n+' '+sym+' '+i, result: n+i });
+    } else if (op === 'sub') {
+        // (n+10)-n=10, (n+9)-n=9 ... n-n=0
+        for (var i=10;i>=0;i--) rows.push({ left: (n+i)+' '+sym+' '+n, result: i });
+    } else { // div
+        // (i*n) / n = i
+        for (var i=1;i<=10;i++) rows.push({ left: (n*i)+' '+sym+' '+n, result: i });
     }
-    showScreen('sStudy','Tabuada do ' + n,'Estude e memorize!');
+
+    rows.forEach(function(r) {
+        var row = document.createElement('div');
+        row.className = 'study-row';
+        row.innerHTML = '<span>'+r.left+'</span><span class="op-sym">=</span><span class="result">'+r.result+'</span>';
+        table.appendChild(row);
+    });
+
+    navigateTo('sStudy', title, 'Estude e memorize!');
 }
 
 function startPractice() {
-    startQuiz('practice', [currentTabuada], null);
+    startQuiz('practice', [currentNumber], null);
 }
 
 // ══════════════════════════════════════════
 //  LICOES
 // ══════════════════════════════════════════
-const LESSONS = [
-    { id:1,  title:'Tabuada do 1',   desc:'Comece pelo mais facil!',        tables:[1],              color:'#4CAF50' },
-    { id:2,  title:'Tabuada do 2',   desc:'Dobrando os numeros',            tables:[2],              color:'#2196F3' },
-    { id:3,  title:'Tabuada do 3',   desc:'Tres vezes mais!',               tables:[3],              color:'#9C27B0' },
-    { id:4,  title:'Tabuada do 4',   desc:'Quatro por quatro',              tables:[4],              color:'#FF9800' },
-    { id:5,  title:'Tabuada do 5',   desc:'De cinco em cinco',              tables:[5],              color:'#E91E63' },
-    { id:6,  title:'Revisao 1-5',    desc:'Mistura das tabuadas 1 a 5',     tables:[1,2,3,4,5],      color:'#607D8B' },
-    { id:7,  title:'Tabuada do 6',   desc:'Ficando mais dificil!',          tables:[6],              color:'#00BCD4' },
-    { id:8,  title:'Tabuada do 7',   desc:'Sete, o numero da sorte',        tables:[7],              color:'#8BC34A' },
-    { id:9,  title:'Tabuada do 8',   desc:'Oito vezes mais forte',          tables:[8],              color:'#FF5722' },
-    { id:10, title:'Tabuada do 9',   desc:'Quase la!',                      tables:[9],              color:'#3F51B5' },
-    { id:11, title:'Tabuada do 10',  desc:'O mais facil dos grandes!',      tables:[10],             color:'#009688' },
-    { id:12, title:'Revisao 6-10',   desc:'Mistura das tabuadas 6 a 10',    tables:[6,7,8,9,10],     color:'#795548' },
-    { id:13, title:'Desafio Mestre', desc:'Todas as tabuadas misturadas!',  tables:[1,2,3,4,5,6,7,8,9,10], color:'#FFD700' },
+var LESSONS = [
+    { id:1,  title:'Numero 1',        numbers:[1],              color:'#4CAF50' },
+    { id:2,  title:'Numero 2',        numbers:[2],              color:'#2196F3' },
+    { id:3,  title:'Numero 3',        numbers:[3],              color:'#9C27B0' },
+    { id:4,  title:'Numero 4',        numbers:[4],              color:'#FF9800' },
+    { id:5,  title:'Numero 5',        numbers:[5],              color:'#E91E63' },
+    { id:6,  title:'Revisao 1 a 5',   numbers:[1,2,3,4,5],      color:'#607D8B' },
+    { id:7,  title:'Numero 6',        numbers:[6],              color:'#00BCD4' },
+    { id:8,  title:'Numero 7',        numbers:[7],              color:'#8BC34A' },
+    { id:9,  title:'Numero 8',        numbers:[8],              color:'#FF5722' },
+    { id:10, title:'Numero 9',        numbers:[9],              color:'#3F51B5' },
+    { id:11, title:'Numero 10',       numbers:[10],             color:'#009688' },
+    { id:12, title:'Revisao 6 a 10',  numbers:[6,7,8,9,10],     color:'#795548' },
+    { id:13, title:'Mestre Total',    numbers:[1,2,3,4,5,6,7,8,9,10], color:'#FFD700' }
 ];
+
+function lessonDesc(lesson, op) {
+    var n = lesson.numbers;
+    if (n.length === 1) {
+        var map = { mult:'Tabuada do '+n[0], add:'Somas com '+n[0], sub:'Subtracoes de '+n[0], div:'Divisoes por '+n[0] };
+        return map[op] || lesson.title;
+    }
+    if (n.length > 5) return 'Todos os numeros misturados!';
+    return 'Mistura: ' + n.join(', ');
+}
 
 function openLessons() {
     renderLessons();
@@ -685,55 +922,61 @@ function openLessons() {
 }
 
 function renderLessons() {
-    const xpProgress = state.xp % 100;
+    var op = currentOp;
+    document.getElementById('lessonTitle').textContent = 'Licoes de ' + OPS[op].name;
+    var xpProg = state.xp % 100;
     document.getElementById('lvlText').textContent = 'Nivel ' + state.level;
-    document.getElementById('lvlXP').textContent   = xpProgress + ' / 100 XP';
-    document.getElementById('lvlBar').style.width  = xpProgress + '%';
+    document.getElementById('lvlXP').textContent   = xpProg + ' / 100 XP';
+    document.getElementById('lvlBar').style.width  = xpProg + '%';
 
-    const list = document.getElementById('lessonsList');
+    var list = document.getElementById('lessonsList');
     list.innerHTML = '';
-    LESSONS.forEach((lesson, idx) => {
-        const unlocked = idx === 0 || state.lessonsCompleted[LESSONS[idx-1].id];
-        const stars    = state.lessonStars[lesson.id] || 0;
-        const card     = document.createElement('div');
+    LESSONS.forEach(function(lesson, idx) {
+        var unlocked = idx === 0 || !!state.lessonsDone[op][LESSONS[idx-1].id];
+        var starsVal = state.lessonStars[op][lesson.id] || 0;
+        var card = document.createElement('div');
         card.className = 'lesson-card' + (unlocked ? '' : ' locked');
-        card.innerHTML = `
-            <div class="lesson-number" style="background:${lesson.color}">${lesson.id}</div>
-            <div class="lesson-info">
-                <h3>${lesson.title}</h3>
-                <p>${lesson.desc}</p>
-            </div>
-            <div class="lesson-stars">${unlocked ? starDisplay(stars) : '&#128274;'}</div>
-        `;
-        if (unlocked) card.onclick = () => startQuiz('lesson', lesson.tables, lesson.id);
+        card.innerHTML =
+            '<div class="lesson-number" style="background:'+lesson.color+'">'+lesson.id+'</div>' +
+            '<div class="lesson-info">' +
+                '<h3>'+lesson.title+'</h3>' +
+                '<p>'+lessonDesc(lesson, op)+'</p>' +
+            '</div>' +
+            '<div class="lesson-stars">'+(unlocked ? starDisplay(starsVal) : '\uD83D\uDD12')+'</div>';
+        if (unlocked) {
+            (function(l) {
+                card.onclick = function() { startQuiz('lesson', l.numbers, l.id); };
+            })(lesson);
+        }
         list.appendChild(card);
     });
 }
 
 function starDisplay(n) {
-    let s = '';
-    for (let i = 0; i < 3; i++) s += i < n ? '\u2B50' : '\u2606';
+    var s = '';
+    for (var i=0;i<3;i++) s += i<n ? '\u2B50' : '\u2606';
     return s;
 }
 
 // ══════════════════════════════════════════
 //  QUIZ ENGINE
 // ══════════════════════════════════════════
-let quizQuestions  = [];
-let quizIndex      = 0;
-let quizCorrect    = 0;
-let quizErrors     = [];
-let quizAnswered   = false;
-let quizOrigin     = 'practice';
-let quizLessonId   = null;
-let pendingTimeout = null;
+var quizQuestions  = [];
+var quizIndex      = 0;
+var quizCorrect    = 0;
+var quizErrors     = [];
+var quizAnswered   = false;
+var quizOrigin     = 'practice';
+var quizLessonId   = null;
+var pendingTimeout = null;
 
 function cancelQuizTimeout() {
     if (pendingTimeout) { clearTimeout(pendingTimeout); pendingTimeout = null; }
 }
 
-function startQuiz(type, tables, lessonId) {
+function startQuiz(type, numbers, lessonId) {
     cancelQuizTimeout();
+    quizOp       = currentOp;
     quizOrigin   = type;
     quizLessonId = lessonId || null;
     quizIndex    = 0;
@@ -741,12 +984,11 @@ function startQuiz(type, tables, lessonId) {
     quizErrors   = [];
     quizAnswered = false;
 
-    quizQuestions = [];
-    tables.forEach(t => {
-        for (let i = 1; i <= 10; i++) quizQuestions.push({ a:t, b:i, answer:t*i });
-    });
-    shuffleArr(quizQuestions);
-    quizQuestions = quizQuestions.slice(0, 10);
+    if (type === 'lesson') {
+        quizQuestions = genLessonQuestions(quizOp, numbers);
+    } else {
+        quizQuestions = genTableQuestions(quizOp, numbers[0]);
+    }
 
     navigateTo('sQuiz', type === 'lesson' ? 'Licao' : 'Pratica', 'Pergunta 1 de 10');
     renderQuiz();
@@ -754,23 +996,26 @@ function startQuiz(type, tables, lessonId) {
 
 function renderQuiz() {
     if (quizIndex >= quizQuestions.length) { showResult(); return; }
-
     quizAnswered = false;
-    const q = quizQuestions[quizIndex];
-    document.getElementById('hSub').textContent = `Pergunta ${quizIndex+1} de ${quizQuestions.length}`;
 
-    const prog = document.getElementById('qProgress');
+    var q = quizQuestions[quizIndex];
+    document.getElementById('hSub').textContent = 'Pergunta ' + (quizIndex+1) + ' de ' + quizQuestions.length;
+
+    var prog = document.getElementById('qProgress');
     prog.innerHTML = '';
-    quizQuestions.forEach((_, i) => {
-        const d = document.createElement('div');
+    quizQuestions.forEach(function(_, i) {
+        var d = document.createElement('div');
         d.className = 'quiz-dot';
-        if      (i < quizIndex) d.classList.add(quizErrors.some(e => e.qi === i) ? 'wrong' : 'correct');
-        else if (i === quizIndex) d.classList.add('current');
+        if (i < quizIndex) {
+            var wasWrong = quizErrors.some(function(e) { return e.qi === i; });
+            d.classList.add(wasWrong ? 'wrong' : 'correct');
+        } else if (i === quizIndex) {
+            d.classList.add('current');
+        }
         prog.appendChild(d);
     });
 
-    document.getElementById('qQuestion').innerHTML =
-        `<span class="hl">${q.a}</span> &times; <span class="hl">${q.b}</span> = ?`;
+    document.getElementById('qQuestion').innerHTML = q.html;
 
     if (quizOrigin === 'lesson') {
         document.getElementById('qOptions').style.display = 'grid';
@@ -779,95 +1024,110 @@ function renderQuiz() {
     } else {
         document.getElementById('qOptions').style.display = 'none';
         document.getElementById('qInputWrap').style.display = 'block';
-        buildNumpad('qInput', 'qNumpad', val => checkPracticeAnswer(parseInt(val), q));
+        buildNumpad('qInput','qNumpad', function(val) { checkPracticeAnswer(parseInt(val), q); });
     }
 }
 
 function renderOptions(q) {
-    const wrap = document.getElementById('qOptions');
+    var wrap = document.getElementById('qOptions');
     wrap.innerHTML = '';
-
-    const choices = new Set([q.answer]);
-    let attempts = 0;
-    while (choices.size < 4 && attempts < 200) {
-        attempts++;
-        const delta = Math.floor(Math.random() * 19) - 9;
-        const fake  = q.answer + delta;
-        if (fake > 0 && fake !== q.answer) choices.add(fake);
+    var choices = new Set([q.answer]);
+    var att = 0;
+    while (choices.size < 4 && att < 300) {
+        att++;
+        var delta = Math.floor(Math.random()*19)-9;
+        var fake  = q.answer + delta;
+        if (fake >= 0 && fake !== q.answer) choices.add(fake);
     }
-    const arr = shuffleArr([...choices]);
-
-    arr.forEach(c => {
-        const btn = document.createElement('button');
+    var arr = shuffleArr(Array.from(choices));
+    arr.forEach(function(c) {
+        var btn = document.createElement('button');
         btn.className = 'quiz-option';
         btn.textContent = c;
-        btn.onclick = () => {
+        btn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
             if (quizAnswered) return;
             quizAnswered = true;
-
-            wrap.querySelectorAll('.quiz-option').forEach(b => b.classList.add('disabled'));
-
-            if (c === q.answer) {
-                btn.classList.add('correct');
-                doCorrect();
-            } else {
-                btn.classList.add('wrong');
-                wrap.querySelectorAll('.quiz-option').forEach(b => {
-                    if (Number(b.textContent) === q.answer) b.classList.add('correct');
-                });
-                doWrong(q);
-            }
-            pendingTimeout = setTimeout(() => { quizIndex++; renderQuiz(); }, 1000);
-        };
+            handleOptionChoice(btn, c, q, wrap);
+        }, { passive: false });
+        btn.addEventListener('click', function() {
+            if (quizAnswered) return;
+            quizAnswered = true;
+            handleOptionChoice(btn, c, q, wrap);
+        });
         wrap.appendChild(btn);
     });
 }
 
+function handleOptionChoice(btn, c, q, wrap) {
+    wrap.querySelectorAll('.quiz-option').forEach(function(b) { b.classList.add('disabled'); });
+    if (c === q.answer) {
+        btn.classList.add('correct');
+        doCorrect();
+    } else {
+        btn.classList.add('wrong');
+        wrap.querySelectorAll('.quiz-option').forEach(function(b) {
+            if (Number(b.textContent) === q.answer) b.classList.add('correct');
+        });
+        doWrong(q);
+    }
+    pendingTimeout = setTimeout(function() { quizIndex++; renderQuiz(); }, 1000);
+}
+
 function buildNumpad(inputId, padId, onConfirm) {
-    const input = document.getElementById(inputId);
+    var input = document.getElementById(inputId);
     input.value = '';
     input.className = 'quiz-input';
-
-    const pad = document.getElementById(padId);
+    var pad = document.getElementById(padId);
     pad.innerHTML = '';
 
-    [1,2,3,4,5,6,7,8,9].forEach(n => {
-        const b = document.createElement('button');
-        b.className = 'numpad-btn';
-        b.textContent = n;
-        b.onclick = () => { if (input.value.length < 4) input.value += n; };
+    [1,2,3,4,5,6,7,8,9].forEach(function(n) {
+        var b = document.createElement('button');
+        b.className = 'numpad-btn'; b.textContent = n;
+        b.addEventListener('touchstart', function(e) {
+            e.preventDefault(); if(input.value.length<4) input.value+=n;
+        }, { passive:false });
+        b.addEventListener('click', function() {
+            if(input.value.length<4) input.value+=n;
+        });
         pad.appendChild(b);
     });
 
-    const del = document.createElement('button');
-    del.className = 'numpad-btn delete';
-    del.textContent = '\u2190';
-    del.onclick = () => { input.value = input.value.slice(0, -1); };
+    var del = document.createElement('button');
+    del.className = 'numpad-btn delete'; del.textContent = '\u2190';
+    del.addEventListener('touchstart', function(e) {
+        e.preventDefault(); input.value = input.value.slice(0,-1);
+    }, { passive:false });
+    del.addEventListener('click', function() { input.value = input.value.slice(0,-1); });
     pad.appendChild(del);
 
-    const zero = document.createElement('button');
-    zero.className = 'numpad-btn';
-    zero.textContent = '0';
-    zero.onclick = () => { if (input.value.length < 4) input.value += '0'; };
+    var zero = document.createElement('button');
+    zero.className = 'numpad-btn'; zero.textContent = '0';
+    zero.addEventListener('touchstart', function(e) {
+        e.preventDefault(); if(input.value.length<4) input.value+='0';
+    }, { passive:false });
+    zero.addEventListener('click', function() { if(input.value.length<4) input.value+='0'; });
     pad.appendChild(zero);
 
-    const ok = document.createElement('button');
-    ok.className = 'numpad-btn confirm';
-    ok.textContent = '\u2713';
-    ok.onclick = () => {
-        if (!input.value || quizAnswered) return;
-        onConfirm(input.value);
-    };
+    var ok = document.createElement('button');
+    ok.className = 'numpad-btn confirm'; ok.textContent = '\u2713';
+    ok.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        if(input.value && !quizAnswered) onConfirm(input.value);
+    }, { passive:false });
+    ok.addEventListener('click', function() {
+        if(input.value && !quizAnswered) onConfirm(input.value);
+    });
     pad.appendChild(ok);
 }
 
 function checkPracticeAnswer(val, q) {
     if (quizAnswered) return;
     quizAnswered = true;
-    const input = document.getElementById('qInput');
-
-    document.getElementById('qNumpad').querySelectorAll('button').forEach(b => b.style.pointerEvents = 'none');
-
+    var input = document.getElementById('qInput');
+    document.getElementById('qNumpad').querySelectorAll('button').forEach(function(b) {
+        b.style.pointerEvents = 'none';
+    });
     if (val === q.answer) {
         input.classList.add('correct');
         doCorrect();
@@ -875,7 +1135,7 @@ function checkPracticeAnswer(val, q) {
         input.classList.add('wrong');
         doWrong(q);
     }
-    pendingTimeout = setTimeout(() => { quizIndex++; renderQuiz(); }, 1000);
+    pendingTimeout = setTimeout(function() { quizIndex++; renderQuiz(); }, 1000);
 }
 
 function doCorrect() {
@@ -887,17 +1147,17 @@ function doCorrect() {
 }
 
 function doWrong(q) {
-    quizErrors.push({ qi: quizIndex, a: q.a, b: q.b, answer: q.answer });
+    quizErrors.push({ qi:quizIndex, q:q });
     state.totalWrong++;
     showFeedback('\u274C');
     saveState();
 }
 
 function showFeedback(emoji) {
-    const el = document.getElementById('feedbackOverlay');
+    var el = document.getElementById('feedbackOverlay');
     document.getElementById('feedbackEmoji').textContent = emoji;
     el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 700);
+    setTimeout(function() { el.classList.remove('show'); }, 700);
 }
 
 // ══════════════════════════════════════════
@@ -905,50 +1165,42 @@ function showFeedback(emoji) {
 // ══════════════════════════════════════════
 function showResult() {
     cancelQuizTimeout();
-    const total = quizQuestions.length;
-    const pct   = total > 0 ? Math.round((quizCorrect / total) * 100) : 0;
-    let stars   = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0;
+    var op    = quizOp;
+    var total = quizQuestions.length;
+    var pct   = total > 0 ? Math.round((quizCorrect / total) * 100) : 0;
+    var stars = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0;
 
     if (quizOrigin === 'lesson' && quizLessonId) {
-        const prev = state.lessonStars[quizLessonId] || 0;
-        if (stars > prev) { state.stars += stars - prev; state.lessonStars[quizLessonId] = stars; }
-        if (stars >= 1) state.lessonsCompleted[quizLessonId] = true;
-        const xpGain = quizCorrect * 5 + stars * 10;
+        var prev = state.lessonStars[op][quizLessonId] || 0;
+        if (stars > prev) { state.stars += stars - prev; state.lessonStars[op][quizLessonId] = stars; }
+        if (stars >= 1) state.lessonsDone[op][quizLessonId] = true;
+        var xpGain = quizCorrect * 5 + stars * 10;
         state.xp += xpGain;
         state.level = Math.floor(state.xp / 100) + 1;
     }
     if (quizOrigin === 'practice' && pct >= 90) {
-        state.tabuadasMastered[currentTabuada] = true;
+        state.mastered[op][currentNumber] = true;
     }
     saveState();
 
     document.getElementById('rStars').textContent  = starDisplay(stars);
-    document.getElementById('rScore').textContent  = `${quizCorrect} / ${total} corretas`;
-    document.getElementById('rDetail').textContent = `${pct}% de acerto \u2022 +${quizCorrect * 10} pts`;
+    document.getElementById('rScore').textContent  = quizCorrect + ' / ' + total + ' corretas';
+    document.getElementById('rDetail').textContent = pct + '% de acerto \u2022 +' + (quizCorrect * 10) + ' pts';
 
-    const msg = document.getElementById('rMsg');
-    if (pct >= 90) {
-        msg.textContent = 'Incrivel! Voce e um genio da tabuada! \uD83C\uDF89';
-        msg.className = 'result-msg';
-        launchConfetti();
-    } else if (pct >= 70) {
-        msg.textContent = 'Muito bom! Continue assim! \uD83D\uDCAA';
-        msg.className = 'result-msg';
-    } else if (pct >= 50) {
-        msg.textContent = 'Bom trabalho! Pratique mais um pouco! \uD83D\uDE0A';
-        msg.className = 'result-msg warn';
-    } else {
-        msg.textContent = 'Nao desista! Estude e tente de novo! \uD83D\uDCDA';
-        msg.className = 'result-msg warn';
-    }
+    var msg = document.getElementById('rMsg');
+    if (pct >= 90)      { msg.textContent = 'Incrivel! Voce e um genio! \uD83C\uDF89'; msg.className = 'result-msg'; launchConfetti(); }
+    else if (pct >= 70) { msg.textContent = 'Muito bom! Continue assim! \uD83D\uDCAA'; msg.className = 'result-msg'; }
+    else if (pct >= 50) { msg.textContent = 'Bom trabalho! Pratique mais! \uD83D\uDE0A'; msg.className = 'result-msg warn'; }
+    else                { msg.textContent = 'Nao desista! Estude e tente de novo! \uD83D\uDCDA'; msg.className = 'result-msg warn'; }
 
-    const errDiv = document.getElementById('rErrors');
+    var errDiv = document.getElementById('rErrors');
     if (quizErrors.length > 0) {
-        let html = '<div class="section-title">Revise estes:</div>';
-        quizErrors.forEach(e => {
-            html += `<div class="study-row" style="justify-content:center;font-size:1.1em;">
-                ${e.a} &times; ${e.b} = <span class="result">${e.answer}</span>
-            </div>`;
+        var html = '<div class="section-title">Revise estes:</div>';
+        quizErrors.forEach(function(e) {
+            var q = e.q;
+            html += '<div class="study-row" style="justify-content:center;font-size:1em;">' +
+                    q.html.replace(' <span class="eq">= ?</span>', '') +
+                    ' <span class="op-sym">=</span> <span class="result">' + q.answer + '</span></div>';
         });
         errDiv.innerHTML = html;
     } else {
@@ -957,63 +1209,62 @@ function showResult() {
 
     document.getElementById('rRetry').style.display    = quizOrigin !== 'challenge' ? 'block' : 'none';
     document.getElementById('rContinue').textContent   = quizOrigin === 'challenge' ? '\uD83C\uDFE0 Voltar ao Menu' : '\u2714 Continuar';
-
-    navigateTo('sResult', 'Resultado', '');
+    navigateTo('sResult','Resultado','');
 }
 
 function retryQuiz() {
     if (quizOrigin === 'lesson' && quizLessonId) {
-        const lesson = LESSONS.find(l => l.id === quizLessonId);
-        if (lesson) startQuiz('lesson', lesson.tables, lesson.id);
+        var lesson = LESSONS.find(function(l) { return l.id === quizLessonId; });
+        if (lesson) startQuiz('lesson', lesson.numbers, lesson.id);
     } else if (quizOrigin === 'practice') {
-        startQuiz('practice', [currentTabuada], null);
+        startQuiz('practice', [currentNumber], null);
     }
 }
 
 function resultContinue() {
     if (quizOrigin === 'lesson') {
-        renderLessons();
-        _show('sLessons','Licoes','Complete todas!');
+        renderLessons(); _show('sLessons','Licoes','Complete todas!');
     } else if (quizOrigin === 'challenge') {
         goToMenu();
     } else {
-        _show('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!');
+        _show('sStudy', studyTitle(), 'Estude e memorize!');
     }
 }
 
 // ══════════════════════════════════════════
 //  DESAFIO RELAMPAGO
 // ══════════════════════════════════════════
-let challengeTimer    = null;
-let challengeTimeLeft = 60;
-let challengePts      = 0;
-let challengeQ        = null;
+var challengeTimer    = null;
+var challengeTimeLeft = 60;
+var challengePts      = 0;
+var challengeQ        = null;
+var challengeOp       = 'mult';
 
 function openChallenge() {
     cancelQuizTimeout();
+    challengeOp       = currentOp;
     challengeTimeLeft = 60;
     challengePts      = 0;
     document.getElementById('cTime').textContent  = 60;
     document.getElementById('cScore').textContent = 0;
+    document.getElementById('cTime').style.color  = 'var(--op-color)';
+    document.getElementById('cOpBadge').textContent = OPS[challengeOp].name;
 
     navigateTo('sChallenge','Desafio Relampago','60 segundos!');
     nextChallengeQ();
 
-    challengeTimer = setInterval(() => {
+    challengeTimer = setInterval(function() {
         challengeTimeLeft--;
         document.getElementById('cTime').textContent = challengeTimeLeft;
-        if (challengeTimeLeft <= 10) document.getElementById('cTime').style.color = '#FF5252';
-        if (challengeTimeLeft <= 0) endChallenge();
+        if (challengeTimeLeft <= 10) document.getElementById('cTime').style.color = '#E53935';
+        if (challengeTimeLeft <= 0)  endChallenge();
     }, 1000);
 }
 
 function nextChallengeQ() {
-    const a = Math.floor(Math.random() * 10) + 1;
-    const b = Math.floor(Math.random() * 10) + 1;
-    challengeQ = { a, b, answer: a * b };
-    document.getElementById('cQuestion').innerHTML =
-        `<span class="hl">${a}</span> &times; <span class="hl">${b}</span> = ?`;
-    buildNumpad('cInput', 'cNumpad', val => {
+    challengeQ = genQuestion(challengeOp);
+    document.getElementById('cQuestion').innerHTML = challengeQ.html;
+    buildNumpad('cInput','cNumpad', function(val) {
         if (parseInt(val) === challengeQ.answer) {
             challengePts += 10;
             state.totalCorrect++;
@@ -1030,18 +1281,20 @@ function nextChallengeQ() {
 
 function stopChallenge() {
     if (challengeTimer) { clearInterval(challengeTimer); challengeTimer = null; }
-    document.getElementById('cTime').style.color = 'var(--primary)';
+    document.getElementById('cTime').style.color = 'var(--op-color)';
 }
 
 function endChallenge() {
     stopChallenge();
     state.points += challengePts;
-    if (challengePts > state.challengeRecord) state.challengeRecord = challengePts;
+    var op = challengeOp;
+    if (challengePts > (state.challengeRec[op] || 0)) state.challengeRec[op] = challengePts;
     saveState();
 
     quizOrigin    = 'challenge';
-    quizQuestions = new Array(Math.max(Math.round(challengePts / 10), 1));
-    quizCorrect   = Math.round(challengePts / 10);
+    quizOp        = op;
+    quizQuestions = new Array(Math.max(Math.round(challengePts/10), 1));
+    quizCorrect   = Math.round(challengePts/10);
     quizErrors    = [];
 
     document.getElementById('rStars').textContent  =
@@ -1049,110 +1302,130 @@ function endChallenge() {
     document.getElementById('rScore').textContent  = challengePts + ' pontos!';
     document.getElementById('rDetail').textContent = quizCorrect + ' respostas certas em 60 segundos';
 
-    const msg = document.getElementById('rMsg');
-    if (challengePts >= 100) {
-        msg.textContent = 'Velocidade incrivel! \uD83D\uDE80';
-        msg.className = 'result-msg';
-        launchConfetti();
-    } else if (challengePts >= 50) {
-        msg.textContent = 'Muito rapido! Consegue mais? \uD83D\uDD25';
-        msg.className = 'result-msg';
-    } else {
-        msg.textContent = 'Continue praticando! \uD83D\uDCAA';
-        msg.className = 'result-msg warn';
-    }
+    var msg = document.getElementById('rMsg');
+    if (challengePts >= 100) { msg.textContent = 'Velocidade incrivel! \uD83D\uDE80'; msg.className = 'result-msg'; launchConfetti(); }
+    else if (challengePts >= 50) { msg.textContent = 'Muito rapido! Consegue mais? \uD83D\uDD25'; msg.className = 'result-msg'; }
+    else { msg.textContent = 'Continue praticando! \uD83D\uDCAA'; msg.className = 'result-msg warn'; }
 
     document.getElementById('rErrors').innerHTML = '';
     document.getElementById('rRetry').style.display  = 'none';
     document.getElementById('rContinue').textContent = '\uD83C\uDFE0 Voltar ao Menu';
-
     navigateTo('sResult','Resultado do Desafio','');
 }
 
 // ══════════════════════════════════════════
 //  ESTATISTICAS
 // ══════════════════════════════════════════
-function openStats() {
-    document.getElementById('stStars').textContent    = state.stars;
-    document.getElementById('stPoints').textContent   = state.points;
-    document.getElementById('stLessons').textContent  = Object.keys(state.lessonsCompleted).length;
-    document.getElementById('stChallenge').textContent= state.challengeRecord;
+var statsOp = 'mult';
 
-    const grid = document.getElementById('statsGrid');
+function openStats() {
+    statsOp = currentOp;
+    renderStats();
+    navigateTo('sStats','Meu Progresso','Veja como esta indo!');
+}
+
+function renderStats() {
+    document.getElementById('stStars').textContent  = state.stars;
+    document.getElementById('stPoints').textContent = state.points;
+    var totalLessons = 0;
+    ['mult','add','sub','div'].forEach(function(op) {
+        totalLessons += Object.keys(state.lessonsDone[op]).length;
+    });
+    document.getElementById('stLessons').textContent = totalLessons;
+    document.getElementById('stCorrect').textContent = state.totalCorrect;
+
+    // Op stat tabs
+    document.querySelectorAll('.op-stat-tab').forEach(function(t) {
+        t.classList.toggle('active', t.dataset.op === statsOp);
+    });
+
+    // Mastery grid for selected op
+    document.getElementById('statsMasteryTitle').textContent = 'Dominados \u2014 ' + OPS[statsOp].name;
+    var grid = document.getElementById('statsGrid');
     grid.innerHTML = '';
-    for (let i = 1; i <= 10; i++) {
-        const d = document.createElement('div');
-        d.className  = 'tabuada-btn' + (state.tabuadasMastered[i] ? ' completed' : '');
+    for (var i=1; i<=10; i++) {
+        var d = document.createElement('div');
+        d.className  = 'number-btn' + (state.mastered[statsOp][i] ? ' mastered' : '');
         d.textContent = i;
         d.style.cursor = 'default';
         grid.appendChild(d);
     }
-    navigateTo('sStats','Meu Progresso','Veja como esta indo!');
+
+    // Records per operation
+    var recDiv = document.getElementById('opRecords');
+    recDiv.innerHTML = '';
+    Object.keys(OPS).forEach(function(op) {
+        var card = document.createElement('div');
+        card.className = 'stat-card';
+        card.innerHTML = '<h3>'+OPS[op].symbol+' '+OPS[op].short+'</h3>' +
+                         '<div class="val">'+(state.challengeRec[op]||0)+'</div>';
+        recDiv.appendChild(card);
+    });
+}
+
+function showOpStats(op) {
+    statsOp = op;
+    renderStats();
 }
 
 // ══════════════════════════════════════════
 //  UTILIDADES
 // ══════════════════════════════════════════
 function shuffleArr(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+    for (var i=arr.length-1; i>0; i--) {
+        var j = Math.floor(Math.random()*(i+1));
+        var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
     }
     return arr;
 }
 
 function launchConfetti() {
-    const box    = document.getElementById('confettiBox');
-    const colors = ['#FF6584','#6C63FF','#4CAF50','#FFD700','#FF9800','#2196F3'];
+    var box    = document.getElementById('confettiBox');
+    var colors = ['#FF6584','#6C63FF','#4CAF50','#FFD700','#FF9800','#2196F3'];
     box.innerHTML = '';
-    for (let i = 0; i < 55; i++) {
-        const p = document.createElement('div');
+    for (var i=0; i<60; i++) {
+        var p = document.createElement('div');
         p.className = 'confetti-piece';
-        const size = 6 + Math.random() * 8;
-        p.style.cssText = `
-            left: ${Math.random() * 100}%;
-            width: ${size}px; height: ${size}px;
-            background: ${colors[Math.floor(Math.random() * colors.length)]};
-            border-radius: ${Math.random() > .5 ? '50%' : '2px'};
-            animation-duration: ${2 + Math.random() * 2}s;
-            animation-delay: ${Math.random() * .6}s;
-        `;
+        var size = 6 + Math.random()*8;
+        p.style.cssText =
+            'left:'+Math.random()*100+'%;' +
+            'width:'+size+'px;height:'+size+'px;' +
+            'background:'+colors[Math.floor(Math.random()*colors.length)]+';' +
+            'border-radius:'+(Math.random()>.5?'50%':'2px')+';' +
+            'animation-duration:'+(2+Math.random()*2)+'s;' +
+            'animation-delay:'+(Math.random()*.6)+'s;';
         box.appendChild(p);
     }
-    setTimeout(() => { box.innerHTML = ''; }, 5000);
+    setTimeout(function() { box.innerHTML = ''; }, 5000);
 }
 
 // ══════════════════════════════════════════
 //  SISTEMA DE ATUALIZACAO
 // ══════════════════════════════════════════
-const APP_VERSION = '1.7.0';
-const VERSION_URL = 'https://madrugagg.github.io/tabuada-divertida/version.json';
-let latestApkUrl = null;
-
-let remoteVersion = null;
+var APP_VERSION = '2.0.0';
+var VERSION_URL = 'https://madrugagg.github.io/tabuada-divertida/version.json';
+var latestApkUrl  = null;
+var remoteVersion = null;
 
 function checkForUpdate() {
     fetch(VERSION_URL + '?t=' + Date.now())
-        .then(r => r.json())
-        .then(data => {
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
             if (!data.version) return;
             remoteVersion = data.version;
-            // So mostra se: versao remota diferente do app atual
-            // E o usuario nao dispensou ESTA versao remota antes
-            const dismissed = localStorage.getItem('update_dismissed_ver');
+            var dismissed = localStorage.getItem('update_dismissed_ver');
             if (data.version !== APP_VERSION && dismissed !== data.version) {
                 latestApkUrl = 'https://madrugagg.github.io/tabuada-divertida/' + (data.apk || 'tabuada-divertida.apk');
                 document.getElementById('updateBanner').classList.add('show');
             }
         })
-        .catch(() => {});
+        .catch(function() {});
 }
 
 function doUpdate() {
-    // Ao clicar em atualizar, limpa o "dispensado" para proxima versao aparecer
     localStorage.removeItem('update_dismissed_ver');
     if (latestApkUrl) {
-        window.open(latestApkUrl, '_blank') || (window.location.href = latestApkUrl);
+        window.open(latestApkUrl,'_blank') || (window.location.href = latestApkUrl);
     } else {
         window.location.reload(true);
     }
@@ -1160,85 +1433,64 @@ function doUpdate() {
 
 function dismissUpdate() {
     document.getElementById('updateBanner').classList.remove('show');
-    // Lembra qual versao foi dispensada — nao mostra mais ate sair outra versao
-    if (remoteVersion) {
-        localStorage.setItem('update_dismissed_ver', remoteVersion);
-    }
+    if (remoteVersion) localStorage.setItem('update_dismissed_ver', remoteVersion);
 }
 
 // ══════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════
 updateHeader();
+selectOp('mult');
 
-// Registrar Service Worker e escutar atualizacoes
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js')
-        .then(reg => {
-            // Verificar atualizacao quando o SW instalar novo
-            reg.addEventListener('updatefound', () => {
-                const newWorker = reg.installing;
-                newWorker.addEventListener('statechange', () => {
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+        .then(function(reg) {
+            reg.addEventListener('updatefound', function() {
+                var nw = reg.installing;
+                nw.addEventListener('statechange', function() {
+                    if (nw.state === 'installed' && navigator.serviceWorker.controller) {
                         document.getElementById('updateBanner').classList.add('show');
                     }
                 });
             });
-        })
-        .catch(() => {});
-
-    // Escutar mensagem do SW sobre atualizacao
-    navigator.serviceWorker.addEventListener('message', e => {
+        }).catch(function() {});
+    navigator.serviceWorker.addEventListener('message', function(e) {
         if (e.data && e.data.type === 'SW_UPDATED') {
             document.getElementById('updateBanner').classList.add('show');
         }
     });
 }
 
-// Mostrar versao atual nos badges de credito
-const versionLabel = 'v' + APP_VERSION;
+var versionLabel = 'v' + APP_VERSION;
 document.getElementById('versionBadge1').textContent = versionLabel;
-document.querySelectorAll('.versionBadgeExtra').forEach(el => el.textContent = versionLabel);
+document.querySelectorAll('.versionBadgeExtra').forEach(function(el) { el.textContent = versionLabel; });
 
-// Verificar versao remota ao abrir
 setTimeout(checkForUpdate, 2000);
 
-// ── BOTAO VOLTAR NATIVO DO ANDROID ──
-// O Capacitor intercepta o evento antes do browser.
-// Registramos o listener diretamente — sem deviceready (isso e Cordova, nao Capacitor).
+// ── BOTAO NATIVO ANDROID ──
 (function setupNativeBack() {
-    // Metodo 1: Capacitor App plugin (APK)
-    // Disponivel imediatamente apos o carregamento da pagina no Capacitor
     function tryCapacitor() {
         if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
-            window.Capacitor.Plugins.App.addListener('backButton', function(info) {
-                // Nunca deixa o app fechar — sempre navega internamente
-                handleBack();
-            });
+            window.Capacitor.Plugins.App.addListener('backButton', function() { handleBack(); });
             return true;
         }
         return false;
     }
-
-    // Tenta imediatamente; se nao estiver pronto, tenta apos 300ms e 800ms
     if (!tryCapacitor()) {
         setTimeout(function() {
             if (!tryCapacitor()) { setTimeout(tryCapacitor, 800); }
         }, 300);
     }
 
-    // Metodo 2: popstate (PWA/navegador)
-    // Mantemos sempre entradas no history para nunca "esvaziar" e fechar o app
-    history.replaceState({ screen: 'sMenu' }, '');
-    history.pushState({ screen: 'sMenu' }, '');
-    history.pushState({ screen: 'sMenu' }, ''); // terceira entrada de seguranca
+    history.replaceState({ screen:'sMenu' }, '');
+    history.pushState({ screen:'sMenu' }, '');
+    history.pushState({ screen:'sMenu' }, '');
 
     var _popLock = false;
-    window.addEventListener('popstate', function(e) {
+    window.addEventListener('popstate', function() {
         if (_popLock) return;
         _popLock = true;
-        // Reempurra imediatamente para manter historico
-        history.pushState({ screen: currentScreen }, '');
+        history.pushState({ screen:currentScreen }, '');
         handleBack();
         setTimeout(function() { _popLock = false; }, 150);
     });
