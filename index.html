@@ -10,34 +10,23 @@
     <link rel="manifest" href="manifest.json">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-
+        html, body { height:100%; }
         :root {
-            --primary: #6C63FF;
-            --success: #4CAF50;
-            --danger: #FF5252;
-            --warning: #FFB74D;
-            --bg: #F0F2FF;
-            --card: #FFFFFF;
-            --text: #333333;
-            --muted: #777777;
+            --primary: #6C63FF; --success: #4CAF50; --danger: #FF5252;
+            --warning: #FFB74D; --bg: #F0F2FF; --card: #FFFFFF;
+            --text: #333333; --muted: #777777;
         }
-
-        html, body {
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
+            background: var(--bg); color: var(--text);
+            min-height: 100vh; overflow-x: hidden;
         }
-
         /* ── HEADER ── */
         .header {
             background: linear-gradient(135deg, #6C63FF, #FF6584);
-            color: white;
-            padding: 16px 20px 14px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(108,99,255,.3);
+            color: white; padding: 16px 20px 14px; text-align: center;
+            position: relative; box-shadow: 0 4px 15px rgba(108,99,255,.3);
+            flex-shrink: 0;
         }
         .header h1 { font-size: 1.6em; }
         .header .subtitle { font-size: .85em; opacity: .9; margin-top: 2px; }
@@ -46,19 +35,22 @@
             margin-top: 8px; font-size: .9em;
         }
         .score-bar span {
-            background: rgba(255,255,255,.2);
-            padding: 3px 12px; border-radius: 20px;
+            background: rgba(255,255,255,.2); padding: 3px 12px; border-radius: 20px;
         }
         .back-btn {
             position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
             background: rgba(255,255,255,.2); border: none; color: white;
             font-size: 1.4em; width: 38px; height: 38px;
             border-radius: 50%; cursor: pointer; display: none;
+            transition: background .2s;
         }
-        .back-btn.visible { display: block; }
+        .back-btn:active { background: rgba(255,255,255,.35); }
+        .back-btn.visible { display: flex; align-items: center; justify-content: center; }
 
-        /* ── SCREENS ── */
-        .screen { display: none; padding: 16px; max-width: 480px; margin: 0 auto; }
+        /* ── LAYOUT ── */
+        #app { display: flex; flex-direction: column; min-height: 100vh; }
+        .content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .screen { display: none; padding: 16px; max-width: 480px; margin: 0 auto; padding-bottom: 30px; }
         .screen.active { display: block; animation: fadeIn .25s ease; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
@@ -84,7 +76,6 @@
         .icon-lesson    { background: linear-gradient(135deg,#E3F2FD,#BBDEFB); }
         .icon-challenge { background: linear-gradient(135deg,#FFF3E0,#FFE0B2); }
         .icon-stats     { background: linear-gradient(135deg,#F3E5F5,#E1BEE7); }
-
         .creator-badge {
             text-align: center; margin-top: 10px; padding: 10px;
             color: var(--muted); font-size: .78em;
@@ -166,20 +157,20 @@
         .quiz-option {
             background: var(--card); border: 3px solid #E0E0E0;
             border-radius: 14px; padding: 16px; font-size: 1.4em; font-weight: bold;
-            cursor: pointer; transition: all .18s;
+            cursor: pointer; transition: all .18s; min-height: 60px;
+            display: flex; align-items: center; justify-content: center;
         }
         .quiz-option:active { transform: scale(.94); }
         .quiz-option.correct { background: #E8F5E9; border-color: var(--success); color: var(--success); }
         .quiz-option.wrong   { background: #FFEBEE; border-color: var(--danger);  color: var(--danger);  }
-        .quiz-option.disabled { pointer-events: none; }
+        .quiz-option.disabled { pointer-events: none; opacity: .6; }
 
         /* ── NUMPAD ── */
-        .numpad-wrap { margin-top: 14px; }
         .quiz-input {
             font-size: 1.9em; text-align: center; width: 140px; padding: 10px;
             border: 3px solid #E0E0E0; border-radius: 14px; outline: none;
             color: var(--text); background: var(--card); transition: border-color .25s;
-            display: block; margin: 0 auto 12px;
+            display: block; margin: 0 auto 12px; font-family: monospace;
         }
         .quiz-input.correct { border-color: var(--success); background: #E8F5E9; }
         .quiz-input.wrong   { border-color: var(--danger);  background: #FFEBEE; }
@@ -191,7 +182,8 @@
         .numpad-btn {
             background: var(--card); border: 2px solid #E0E0E0; border-radius: 11px;
             padding: 13px; font-size: 1.3em; font-weight: bold; cursor: pointer;
-            transition: all .13s; color: var(--text);
+            transition: all .13s; color: var(--text); min-height: 50px;
+            display: flex; align-items: center; justify-content: center;
         }
         .numpad-btn:active { background: var(--primary); color: white; border-color: var(--primary); transform: scale(.93); }
         .numpad-btn.confirm { background: var(--success); color: white; border-color: var(--success); }
@@ -215,7 +207,6 @@
             background: #E8F5E9; color: var(--success);
         }
         .result-msg.warn { background: #FFF3E0; color: #E65100; }
-
         .result-errors { margin: 12px 0; text-align: left; }
 
         /* ── ESTATISTICAS ── */
@@ -232,6 +223,7 @@
             display: block; width: 100%; padding: 14px; border: none;
             border-radius: 14px; font-size: 1.05em; font-weight: bold;
             cursor: pointer; margin: 8px 0; transition: transform .15s, opacity .15s;
+            touch-action: manipulation;
         }
         .btn:active { transform: scale(.96); opacity: .9; }
         .btn-primary { background: var(--primary); color: white; }
@@ -265,145 +257,147 @@
         @keyframes fall {
             to { top: 110%; transform: rotate(720deg); }
         }
-
-        /* ── SCROLLABLE SCREENS ── */
-        .screen { padding-bottom: 30px; }
     </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-    <button class="back-btn" id="backBtn" onclick="goBack()">&#8592;</button>
-    <h1 id="hTitle">Tabuada Divertida</h1>
-    <p class="subtitle" id="hSub">Aprenda brincando!</p>
-    <div class="score-bar">
-        <span id="hStars">0 &#11088;</span>
-        <span id="hPoints">0 pts</span>
-    </div>
-</div>
-
-<!-- OVERLAYS -->
-<div class="feedback-overlay" id="feedbackOverlay">
-    <div class="feedback-emoji" id="feedbackEmoji"></div>
-</div>
-<div class="confetti-container" id="confettiBox"></div>
-
-<!-- ══ MENU ══ -->
-<div class="screen active" id="sMenu">
-    <div class="section-title">O que vamos fazer?</div>
-
-    <div class="menu-card" onclick="openStudy()">
-        <div class="icon icon-study">&#128218;</div>
-        <div class="info">
-            <h2>Estudar</h2>
-            <p>Veja a tabuada completa de cada numero</p>
-        </div>
-    </div>
-    <div class="menu-card" onclick="openLessons()">
-        <div class="icon icon-lesson">&#127891;</div>
-        <div class="info">
-            <h2>Licoes</h2>
-            <p>Complete licoes e ganhe estrelas!</p>
-        </div>
-    </div>
-    <div class="menu-card" onclick="openChallenge()">
-        <div class="icon icon-challenge">&#9889;</div>
-        <div class="info">
-            <h2>Desafio Relampago</h2>
-            <p>Responda o maximo que puder em 60 segundos!</p>
-        </div>
-    </div>
-    <div class="menu-card" onclick="openStats()">
-        <div class="icon icon-stats">&#128200;</div>
-        <div class="info">
-            <h2>Meu Progresso</h2>
-            <p>Veja suas estatisticas e conquistas</p>
+<div id="app">
+    <!-- HEADER -->
+    <div class="header">
+        <button class="back-btn" id="backBtn" onclick="handleBack()">&#8592;</button>
+        <h1 id="hTitle">Tabuada Divertida</h1>
+        <p class="subtitle" id="hSub">Aprenda brincando!</p>
+        <div class="score-bar">
+            <span id="hStars">0 &#11088;</span>
+            <span id="hPoints">0 pts</span>
         </div>
     </div>
 
-    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;</div>
-</div>
-
-<!-- ══ ESTUDO: ESCOLHER TABUADA ══ -->
-<div class="screen" id="sStudySelect">
-    <div class="section-title">Escolha a tabuada:</div>
-    <div class="tabuada-grid" id="studyGrid"></div>
-</div>
-
-<!-- ══ ESTUDO: VER TABUADA ══ -->
-<div class="screen" id="sStudy">
-    <div class="section-title" id="studyTitle">Tabuada do 1</div>
-    <div class="study-table" id="studyTable"></div>
-    <button class="btn btn-primary" style="margin-top:14px" onclick="startPractice()">
-        &#9654; Praticar esta tabuada
-    </button>
-</div>
-
-<!-- ══ LICOES ══ -->
-<div class="screen" id="sLessons">
-    <div class="section-title">Licoes</div>
-    <div class="level-info">
-        <span id="lvlText">Nivel 1</span>
-        <span id="lvlXP">0 / 100 XP</span>
+    <!-- OVERLAYS -->
+    <div class="feedback-overlay" id="feedbackOverlay">
+        <div class="feedback-emoji" id="feedbackEmoji"></div>
     </div>
-    <div class="level-bar"><div class="level-bar-fill" id="lvlBar" style="width:0%"></div></div>
-    <div id="lessonsList"></div>
-</div>
+    <div class="confetti-container" id="confettiBox"></div>
 
-<!-- ══ QUIZ ══ -->
-<div class="screen" id="sQuiz">
-    <div class="quiz-area">
-        <div class="quiz-progress" id="qProgress"></div>
-        <div class="quiz-question" id="qQuestion"></div>
-        <div class="quiz-options" id="qOptions"></div>
-        <div id="qInputWrap" style="display:none">
-            <input type="text" class="quiz-input" id="qInput" inputmode="numeric" readonly>
-            <div class="numpad" id="qNumpad"></div>
+    <!-- CONTENT -->
+    <div class="content">
+        <!-- ══ MENU ══ -->
+        <div class="screen active" id="sMenu">
+            <div class="section-title">O que vamos fazer?</div>
+
+            <div class="menu-card" onclick="openStudy()">
+                <div class="icon icon-study">&#128218;</div>
+                <div class="info">
+                    <h2>Estudar</h2>
+                    <p>Veja a tabuada completa de cada numero</p>
+                </div>
+            </div>
+            <div class="menu-card" onclick="openLessons()">
+                <div class="icon icon-lesson">&#127891;</div>
+                <div class="info">
+                    <h2>Licoes</h2>
+                    <p>Complete licoes e ganhe estrelas!</p>
+                </div>
+            </div>
+            <div class="menu-card" onclick="openChallenge()">
+                <div class="icon icon-challenge">&#9889;</div>
+                <div class="info">
+                    <h2>Desafio Relampago</h2>
+                    <p>Responda o maximo que puder em 60 segundos!</p>
+                </div>
+            </div>
+            <div class="menu-card" onclick="openStats()">
+                <div class="icon icon-stats">&#128200;</div>
+                <div class="info">
+                    <h2>Meu Progresso</h2>
+                    <p>Veja suas estatisticas e conquistas</p>
+                </div>
+            </div>
+
+            <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;</div>
+        </div>
+
+        <!-- ══ ESTUDO: ESCOLHER TABUADA ══ -->
+        <div class="screen" id="sStudySelect">
+            <div class="section-title">Escolha a tabuada:</div>
+            <div class="tabuada-grid" id="studyGrid"></div>
+        </div>
+
+        <!-- ══ ESTUDO: VER TABUADA ══ -->
+        <div class="screen" id="sStudy">
+            <div class="section-title" id="studyTitle">Tabuada do 1</div>
+            <div class="study-table" id="studyTable"></div>
+            <button class="btn btn-primary" style="margin-top:14px" onclick="startPractice()">
+                &#9654; Praticar esta tabuada
+            </button>
+        </div>
+
+        <!-- ══ LICOES ══ -->
+        <div class="screen" id="sLessons">
+            <div class="section-title">Licoes</div>
+            <div class="level-info">
+                <span id="lvlText">Nivel 1</span>
+                <span id="lvlXP">0 / 100 XP</span>
+            </div>
+            <div class="level-bar"><div class="level-bar-fill" id="lvlBar" style="width:0%"></div></div>
+            <div id="lessonsList"></div>
+        </div>
+
+        <!-- ══ QUIZ ══ -->
+        <div class="screen" id="sQuiz">
+            <div class="quiz-area">
+                <div class="quiz-progress" id="qProgress"></div>
+                <div class="quiz-question" id="qQuestion"></div>
+                <div class="quiz-options" id="qOptions"></div>
+                <div id="qInputWrap" style="display:none">
+                    <input type="text" class="quiz-input" id="qInput" inputmode="numeric" readonly>
+                    <div class="numpad" id="qNumpad"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ RESULTADO ══ -->
+        <div class="screen" id="sResult">
+            <div class="result-wrap">
+                <div class="result-stars"  id="rStars"></div>
+                <div class="result-score"  id="rScore"></div>
+                <div class="result-detail" id="rDetail"></div>
+                <div class="result-msg"    id="rMsg"></div>
+                <div class="result-errors" id="rErrors"></div>
+                <button class="btn btn-primary" id="rRetry"  onclick="retryQuiz()">&#128260; Tentar Novamente</button>
+                <button class="btn btn-success" id="rContinue" onclick="resultContinue()">&#10003; Continuar</button>
+            </div>
+            <div class="creator-badge">Criado por <span>David Duarte</span></div>
+        </div>
+
+        <!-- ══ DESAFIO ══ -->
+        <div class="screen" id="sChallenge">
+            <div class="quiz-area">
+                <div class="challenge-info">
+                    <span>&#9201; <span class="val" id="cTime">60</span>s</span>
+                    <span>&#127942; <span class="val" id="cScore">0</span> pts</span>
+                </div>
+                <div class="quiz-question" id="cQuestion"></div>
+                <input type="text" class="quiz-input" id="cInput" inputmode="numeric" readonly>
+                <div class="numpad" id="cNumpad"></div>
+            </div>
+        </div>
+
+        <!-- ══ ESTATISTICAS ══ -->
+        <div class="screen" id="sStats">
+            <div class="section-title">Suas Estatisticas</div>
+            <div class="stats-grid">
+                <div class="stat-card"><h3>Estrelas</h3><div class="val" id="stStars">0</div></div>
+                <div class="stat-card"><h3>Pontos</h3><div class="val" id="stPoints">0</div></div>
+                <div class="stat-card"><h3>Licoes Completas</h3><div class="val" id="stLessons">0</div></div>
+                <div class="stat-card"><h3>Recorde Desafio</h3><div class="val" id="stChallenge">0</div></div>
+            </div>
+            <div class="section-title">Tabuadas Dominadas</div>
+            <div class="tabuada-grid" id="statsGrid"></div>
+            <button class="btn btn-danger" style="margin-top:18px" onclick="resetProgress()">&#128465; Resetar Progresso</button>
+            <div class="creator-badge">Criado por <span>David Duarte</span></div>
         </div>
     </div>
-</div>
-
-<!-- ══ RESULTADO ══ -->
-<div class="screen" id="sResult">
-    <div class="result-wrap">
-        <div class="result-stars"  id="rStars"></div>
-        <div class="result-score"  id="rScore"></div>
-        <div class="result-detail" id="rDetail"></div>
-        <div class="result-msg"    id="rMsg"></div>
-        <div class="result-errors" id="rErrors"></div>
-        <button class="btn btn-primary" id="rRetry"  onclick="retryQuiz()">&#128260; Tentar Novamente</button>
-        <button class="btn btn-success" id="rContinue" onclick="resultContinue()">&#10003; Continuar</button>
-    </div>
-    <div class="creator-badge">Criado por <span>David Duarte</span></div>
-</div>
-
-<!-- ══ DESAFIO ══ -->
-<div class="screen" id="sChallenge">
-    <div class="quiz-area">
-        <div class="challenge-info">
-            <span>&#9201; <span class="val" id="cTime">60</span>s</span>
-            <span>&#127942; <span class="val" id="cScore">0</span> pts</span>
-        </div>
-        <div class="quiz-question" id="cQuestion"></div>
-        <input type="text" class="quiz-input" id="cInput" inputmode="numeric" readonly>
-        <div class="numpad" id="cNumpad"></div>
-    </div>
-</div>
-
-<!-- ══ ESTATISTICAS ══ -->
-<div class="screen" id="sStats">
-    <div class="section-title">Suas Estatisticas</div>
-    <div class="stats-grid">
-        <div class="stat-card"><h3>Estrelas</h3><div class="val" id="stStars">0</div></div>
-        <div class="stat-card"><h3>Pontos</h3><div class="val" id="stPoints">0</div></div>
-        <div class="stat-card"><h3>Licoes Completas</h3><div class="val" id="stLessons">0</div></div>
-        <div class="stat-card"><h3>Recorde Desafio</h3><div class="val" id="stChallenge">0</div></div>
-    </div>
-    <div class="section-title">Tabuadas Dominadas</div>
-    <div class="tabuada-grid" id="statsGrid"></div>
-    <button class="btn btn-danger" style="margin-top:18px" onclick="resetProgress()">&#128465; Resetar Progresso</button>
-    <div class="creator-badge">Criado por <span>David Duarte</span></div>
 </div>
 
 <script>
@@ -445,9 +439,10 @@ function updateHeader() {
 }
 
 // ══════════════════════════════════════════
-//  NAVEGACAO
+//  NAVEGACAO - CORRIGIDA
 // ══════════════════════════════════════════
 let currentScreen = 'sMenu';
+let screenStack = ['sMenu'];
 
 function showScreen(id, title, sub) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -458,38 +453,49 @@ function showScreen(id, title, sub) {
     document.getElementById('hTitle').textContent = title || 'Tabuada Divertida';
     document.getElementById('hSub').textContent   = sub   || 'Aprenda brincando!';
 
-    // Rolar para o topo
     window.scrollTo(0, 0);
 }
 
+function navigateTo(id, title, sub) {
+    screenStack.push(id);
+    showScreen(id, title, sub);
+}
+
+function handleBack() {
+    stopChallenge();
+    cancelQuizTimeout();
+
+    if (screenStack.length <= 1) {
+        showScreen('sMenu');
+        return;
+    }
+
+    screenStack.pop();
+    const prev = screenStack[screenStack.length - 1];
+
+    // Restaurar estado anterior
+    if (prev === 'sMenu') {
+        showScreen('sMenu');
+    } else if (prev === 'sStudySelect') {
+        renderStudyGrid();
+        showScreen('sStudySelect','Estudar','Escolha uma tabuada');
+    } else if (prev === 'sStudy') {
+        showScreen('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!');
+    } else if (prev === 'sLessons') {
+        renderLessons();
+        showScreen('sLessons','Licoes','Complete todas!');
+    } else if (prev === 'sStats') {
+        showScreen('sStats','Meu Progresso','Veja como esta indo!');
+    } else {
+        showScreen('sMenu');
+    }
+}
+
 function goToMenu() {
+    screenStack = ['sMenu'];
     stopChallenge();
     cancelQuizTimeout();
     showScreen('sMenu');
-}
-
-function goBack() {
-    stopChallenge();
-    cancelQuizTimeout();
-
-    const map = {
-        'sStudySelect': () => showScreen('sMenu'),
-        'sStudy':       () => { showScreen('sStudySelect','Estudar','Escolha uma tabuada'); renderStudyGrid(); },
-        'sLessons':     () => showScreen('sMenu'),
-        'sQuiz':        () => {
-            if (quizOrigin === 'lesson') { showScreen('sLessons','Licoes','Complete todas!'); renderLessons(); }
-            else { showScreen('sStudy', 'Tabuada do ' + currentTabuada, 'Estude e memorize!'); }
-        },
-        'sResult':      () => {
-            if (quizOrigin === 'lesson') { showScreen('sLessons','Licoes','Complete todas!'); renderLessons(); }
-            else if (quizOrigin === 'challenge') showScreen('sMenu');
-            else { showScreen('sStudy', 'Tabuada do ' + currentTabuada, 'Estude e memorize!'); }
-        },
-        'sChallenge':   () => showScreen('sMenu'),
-        'sStats':       () => showScreen('sMenu'),
-    };
-    const fn = map[currentScreen];
-    if (fn) fn(); else showScreen('sMenu');
 }
 
 // ══════════════════════════════════════════
@@ -499,7 +505,7 @@ let currentTabuada = 1;
 
 function openStudy() {
     renderStudyGrid();
-    showScreen('sStudySelect','Estudar','Escolha uma tabuada');
+    navigateTo('sStudySelect','Estudar','Escolha uma tabuada');
 }
 
 function renderStudyGrid() {
@@ -553,7 +559,7 @@ const LESSONS = [
 
 function openLessons() {
     renderLessons();
-    showScreen('sLessons','Licoes','Complete todas!');
+    navigateTo('sLessons','Licoes','Complete todas!');
 }
 
 function renderLessons() {
@@ -596,7 +602,7 @@ let quizIndex      = 0;
 let quizCorrect    = 0;
 let quizErrors     = [];
 let quizAnswered   = false;
-let quizOrigin     = 'practice'; // 'practice' | 'lesson' | 'challenge'
+let quizOrigin     = 'practice';
 let quizLessonId   = null;
 let pendingTimeout = null;
 
@@ -620,7 +626,7 @@ function startQuiz(type, tables, lessonId) {
     shuffleArr(quizQuestions);
     quizQuestions = quizQuestions.slice(0, 10);
 
-    showScreen('sQuiz', type === 'lesson' ? 'Licao' : 'Pratica', 'Pergunta 1 de 10');
+    navigateTo('sQuiz', type === 'lesson' ? 'Licao' : 'Pratica', 'Pergunta 1 de 10');
     renderQuiz();
 }
 
@@ -631,7 +637,6 @@ function renderQuiz() {
     const q = quizQuestions[quizIndex];
     document.getElementById('hSub').textContent = `Pergunta ${quizIndex+1} de ${quizQuestions.length}`;
 
-    // Dots
     const prog = document.getElementById('qProgress');
     prog.innerHTML = '';
     quizQuestions.forEach((_, i) => {
@@ -660,12 +665,11 @@ function renderOptions(q) {
     const wrap = document.getElementById('qOptions');
     wrap.innerHTML = '';
 
-    // Gerar 4 opcoes unicas
     const choices = new Set([q.answer]);
     let attempts = 0;
     while (choices.size < 4 && attempts < 200) {
         attempts++;
-        const delta = Math.floor(Math.random() * 19) - 9; // -9 a +9
+        const delta = Math.floor(Math.random() * 19) - 9;
         const fake  = q.answer + delta;
         if (fake > 0 && fake !== q.answer) choices.add(fake);
     }
@@ -679,7 +683,6 @@ function renderOptions(q) {
             if (quizAnswered) return;
             quizAnswered = true;
 
-            // Desabilitar todos
             wrap.querySelectorAll('.quiz-option').forEach(b => b.classList.add('disabled'));
 
             if (c === q.answer) {
@@ -741,7 +744,6 @@ function checkPracticeAnswer(val, q) {
     quizAnswered = true;
     const input = document.getElementById('qInput');
 
-    // Desabilitar numpad
     document.getElementById('qNumpad').querySelectorAll('button').forEach(b => b.style.pointerEvents = 'none');
 
     if (val === q.answer) {
@@ -818,7 +820,6 @@ function showResult() {
         msg.className = 'result-msg warn';
     }
 
-    // Erros para revisar
     const errDiv = document.getElementById('rErrors');
     if (quizErrors.length > 0) {
         let html = '<div class="section-title">Revise estes:</div>';
@@ -832,11 +833,10 @@ function showResult() {
         errDiv.innerHTML = '';
     }
 
-    // Botoes
     document.getElementById('rRetry').style.display    = quizOrigin !== 'challenge' ? 'block' : 'none';
     document.getElementById('rContinue').textContent   = quizOrigin === 'challenge' ? '\uD83C\uDFE0 Voltar ao Menu' : '\u2714 Continuar';
 
-    showScreen('sResult', 'Resultado', '');
+    navigateTo('sResult', 'Resultado', '');
 }
 
 function retryQuiz() {
@@ -852,10 +852,12 @@ function resultContinue() {
     if (quizOrigin === 'lesson') {
         renderLessons();
         showScreen('sLessons','Licoes','Complete todas!');
+        screenStack = ['sMenu', 'sLessons'];
     } else if (quizOrigin === 'challenge') {
-        showScreen('sMenu');
+        goToMenu();
     } else {
         showScreen('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!');
+        screenStack = ['sMenu', 'sStudySelect', 'sStudy'];
     }
 }
 
@@ -874,7 +876,7 @@ function openChallenge() {
     document.getElementById('cTime').textContent  = 60;
     document.getElementById('cScore').textContent = 0;
 
-    showScreen('sChallenge','Desafio Relampago','60 segundos!');
+    navigateTo('sChallenge','Desafio Relampago','60 segundos!');
     nextChallengeQ();
 
     challengeTimer = setInterval(() => {
@@ -944,7 +946,7 @@ function endChallenge() {
     document.getElementById('rRetry').style.display  = 'none';
     document.getElementById('rContinue').textContent = '\uD83C\uDFE0 Voltar ao Menu';
 
-    showScreen('sResult','Resultado do Desafio','');
+    navigateTo('sResult','Resultado do Desafio','');
 }
 
 // ══════════════════════════════════════════
@@ -965,7 +967,7 @@ function openStats() {
         d.style.cursor = 'default';
         grid.appendChild(d);
     }
-    showScreen('sStats','Meu Progresso','Veja como esta indo!');
+    navigateTo('sStats','Meu Progresso','Veja como esta indo!');
 }
 
 // ══════════════════════════════════════════
