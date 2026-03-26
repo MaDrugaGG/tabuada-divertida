@@ -9,31 +9,34 @@
     <title>Tabuada Divertida</title>
     <link rel="manifest" href="manifest.json">
     <style>
-        /* ── UPDATE BANNER ── */
-        .update-banner {
-            display: none;
-            position: fixed; bottom: 0; left: 0; right: 0;
+        /* ── UPDATE MODAL ── */
+        .update-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,.55); z-index: 1000;
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .update-overlay.show { display: flex; animation: fadeIn .25s ease; }
+        .update-modal {
+            background: white; border-radius: 24px; padding: 32px 24px;
+            text-align: center; max-width: 340px; width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,.3);
+            animation: popIn .3s ease;
+        }
+        .update-modal .update-icon { font-size: 3.5em; margin-bottom: 12px; }
+        .update-modal h2 { font-size: 1.3em; color: #333; margin-bottom: 8px; }
+        .update-modal p  { font-size: .9em; color: #777; margin-bottom: 24px; line-height: 1.5; }
+        .update-modal .btn-update {
+            display: block; width: 100%; padding: 14px;
             background: linear-gradient(135deg, #6C63FF, #FF6584);
-            color: white; padding: 14px 16px;
-            z-index: 999; box-shadow: 0 -4px 20px rgba(0,0,0,.2);
-            animation: slideUp .3s ease;
+            color: white; border: none; border-radius: 14px;
+            font-size: 1.05em; font-weight: bold; cursor: pointer;
+            margin-bottom: 10px; transition: transform .15s;
         }
-        .update-banner.show { display: flex; align-items: center; gap: 12px; }
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to   { transform: translateY(0); }
-        }
-        .update-banner .update-text { flex: 1; font-size: .9em; }
-        .update-banner .update-text b { display: block; font-size: 1em; }
-        .update-banner .btn-update {
-            background: white; color: #6C63FF; border: none;
-            padding: 8px 16px; border-radius: 10px; font-weight: bold;
-            cursor: pointer; font-size: .85em; white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .update-banner .btn-dismiss {
-            background: none; border: none; color: rgba(255,255,255,.7);
-            font-size: 1.3em; cursor: pointer; padding: 4px; flex-shrink: 0;
+        .update-modal .btn-update:active { transform: scale(.97); }
+        .update-modal .btn-dismiss {
+            display: block; width: 100%; padding: 10px;
+            background: none; border: none; color: #aaa;
+            font-size: .9em; cursor: pointer;
         }
     </style>
     <style>
@@ -289,14 +292,15 @@
 </head>
 <body>
 
-<!-- UPDATE BANNER -->
-<div class="update-banner" id="updateBanner">
-    <div class="update-text">
-        <b>&#128640; Nova versao disponivel!</b>
-        Toque para baixar e instalar a atualizacao
+<!-- UPDATE MODAL -->
+<div class="update-overlay" id="updateBanner">
+    <div class="update-modal">
+        <div class="update-icon">&#128640;</div>
+        <h2>Nova versao disponivel!</h2>
+        <p>Uma atualizacao com melhorias esta pronta. Baixe agora e instale por cima do app atual!</p>
+        <button class="btn-update" onclick="doUpdate()">&#11015; Baixar Atualizacao</button>
+        <button class="btn-dismiss" onclick="dismissUpdate()">Agora nao</button>
     </div>
-    <button class="btn-update" id="updateBtn" onclick="doUpdate()">Atualizar</button>
-    <button class="btn-dismiss" onclick="dismissUpdate()">&#215;</button>
 </div>
 
 <div id="app">
@@ -321,7 +325,36 @@
     <div class="content">
         <!-- ══ MENU ══ -->
         <div class="screen active" id="sMenu">
-            <div class="section-title">O que vamos fazer?</div>
+            <!-- BANNER PRINCIPAL -->
+            <div style="
+                background: linear-gradient(135deg, #6C63FF 0%, #9C63FF 50%, #FF6584 100%);
+                border-radius: 22px; padding: 24px 20px; margin-bottom: 18px;
+                text-align: center; color: white; position: relative; overflow: hidden;
+                box-shadow: 0 6px 24px rgba(108,99,255,.35);
+            ">
+                <!-- circulos decorativos -->
+                <div style="position:absolute;width:120px;height:120px;border-radius:50%;
+                    background:rgba(255,255,255,.08);top:-30px;left:-30px;"></div>
+                <div style="position:absolute;width:80px;height:80px;border-radius:50%;
+                    background:rgba(255,255,255,.08);bottom:-20px;right:-10px;"></div>
+
+                <div style="font-size:3.2em;margin-bottom:8px;position:relative;">&#10006;&#65039;</div>
+                <div style="font-size:1.5em;font-weight:bold;margin-bottom:4px;position:relative;">
+                    Tabuada Divertida
+                </div>
+                <div style="font-size:.85em;opacity:.85;margin-bottom:16px;position:relative;">
+                    Aprenda multiplicacao de um jeito divertido!
+                </div>
+                <!-- mini numeros decorativos -->
+                <div style="display:flex;justify-content:center;gap:8px;position:relative;">
+                    <span style="background:rgba(255,255,255,.2);border-radius:10px;padding:5px 10px;font-size:.85em;font-weight:bold;">1&#215;1</span>
+                    <span style="background:rgba(255,255,255,.2);border-radius:10px;padding:5px 10px;font-size:.85em;font-weight:bold;">5&#215;5</span>
+                    <span style="background:rgba(255,255,255,.2);border-radius:10px;padding:5px 10px;font-size:.85em;font-weight:bold;">9&#215;9</span>
+                    <span style="background:rgba(255,255,255,.2);border-radius:10px;padding:5px 10px;font-size:.85em;font-weight:bold;">&#11088;&#11088;&#11088;</span>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top:4px;">O que vamos fazer?</div>
 
             <div class="menu-card" onclick="openStudy()">
                 <div class="icon icon-study">&#128218;</div>
@@ -1033,7 +1066,7 @@ function launchConfetti() {
 // ══════════════════════════════════════════
 //  SISTEMA DE ATUALIZACAO
 // ══════════════════════════════════════════
-const APP_VERSION = '1.2.0';
+const APP_VERSION = '1.3.0';
 const VERSION_URL = 'https://madrugagg.github.io/tabuada-divertida/version.json';
 let latestApkUrl = null;
 
