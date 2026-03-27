@@ -2132,6 +2132,29 @@ const APP_VERSION = '2.3.1';
             if (data.version && data.version !== APP_VERSION) showUpdateBanner();
         }).catch(() => {});
 })();
+
+// ── ADMOB ──
+// ID de teste: use ate criar seu bloco de anuncio no AdMob
+// Depois substitua pelo ID real do seu bloco (ex: ca-app-pub-8537968127598634/XXXXXXXXX)
+const ADMOB_BANNER_ID = 'ca-app-pub-3940256099942544/6300978111'; // TESTE - trocar pelo real
+
+async function initAdMob() {
+    const AdMob = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob;
+    if (!AdMob) return; // nao e app nativo, ignora no navegador
+    try {
+        await AdMob.initialize({
+            tagForChildDirectedTreatment: true,  // app infantil - COPPA
+            tagForUnderAgeOfConsent: true,
+        });
+        await AdMob.showBanner({
+            adId: ADMOB_BANNER_ID,
+            adSize: 'ADAPTIVE_BANNER',
+            position: 'BOTTOM_CENTER',
+            margin: 0,
+        });
+    } catch(e) { console.log('AdMob:', e); }
+}
+initAdMob();
 </script>
 </body>
 </html>
