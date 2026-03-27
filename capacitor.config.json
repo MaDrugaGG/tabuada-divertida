@@ -1,0 +1,9 @@
+{
+  "appId": "com.tabuada.divertida",
+  "appName": "Tabuada Divertida",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true
+  }
+}
