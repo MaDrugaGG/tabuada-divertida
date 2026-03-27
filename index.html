@@ -22,9 +22,12 @@
             --muted: #777777;
         }
 
-        html, body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        html {
             background: var(--bg);
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: transparent;
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
@@ -52,9 +55,10 @@
         .back-btn {
             position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
             background: rgba(255,255,255,.2); border: none; color: white;
-            width: 44px; height: 44px;
+            width: 48px; height: 48px;
             border-radius: 50%; cursor: pointer; display: none;
             align-items: center; justify-content: center; padding: 0;
+            touch-action: manipulation; -webkit-tap-highlight-color: rgba(255,255,255,0.15);
         }
         .back-btn.visible { display: flex; }
 
@@ -274,7 +278,21 @@
         .screen { padding-bottom: 30px; }
 
         /* ── FUNDO PADRAO ── */
-        #bgPattern { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+        #bgPattern {
+            position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+            background: linear-gradient(145deg, #F0F2FF 0%, #EEF0FF 50%, #F5F0FF 100%);
+        }
+        #bgPattern::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(circle at 10% 15%, rgba(108,99,255,0.10) 50px, transparent 50px),
+                radial-gradient(circle at 90% 10%, rgba(255,101,132,0.09) 40px, transparent 40px),
+                radial-gradient(circle at 50% 50%, rgba(108,99,255,0.06) 70px, transparent 70px),
+                radial-gradient(circle at 80% 70%, rgba(255,101,132,0.08) 55px, transparent 55px),
+                radial-gradient(circle at 20% 80%, rgba(108,99,255,0.07) 45px, transparent 45px),
+                radial-gradient(circle at 60% 90%, rgba(255,101,132,0.06) 35px, transparent 35px);
+        }
         #bgPattern span { position: absolute; font-weight: bold; user-select: none; line-height: 1; }
 
         /* ── CORRIDA MATEMATICA ── */
@@ -299,8 +317,9 @@
             position: absolute; left: 14%; bottom: 32%; font-size: 2.4em; z-index: 2;
             transition: bottom .3s cubic-bezier(.2,.8,.3,1);
             filter: drop-shadow(2px 2px 2px rgba(0,0,0,.2));
+            transform: scaleX(-1);
         }
-        .rn-char.jumping { bottom: 58%; }
+        .rn-char.jumping { bottom: 58%; transform: scaleX(-1); }
         .rn-char.hit { animation: rnHit .5s; }
         @keyframes rnHit { 0%,100%{opacity:1} 30%,70%{opacity:.1} }
         .rn-obstacle {
@@ -310,18 +329,19 @@
         .rn-obstacle.explode { animation: rnExplode .35s forwards; }
         @keyframes rnExplode { 0%{transform:scale(1);opacity:1} 60%{transform:scale(2);opacity:.4} 100%{transform:scale(0);opacity:0} }
         .rn-question {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            background: rgba(255,255,255,.97); padding: 10px 12px;
-            border-radius: 0 0 16px 16px; display: none;
-            box-shadow: 0 -2px 10px rgba(0,0,0,.08);
+            background: var(--card); border-radius: 14px; padding: 14px 12px;
+            margin-top: 10px; display: none;
+            box-shadow: 0 4px 18px rgba(108,99,255,.18);
+            border: 2px solid var(--primary);
         }
-        .rn-question.show { display: block; }
+        .rn-question.show { display: block; animation: fadeIn .2s ease; }
         .rn-q-text { font-size: 1.7em; font-weight: bold; text-align: center; margin-bottom: 8px; }
         .rn-opts { display: flex; gap: 8px; justify-content: center; }
         .rn-opt {
             background: var(--card); border: 2px solid #E0E0E0; border-radius: 10px;
             padding: 10px 18px; font-size: 1.2em; font-weight: bold;
             cursor: pointer; transition: all .15s; min-width: 65px; text-align: center;
+            touch-action: manipulation;
         }
         .rn-opt:active { transform: scale(.92); }
         .rn-opt.correct { background: #E8F5E9; border-color: var(--success); color: var(--success); }
@@ -349,16 +369,19 @@
             box-shadow: 0 4px 14px rgba(0,0,0,.08);
         }
         .balloon {
-            position: absolute; cursor: pointer; text-align: center;
+            position: absolute; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center;
             animation: blFloat var(--dur,4s) linear forwards;
             animation-delay: var(--dly,0s); z-index: 2; user-select: none;
+            touch-action: manipulation;
         }
         @keyframes blFloat { from{bottom:-90px} to{bottom:110%} }
-        .balloon-emoji { font-size: 2.6em; display: block; line-height: 1; }
+        .balloon-emoji { font-size: 2.6em; line-height: 1.1; display: block; }
         .balloon-num {
-            font-weight: bold; font-size: .88em; background: rgba(255,255,255,.92);
-            border-radius: 20px; padding: 2px 8px; margin-top: -4px;
-            color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.1);
+            font-weight: bold; font-size: .85em; background: rgba(255,255,255,.95);
+            border-radius: 20px; padding: 3px 9px; margin-top: 3px;
+            color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.15);
+            min-width: 28px; text-align: center;
         }
         .balloon.pop { animation: blPop .3s forwards !important; pointer-events: none; }
         @keyframes blPop { 0%{transform:scale(1.3)} 100%{transform:scale(0);opacity:0} }
@@ -377,21 +400,19 @@
         .od-stats { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: .9em; }
         .od-stats .val { font-weight: bold; color: var(--primary); }
         .od-hint { text-align: center; font-size: .8em; color: var(--muted); margin: 0 0 10px; }
-        .od-area { position: relative; display: flex; gap: 8px; margin: 4px 0; align-items: flex-start; }
-        .od-svg { position: absolute; inset: 0; width: 100%; pointer-events: none; overflow: visible; z-index: 3; }
+        .od-area { display: flex; gap: 10px; margin: 4px 0; align-items: flex-start; }
         .od-col { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-        .od-col.right { align-items: flex-end; }
         .od-item {
-            background: var(--card); border: 2.5px solid #E0E0E0; border-radius: 12px;
-            padding: 12px 8px; font-weight: bold; font-size: 1em;
-            cursor: pointer; transition: all .18s; text-align: center;
-            width: 100%; box-shadow: 0 2px 6px rgba(0,0,0,.05);
+            background: var(--card); border: 2.5px solid #E0E0E0; border-radius: 14px;
+            padding: 14px 8px; font-weight: bold; font-size: 1.05em;
+            cursor: pointer; transition: all .2s; text-align: center;
+            width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,.06);
+            touch-action: manipulation;
         }
-        .od-item:active { transform: scale(.95); }
-        .od-item.selected { border-color: var(--primary); background: #F0EFFF; color: var(--primary); transform: scale(1.04); }
-        .od-item.matched  { border-color: var(--success); background: #E8F5E9; color: var(--success); pointer-events: none; }
-        .od-item.wrong    { border-color: var(--danger);  background: #FFEBEE; animation: odShake .35s; }
+        .od-item:active { transform: scale(.94); }
+        .od-item.wrong { animation: odShake .35s; }
         @keyframes odShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+        .od-item.matched { pointer-events: none; transform: scale(1.02); }
         .od-result { text-align: center; padding: 16px 0; display: none; }
         .od-result.show { display: block; }
 
@@ -408,6 +429,43 @@
         .weak-mini-bar { background: #E0E0E0; height: 6px; border-radius: 3px; overflow: hidden; }
         .weak-mini-fill { height: 100%; border-radius: 3px; }
         .weak-pct { font-size: .8em; color: var(--muted); min-width: 32px; text-align: right; }
+
+        /* ── AVENTURA MATEMATICA ── */
+        .icon-adventure { background: linear-gradient(135deg,#E8EAF6,#C5CAE9); }
+        .adv-map { display: flex; flex-direction: column; gap: 10px; margin: 8px 0; }
+        .adv-phase {
+            background: var(--card); border-radius: 18px; padding: 16px 18px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.07);
+            display: flex; align-items: center; gap: 14px;
+            cursor: pointer; transition: transform .15s; position: relative;
+            touch-action: manipulation;
+        }
+        .adv-phase:active { transform: scale(.97); }
+        .adv-phase.locked { opacity: .4; cursor: not-allowed; }
+        .adv-phase-icon {
+            width: 52px; height: 52px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8em; flex-shrink: 0; color: white;
+        }
+        .adv-phase-info h3 { font-size: 1em; margin-bottom: 3px; }
+        .adv-phase-info p  { font-size: .78em; color: var(--muted); }
+        .adv-phase-stars { margin-left: auto; font-size: 1.1em; white-space: nowrap; }
+        .adv-phase-badge {
+            position: absolute; top: -6px; right: 10px;
+            background: var(--primary); color: white;
+            font-size: .68em; font-weight: bold; padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .adv-phase-badge.done { background: var(--success); }
+        .adv-progress {
+            text-align: center; background: var(--card); border-radius: 14px;
+            padding: 14px; margin-bottom: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,.06);
+        }
+        .adv-progress h3 { font-size: .95em; color: var(--muted); margin-bottom: 8px; }
+        .adv-prog-bar { background: #E0E0E0; height: 10px; border-radius: 5px; overflow: hidden; }
+        .adv-prog-fill { height: 100%; background: linear-gradient(90deg,var(--primary),#FF6584); border-radius: 5px; transition: width .6s ease; }
+        .adv-prog-label { font-size: .82em; color: var(--muted); margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -415,7 +473,7 @@
 
 <!-- HEADER -->
 <div class="header">
-    <button class="back-btn" id="backBtn" onclick="goBack()" aria-label="Voltar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <button class="back-btn" id="backBtn" onclick="goBack()" aria-label="Voltar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none;display:block"><polyline points="15 18 9 12 15 6"/></svg></button>
     <h1 id="hTitle">Tabuada Divertida</h1>
     <p class="subtitle" id="hSub">Aprenda brincando!</p>
     <div class="score-bar">
@@ -481,6 +539,14 @@
         <div class="info">
             <h2>Conecta Matematica</h2>
             <p>Conecte cada conta com seu resultado!</p>
+        </div>
+    </div>
+
+    <div class="menu-card" onclick="openAdventure()">
+        <div class="icon icon-adventure">&#127758;</div>
+        <div class="info">
+            <h2>Aventura Matematica</h2>
+            <p>Fase a fase do mais facil ao mais dificil!</p>
         </div>
     </div>
 
@@ -585,15 +651,15 @@
     <div class="rn-world" id="rnWorld">
         <div class="rn-ground"></div>
         <div class="rn-char" id="rnChar">&#127939;</div>
-        <div class="rn-question" id="rnQuestion">
-            <div class="rn-q-text" id="rnQText"></div>
-            <div class="rn-opts" id="rnOpts"></div>
-        </div>
         <div class="rn-gameover" id="rnGameOver">
             <h2>Fim de Jogo! &#128128;</h2>
             <div class="pts" id="rnFinalScore"></div>
             <button class="btn btn-primary" style="color:white;width:200px;margin-top:8px" onclick="startRunnerGame()">&#128260; Jogar Novamente</button>
         </div>
+    </div>
+    <div class="rn-question" id="rnQuestion">
+        <div class="rn-q-text" id="rnQText"></div>
+        <div class="rn-opts" id="rnOpts"></div>
     </div>
     <button class="btn btn-success" style="margin-top:8px" onclick="startRunnerGame()">&#9654; Novo Jogo</button>
 </div>
@@ -623,9 +689,8 @@
     </div>
     <p class="od-hint">Toque uma conta e depois o resultado correto</p>
     <div class="od-area" id="odArea">
-        <svg class="od-svg" id="odSvg"></svg>
         <div class="od-col" id="odLeft"></div>
-        <div class="od-col right" id="odRight"></div>
+        <div class="od-col" id="odRight"></div>
     </div>
     <div class="od-result" id="odResult">
         <div class="result-stars" id="odStars"></div>
@@ -633,6 +698,17 @@
         <button class="btn btn-primary" style="margin-top:12px" onclick="startOrderGame()">&#128260; Jogar Novamente</button>
         <button class="btn btn-success" style="margin-top:6px" onclick="goBack()">&#10003; Voltar ao Menu</button>
     </div>
+</div>
+
+
+<!-- ══ AVENTURA MATEMATICA ══ -->
+<div class="screen" id="sAdventure">
+    <div class="adv-progress">
+        <h3>Progresso da Aventura</h3>
+        <div class="adv-prog-bar"><div class="adv-prog-fill" id="advProgFill" style="width:0%"></div></div>
+        <div class="adv-prog-label" id="advProgLabel">0 de 6 fases completas</div>
+    </div>
+    <div class="adv-map" id="advMap"></div>
 </div>
 
 <script>
@@ -645,7 +721,7 @@ function defaultState() {
         lessonsCompleted: {}, lessonStars: {},
         tabuadasMastered: {}, challengeRecord: 0,
         totalCorrect: 0, totalWrong: 0,
-        tableStats: {}
+        tableStats: {}, adventureStars: {}
     };
 }
 
@@ -723,6 +799,7 @@ function goBack() {
         'sRunner':      () => showScreen('sMenu'),
         'sBalloon':     () => showScreen('sMenu'),
         'sOrder':       () => showScreen('sMenu'),
+        'sAdventure':   () => showScreen('sMenu'),
     };
     const fn = map[currentScreen];
     if (fn) fn(); else showScreen('sMenu');
@@ -1043,6 +1120,14 @@ function showResult() {
     if (quizOrigin === 'practice' && pct >= 90) {
         state.tabuadasMastered[currentTabuada] = true;
     }
+    if (quizOrigin === 'adventure' && advCurrentPhase) {
+        const minPct = advCurrentPhase.minPct;
+        if (pct >= minPct) {
+            if (!state.adventureStars) state.adventureStars = {};
+            const prev = state.adventureStars[advCurrentPhase.id] || 0;
+            if (stars > prev) state.adventureStars[advCurrentPhase.id] = stars;
+        }
+    }
     saveState();
 
     document.getElementById('rStars').textContent  = starDisplay(stars);
@@ -1090,6 +1175,8 @@ function retryQuiz() {
     if (quizOrigin === 'lesson' && quizLessonId) {
         const lesson = LESSONS.find(l => l.id === quizLessonId);
         if (lesson) startQuiz('lesson', lesson.tables, lesson.id);
+    } else if (quizOrigin === 'adventure' && advCurrentPhase) {
+        startAdvPhase(advCurrentPhase);
     } else if (quizOrigin === 'practice') {
         startQuiz('practice', [currentTabuada], null);
     }
@@ -1101,6 +1188,9 @@ function resultContinue() {
         showScreen('sLessons','Licoes','Complete todas!');
     } else if (quizOrigin === 'challenge') {
         showScreen('sMenu');
+    } else if (quizOrigin === 'adventure') {
+        renderAdventureMap();
+        showScreen('sAdventure','Aventura Matematica','Fase a fase!');
     } else {
         showScreen('sStudy','Tabuada do ' + currentTabuada,'Estude e memorize!');
     }
@@ -1521,20 +1611,25 @@ function openOrderGame() {
     startOrderGame();
 }
 
+const OD_COLORS = ['#6C63FF','#FF6584','#4CAF50','#FF9800','#00BCD4'];
+
 function startOrderGame() {
     stopOrderGame();
     od.active = true; od.selected = null; od.matched = 0; od.tries = 0; od.seconds = 0;
     document.getElementById('odTries').textContent = '0';
     document.getElementById('odTime').textContent  = '0';
     document.getElementById('odResult').classList.remove('show');
-    document.getElementById('odSvg').innerHTML = '';
     const used = new Set();
     const pairs = [];
     while (pairs.length < 5) {
         const a = Math.floor(Math.random() * 9) + 2;
         const b = Math.floor(Math.random() * 9) + 2;
         const key = Math.min(a, b) + 'x' + Math.max(a, b);
-        if (!used.has(key)) { used.add(key); pairs.push({ q: a + ' \u00D7 ' + b, ans: a * b, id: pairs.length }); }
+        if (!used.has(key)) {
+            const idx = pairs.length;
+            used.add(key);
+            pairs.push({ q: a + ' \u00D7 ' + b, ans: a * b, id: idx, color: OD_COLORS[idx] });
+        }
     }
     const leftCol  = document.getElementById('odLeft');
     const rightCol = document.getElementById('odRight');
@@ -1543,14 +1638,14 @@ function startOrderGame() {
     pairs.forEach(p => {
         const el = document.createElement('div');
         el.className = 'od-item'; el.textContent = p.q;
-        el.dataset.id = p.id; el.dataset.side = 'q';
+        el.dataset.id = p.id; el.dataset.side = 'q'; el.dataset.color = p.color;
         el.onclick = () => selectOdItem(el);
         leftCol.appendChild(el);
     });
     shuffleArr([...pairs]).forEach(p => {
         const el = document.createElement('div');
         el.className = 'od-item'; el.textContent = p.ans;
-        el.dataset.id = p.id; el.dataset.side = 'a';
+        el.dataset.id = p.id; el.dataset.side = 'a'; el.dataset.color = p.color;
         el.onclick = () => selectOdItem(el);
         rightCol.appendChild(el);
     });
@@ -1564,17 +1659,32 @@ function stopOrderGame() {
 
 function selectOdItem(el) {
     if (!od.active || el.classList.contains('matched')) return;
-    const side = el.dataset.side;
-    const id   = parseInt(el.dataset.id);
+    const side  = el.dataset.side;
+    const id    = parseInt(el.dataset.id);
+    const color = el.dataset.color;
     if (!od.selected) {
-        document.querySelectorAll('.od-item.selected').forEach(e => e.classList.remove('selected'));
+        // Clear previous selection
+        document.querySelectorAll('.od-item.selected').forEach(e => {
+            e.classList.remove('selected');
+            e.style.borderColor = ''; e.style.background = ''; e.style.color = '';
+        });
         el.classList.add('selected');
-        od.selected = { el, side, id };
+        el.style.borderColor = color;
+        el.style.background  = color + '22';
+        el.style.color       = color;
+        od.selected = { el, side, id, color };
     } else {
         if (od.selected.side === side) {
-            document.querySelectorAll('.od-item.selected').forEach(e => e.classList.remove('selected'));
+            // Reselect same side
+            document.querySelectorAll('.od-item.selected').forEach(e => {
+                e.classList.remove('selected');
+                e.style.borderColor = ''; e.style.background = ''; e.style.color = '';
+            });
             el.classList.add('selected');
-            od.selected = { el, side, id };
+            el.style.borderColor = color;
+            el.style.background  = color + '22';
+            el.style.color       = color;
+            od.selected = { el, side, id, color };
             return;
         }
         od.tries++;
@@ -1582,37 +1692,33 @@ function selectOdItem(el) {
         const first = od.selected;
         od.selected = null;
         if (first.id === id) {
-            first.el.classList.remove('selected'); first.el.classList.add('matched');
-            el.classList.add('matched');
-            drawOdLine(first.el, el, od.matched);
+            // Match! Use the pair's color for both
+            const pairColor = first.color;
+            [first.el, el].forEach(item => {
+                item.classList.remove('selected');
+                item.classList.add('matched');
+                item.style.borderColor = pairColor;
+                item.style.background  = pairColor + '28';
+                item.style.color       = pairColor;
+            });
             od.matched++;
-            if (od.matched === 5) setTimeout(endOrderGame, 300);
+            showFeedback('\u2705');
+            if (od.matched === 5) setTimeout(endOrderGame, 400);
         } else {
-            first.el.classList.add('wrong'); el.classList.add('wrong');
-            setTimeout(() => { first.el.classList.remove('wrong','selected'); el.classList.remove('wrong','selected'); }, 420);
+            // No match - flash red then reset styles
+            [first.el, el].forEach(item => {
+                item.classList.add('wrong');
+                item.style.borderColor = '';
+                item.style.background  = '';
+                item.style.color       = '';
+            });
+            setTimeout(() => {
+                [first.el, el].forEach(item => item.classList.remove('wrong', 'selected'));
+            }, 420);
         }
     }
 }
 
-function drawOdLine(leftEl, rightEl, idx) {
-    const svg  = document.getElementById('odSvg');
-    const area = document.getElementById('odArea');
-    const ar   = area.getBoundingClientRect();
-    const lr   = leftEl.getBoundingClientRect();
-    const rr   = rightEl.getBoundingClientRect();
-    const x1 = lr.right - ar.left, y1 = lr.top + lr.height / 2 - ar.top;
-    const x2 = rr.left  - ar.left, y2 = rr.top + rr.height / 2 - ar.top;
-    const colors = ['#6C63FF','#FF6584','#4CAF50','#FF9800','#00BCD4'];
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
-    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
-    line.setAttribute('stroke', colors[idx % colors.length]);
-    line.setAttribute('stroke-width', '3');
-    line.setAttribute('stroke-dasharray', '6,3');
-    line.setAttribute('opacity', '0.75');
-    svg.setAttribute('height', area.offsetHeight);
-    svg.appendChild(line);
-}
 
 function endOrderGame() {
     stopOrderGame();
@@ -1623,6 +1729,69 @@ function endOrderGame() {
     document.getElementById('odFinalInfo').textContent = od.tries + ' tent. \u2022 ' + od.seconds + 's \u2022 +' + bonus + ' pts';
     document.getElementById('odResult').classList.add('show');
     if (stars === 3) launchConfetti();
+}
+
+// ══════════════════════════════════════════
+//  AVENTURA MATEMATICA
+// ══════════════════════════════════════════
+const ADV_PHASES = [
+    { id:1, name:'Floresta Facil',   sub:'Tabuadas do 1 e 2',       tables:[1,2],              color:'#4CAF50', emoji:'\uD83C\uDF32', minPct:60, questions:10 },
+    { id:2, name:'Rio Tranquilo',    sub:'Tabuadas do 3 e 4',       tables:[3,4],              color:'#2196F3', emoji:'\uD83D\uDCA7', minPct:60, questions:10 },
+    { id:3, name:'Montanha Media',   sub:'Tabuadas do 5 e 6',       tables:[5,6],              color:'#FF9800', emoji:'\u26F0\uFE0F', minPct:70, questions:10 },
+    { id:4, name:'Deserto Ardente',  sub:'Tabuadas do 7 e 8',       tables:[7,8],              color:'#FF5722', emoji:'\uD83C\uDFDC\uFE0F', minPct:70, questions:10 },
+    { id:5, name:'Gelo Eterno',      sub:'Tabuadas do 9 e 10',      tables:[9,10],             color:'#00BCD4', emoji:'\u2744\uFE0F', minPct:80, questions:10 },
+    { id:6, name:'Templo do Mestre', sub:'Todas as tabuadas!',      tables:[1,2,3,4,5,6,7,8,9,10], color:'#9C27B0', emoji:'\uD83C\uDFC6', minPct:80, questions:15 },
+];
+
+let advCurrentPhase = null;
+
+function openAdventure() {
+    renderAdventureMap();
+    showScreen('sAdventure', 'Aventura Matematica', 'Fase a fase!');
+}
+
+function renderAdventureMap() {
+    const advStars = state.adventureStars || {};
+    const completed = ADV_PHASES.filter(p => (advStars[p.id] || 0) >= 1).length;
+    const pct = Math.round((completed / ADV_PHASES.length) * 100);
+    document.getElementById('advProgFill').style.width = pct + '%';
+    document.getElementById('advProgLabel').textContent = completed + ' de ' + ADV_PHASES.length + ' fases completas';
+
+    const map = document.getElementById('advMap');
+    map.innerHTML = '';
+    ADV_PHASES.forEach((phase, idx) => {
+        const prevDone = idx === 0 || (advStars[ADV_PHASES[idx - 1].id] || 0) >= 1;
+        const stars = advStars[phase.id] || 0;
+        const card = document.createElement('div');
+        card.className = 'adv-phase' + (prevDone ? '' : ' locked');
+        const diffLabel = idx < 2 ? 'Facil' : idx < 4 ? 'Medio' : 'Dificil';
+        card.innerHTML =
+            '<div class="adv-phase-icon" style="background:' + phase.color + '">' + phase.emoji + '</div>' +
+            '<div class="adv-phase-info"><h3>' + phase.name + '</h3><p>' + phase.sub + '</p></div>' +
+            '<div class="adv-phase-stars">' + (prevDone ? starDisplay(stars) : '\uD83D\uDD12') + '</div>' +
+            (stars >= 1 ? '<div class="adv-phase-badge done">\u2713 Completa</div>' : '<div class="adv-phase-badge">' + diffLabel + '</div>');
+        if (prevDone) card.onclick = () => startAdvPhase(phase);
+        map.appendChild(card);
+    });
+}
+
+function startAdvPhase(phase) {
+    advCurrentPhase = phase;
+    quizOrigin = 'adventure';
+    quizLessonId = phase.id;
+
+    quizQuestions = [];
+    phase.tables.forEach(t => {
+        for (let i = 1; i <= 10; i++) quizQuestions.push({ a: t, b: i, answer: t * i });
+    });
+    shuffleArr(quizQuestions);
+    quizQuestions = quizQuestions.slice(0, phase.questions);
+
+    quizIndex = 0; quizCorrect = 0; quizErrors = []; quizAnswered = false;
+    cancelQuizTimeout();
+
+    showScreen('sQuiz', phase.name, 'Pergunta 1 de ' + phase.questions);
+    renderQuiz();
 }
 
 // ══════════════════════════════════════════
@@ -1671,7 +1840,7 @@ updateHeader();
         const s = document.createElement('span');
         s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
         const sz = 14 + Math.floor(Math.random() * 22);
-        s.style.cssText = 'left:' + (Math.random()*100) + '%;top:' + (Math.random()*100) + '%;font-size:' + sz + 'px;color:' + colors[Math.floor(Math.random()*colors.length)] + ';opacity:0.06;transform:rotate(' + (Math.random()*60-30) + 'deg)';
+        s.style.cssText = 'left:' + (Math.random()*100) + '%;top:' + (Math.random()*100) + '%;font-size:' + sz + 'px;color:' + colors[Math.floor(Math.random()*colors.length)] + ';opacity:0.12;transform:rotate(' + (Math.random()*60-30) + 'deg)';
         bg.appendChild(s);
     }
 })();
