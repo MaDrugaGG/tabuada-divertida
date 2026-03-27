@@ -110,18 +110,24 @@
 
         /* ── TABUADA GRID ── */
         .tabuada-grid {
-            display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin: 12px 0;
+            display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin: 12px 0;
         }
         .tabuada-btn {
             background: var(--card); border: 3px solid #E0E0E0;
-            border-radius: 14px; padding: 14px 4px;
-            font-size: 1.2em; font-weight: bold; color: var(--primary);
+            border-radius: 18px; padding: 10px 4px 8px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
             cursor: pointer; transition: all .18s; position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
         }
-        .tabuada-btn:active { background: var(--primary); color: white; border-color: var(--primary); }
-        .tabuada-btn.completed { border-color: var(--success); }
+        .tabuada-btn .tb-animal { font-size: 1.7em; line-height: 1; }
+        .tabuada-btn .tb-num {
+            font-size: 1.05em; font-weight: bold; color: var(--primary); line-height: 1;
+        }
+        .tabuada-btn:active { background: #ede9ff; border-color: var(--primary); transform: scale(.93); }
+        .tabuada-btn.completed { border-color: var(--success); background: linear-gradient(145deg,#f0fff4,#fff); }
+        .tabuada-btn.completed .tb-num { color: var(--success); }
         .tabuada-btn.completed::after {
-            content: '⭐'; position: absolute; top: -5px; right: -5px; font-size: .55em;
+            content: '⭐'; position: absolute; top: -7px; right: -5px; font-size: .75em;
         }
 
         /* ── STUDY TABLE ── */
@@ -845,13 +851,15 @@ function openStudy() {
     showScreen('sStudySelect','Estudar','Escolha uma tabuada');
 }
 
+const TB_ANIMALS = ['','🐶','🐱','🐸','🦊','🐻','🐼','🦁','🐯','🦄','🐲'];
+
 function renderStudyGrid() {
     const grid = document.getElementById('studyGrid');
     grid.innerHTML = '';
     for (let i = 1; i <= 10; i++) {
         const b = document.createElement('button');
         b.className = 'tabuada-btn' + (state.tabuadasMastered[i] ? ' completed' : '');
-        b.textContent = i;
+        b.innerHTML = '<span class="tb-animal">' + TB_ANIMALS[i] + '</span><span class="tb-num">' + i + '</span>';
         b.onclick = () => showStudyTable(i);
         grid.appendChild(b);
     }
@@ -1332,7 +1340,7 @@ function openStats() {
     for (let i = 1; i <= 10; i++) {
         const d = document.createElement('div');
         d.className  = 'tabuada-btn' + (state.tabuadasMastered[i] ? ' completed' : '');
-        d.textContent = i;
+        d.innerHTML = '<span class="tb-animal">' + TB_ANIMALS[i] + '</span><span class="tb-num">' + i + '</span>';
         d.style.cursor = 'default';
         grid.appendChild(d);
     }
