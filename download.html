@@ -22,6 +22,16 @@
         .icon { font-size: 4em; margin-bottom: 16px; }
         h1 { font-size: 1.6em; color: #333; margin-bottom: 8px; }
         p  { color: #777; font-size: .95em; margin-bottom: 24px; line-height: 1.5; }
+        .version-badge {
+            display: inline-block; background: #f0eeff; color: #6C63FF;
+            font-size: .8em; font-weight: bold; padding: 4px 12px;
+            border-radius: 20px; margin-bottom: 20px;
+        }
+        .notes {
+            font-size: .82em; color: #888; margin-bottom: 20px;
+            background: #f9f9f9; border-radius: 10px; padding: 10px 14px;
+            text-align: left; line-height: 1.5;
+        }
         .btn-download {
             display: block; background: #6C63FF; color: white;
             text-decoration: none; padding: 16px 24px;
@@ -35,6 +45,7 @@
             border-radius: 16px; font-size: 1em; font-weight: bold;
             transition: transform .15s;
         }
+        .btn-open:active { transform: scale(.97); }
         .info {
             margin-top: 20px; padding: 14px;
             background: #FFF3E0; border-radius: 12px;
@@ -43,6 +54,7 @@
         .info b { display: block; margin-bottom: 4px; }
         .creator { margin-top: 20px; font-size: .78em; color: #aaa; }
         .creator span { color: #6C63FF; font-weight: bold; }
+        .loading { color: #bbb; font-size: .9em; margin-bottom: 16px; }
     </style>
 </head>
 <body>
@@ -51,8 +63,11 @@
     <h1>Tabuada Divertida</h1>
     <p>App educativo para criancas aprenderem a tabuada com licoes, pontuacao e desafios!</p>
 
-    <a class="btn-download" href="https://github.com/MaDrugaGG/tabuada-divertida/releases/download/v2.0.1/tabuada-divertida.apk" download="tabuada-divertida.apk">
-        &#11015; Baixar APK v2.0.1
+    <div class="version-badge" id="versionBadge">&#8987; carregando...</div>
+    <div class="notes" id="versionNotes" style="display:none"></div>
+
+    <a class="btn-download" id="btnDownload" href="tabuada-divertida.apk" download="tabuada-divertida.apk">
+        &#11015; Baixar APK
     </a>
     <a class="btn-open" href="index.html">
         &#127760; Abrir no Navegador
@@ -68,5 +83,33 @@
 
     <div class="creator">Criado por <span>David Duarte</span> &#11088;</div>
 </div>
+
+<script>
+fetch('version.json?t=' + Date.now(), { cache: 'no-store' })
+    .then(r => r.json())
+    .then(data => {
+        const badge = document.getElementById('versionBadge');
+        const btn   = document.getElementById('btnDownload');
+        const notes = document.getElementById('versionNotes');
+
+        badge.textContent = '&#11088; v' + data.version;
+        badge.innerHTML   = '&#11088; v' + data.version;
+
+        if (data.apk) {
+            btn.href = data.apk;
+            btn.setAttribute('download', 'tabuada-divertida.apk');
+        }
+        btn.innerHTML = '&#11015; Baixar APK v' + data.version;
+
+        if (data.notes) {
+            notes.textContent = '&#128221; ' + data.notes;
+            notes.innerHTML   = '&#128221; ' + data.notes;
+            notes.style.display = 'block';
+        }
+    })
+    .catch(() => {
+        document.getElementById('versionBadge').textContent = 'APK';
+    });
+</script>
 </body>
 </html>
