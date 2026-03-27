@@ -16,14 +16,14 @@
             --success: #4CAF50;
             --danger: #FF5252;
             --warning: #FFB74D;
-            --bg: #F0F2FF;
+            --bg: #F3EEFF;
             --card: #FFFFFF;
             --text: #333333;
             --muted: #777777;
         }
 
         html {
-            background: var(--bg);
+            background: linear-gradient(160deg, #f3eeff 0%, #fff0f8 50%, #eef3ff 100%) fixed;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -283,18 +283,18 @@
         /* ── FUNDO PADRAO ── */
         #bgPattern {
             position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
-            background: linear-gradient(145deg, #F0F2FF 0%, #EEF0FF 50%, #F5F0FF 100%);
         }
         #bgPattern::before {
             content: '';
             position: absolute; inset: 0;
             background:
-                radial-gradient(circle at 10% 15%, rgba(108,99,255,0.10) 50px, transparent 50px),
-                radial-gradient(circle at 90% 10%, rgba(255,101,132,0.09) 40px, transparent 40px),
-                radial-gradient(circle at 50% 50%, rgba(108,99,255,0.06) 70px, transparent 70px),
-                radial-gradient(circle at 80% 70%, rgba(255,101,132,0.08) 55px, transparent 55px),
-                radial-gradient(circle at 20% 80%, rgba(108,99,255,0.07) 45px, transparent 45px),
-                radial-gradient(circle at 60% 90%, rgba(255,101,132,0.06) 35px, transparent 35px);
+                radial-gradient(circle at 10% 15%, rgba(108,99,255,0.15) 60px, transparent 60px),
+                radial-gradient(circle at 90% 10%, rgba(255,101,132,0.13) 50px, transparent 50px),
+                radial-gradient(circle at 50% 48%, rgba(108,99,255,0.09) 80px, transparent 80px),
+                radial-gradient(circle at 80% 72%, rgba(255,101,132,0.12) 65px, transparent 65px),
+                radial-gradient(circle at 18% 78%, rgba(108,99,255,0.11) 55px, transparent 55px),
+                radial-gradient(circle at 62% 88%, rgba(255,101,132,0.10) 45px, transparent 45px),
+                radial-gradient(circle at 35% 35%, rgba(76,175,80,0.07)   40px, transparent 40px);
         }
         #bgPattern span { position: absolute; font-weight: bold; user-select: none; line-height: 1; }
 
@@ -305,9 +305,30 @@
         .rn-speed-track { flex: 1; height: 6px; background: #E0E0E0; border-radius: 3px; overflow: hidden; }
         .rn-speed-fill { height: 100%; background: linear-gradient(90deg,#4CAF50,#FFD700,#FF5252); border-radius: 3px; transition: width .5s; }
         .rn-world {
-            position: relative; height: 220px; border-radius: 16px; overflow: hidden;
-            background: linear-gradient(180deg,#87CEEB 0%,#B2D8EF 68%,#66BB6A 68%,#4CAF50 100%);
-            margin-bottom: 10px; box-shadow: 0 4px 14px rgba(0,0,0,.1);
+            position: relative; height: 240px; border-radius: 16px; overflow: hidden;
+            background: linear-gradient(180deg,#1E88E5 0%,#42A5F5 40%,#90CAF9 68%,#A5D6A7 68%,#4CAF50 84%,#388E3C 100%);
+            margin-bottom: 10px; box-shadow: 0 4px 18px rgba(0,0,0,.15);
+        }
+        .rn-cloud {
+            position: absolute; background: rgba(255,255,255,.88); border-radius: 50px;
+            animation: cloudDrift linear infinite; animation-play-state: paused;
+        }
+        .rn-world.running .rn-cloud { animation-play-state: running; }
+        .rn-cloud::before, .rn-cloud::after { content:''; position:absolute; background:rgba(255,255,255,.88); border-radius:50%; }
+        .rn-cloud-1 { width:60px; height:18px; top:10%; left:110%; animation-duration:11s; }
+        .rn-cloud-1::before { width:30px; height:30px; top:-18px; left:8px; }
+        .rn-cloud-1::after  { width:22px; height:22px; top:-12px; left:32px; }
+        .rn-cloud-2 { width:44px; height:14px; top:28%; left:110%; animation-duration:8s; animation-delay:-3.5s; }
+        .rn-cloud-2::before { width:22px; height:22px; top:-13px; left:6px; }
+        .rn-cloud-2::after  { width:16px; height:16px; top:-9px; left:24px; }
+        .rn-cloud-3 { width:32px; height:11px; top:18%; left:110%; animation-duration:14s; animation-delay:-6s; }
+        .rn-cloud-3::before { width:18px; height:18px; top:-11px; left:5px; }
+        .rn-cloud-3::after  { width:12px; height:12px; top:-7px; left:18px; }
+        @keyframes cloudDrift { from{left:110%} to{left:-130px} }
+        .rn-mode-badge {
+            display:inline-block; font-size:.78em; font-weight:bold;
+            padding:3px 12px; border-radius:20px; margin-bottom:6px;
+            background:var(--primary); color:white;
         }
         .rn-ground {
             position: absolute; bottom: 0; left: -10%; right: -10%; height: 32%;
@@ -338,7 +359,7 @@
             border: 2px solid var(--primary);
         }
         .rn-question.show { display: block; animation: fadeIn .2s ease; }
-        .rn-q-text { font-size: 1.7em; font-weight: bold; text-align: center; margin-bottom: 8px; }
+        .rn-q-text { font-size: 1.9em; font-weight: bold; text-align: center; margin-bottom: 10px; letter-spacing: 1px; }
         .rn-opts { display: flex; gap: 8px; justify-content: center; }
         .rn-opt {
             background: var(--card); border: 2px solid #E0E0E0; border-radius: 10px;
@@ -553,7 +574,7 @@
         </div>
     </div>
 
-    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><small style="opacity:.6;font-size:.9em">v2.2.0</small></div>
+    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><small style="opacity:.6;font-size:.9em">v2.3.0</small></div>
 </div>
 
 <!-- ══ ESTUDO: ESCOLHER TABUADA ══ -->
@@ -645,7 +666,7 @@
     <div class="rn-stats">
         <span>&#127942; <span class="val" id="rnScore">0</span></span>
         <span id="rnLives">&#10084;&#65039;&#10084;&#65039;&#10084;&#65039;</span>
-        <span>&#9889; Nivel <span class="val" id="rnLevel">1</span></span>
+        <span id="rnMode" style="font-weight:bold;color:var(--primary)">&#10133; Adicao</span>
     </div>
     <div class="rn-speed-bar">
         <span>Velocidade</span>
@@ -653,6 +674,9 @@
     </div>
     <div class="rn-world" id="rnWorld">
         <div class="rn-ground"></div>
+        <div class="rn-cloud rn-cloud-1"></div>
+        <div class="rn-cloud rn-cloud-2"></div>
+        <div class="rn-cloud rn-cloud-3"></div>
         <div class="rn-char" id="rnChar">&#127939;</div>
         <div class="rn-gameover" id="rnGameOver">
             <h2>Fim de Jogo! &#128128;</h2>
@@ -661,6 +685,7 @@
         </div>
     </div>
     <div class="rn-question" id="rnQuestion">
+        <div style="text-align:center;margin-bottom:6px"><span class="rn-mode-badge" id="rnModeBadge">&#10133; Adicao</span></div>
         <div class="rn-q-text" id="rnQText"></div>
         <div class="rn-opts" id="rnOpts"></div>
     </div>
@@ -672,7 +697,9 @@
     <div class="bl-stats">
         <span>&#127880; <span class="val" id="blScore">0</span></span>
         <span id="blLives">&#10084;&#65039;&#10084;&#65039;&#10084;&#65039;</span>
+        <span id="blMode" style="font-weight:bold;color:var(--primary)">&#10133; Adição</span>
     </div>
+    <div style="text-align:center;margin-bottom:4px"><span class="rn-mode-badge" id="blModeBadge" style="background:#4CAF50">&#10133; Adição</span></div>
     <div class="bl-qbox" id="blQuestion">3 &#215; 4 = ?</div>
     <div class="bl-world" id="blWorld">
         <div class="bl-gameover" id="blGameOver">
@@ -1391,9 +1418,64 @@ function stopRunnerGame() {
     if (world) world.classList.remove('running');
 }
 
+function getRunnerModeName() {
+    const lvl = rn.speedLevel;
+    if (lvl <= 2) return '\u2795 Adicao';
+    if (lvl <= 4) return '\u2796 Subtracao';
+    if (lvl <= 6) return '\u00D7 Mult. Facil';
+    return '\uD83D\uDD25 Mestre!';
+}
+
+function getRunnerModeBg() {
+    const lvl = rn.speedLevel;
+    if (lvl <= 2) return '#4CAF50';
+    if (lvl <= 4) return '#2196F3';
+    if (lvl <= 6) return '#FF9800';
+    return '#FF5252';
+}
+
+function getRunnerQuestion() {
+    const lvl = rn.speedLevel;
+    let a, b, text, answer;
+    if (lvl <= 2) {
+        a = Math.floor(Math.random() * 12) + 1;
+        b = Math.floor(Math.random() * 12) + 1;
+        text = a + ' + ' + b; answer = a + b;
+    } else if (lvl <= 4) {
+        a = Math.floor(Math.random() * 15) + 10;
+        b = Math.floor(Math.random() * 9) + 1;
+        text = a + ' - ' + b; answer = a - b;
+    } else if (lvl <= 6) {
+        a = Math.floor(Math.random() * 4) + 2;
+        b = Math.floor(Math.random() * 9) + 1;
+        text = a + ' \u00D7 ' + b; answer = a * b;
+    } else {
+        a = Math.floor(Math.random() * 5) + 6;
+        b = Math.floor(Math.random() * 9) + 1;
+        text = a + ' \u00D7 ' + b; answer = a * b;
+    }
+    return { text, answer };
+}
+
+function getObstacleForLevel() {
+    const lvl = rn.speedLevel;
+    const sets = [
+        ['\uD83C\uDF35','\uD83C\uDF33','\uD83C\uDF31'],
+        ['\uD83E\uDEA8','\uD83D\uDEA7','\uD83E\uDDF1'],
+        ['\uD83D\uDEE1\uFE0F','\u26A1','\uD83C\uDF00'],
+        ['\uD83D\uDD25','\uD83D\uDCA5','\u2620\uFE0F'],
+    ];
+    const set = lvl <= 2 ? sets[0] : lvl <= 4 ? sets[1] : lvl <= 6 ? sets[2] : sets[3];
+    return set[Math.floor(Math.random() * set.length)];
+}
+
 function updateRunnerUI() {
     document.getElementById('rnScore').textContent = rn.score;
-    document.getElementById('rnLevel').textContent = rn.speedLevel;
+    const modeName = getRunnerModeName();
+    const modeBg   = getRunnerModeBg();
+    document.getElementById('rnMode').textContent = modeName;
+    const badge = document.getElementById('rnModeBadge');
+    if (badge) { badge.textContent = modeName; badge.style.background = modeBg; }
     document.getElementById('rnLives').textContent = '\u2764\uFE0F'.repeat(rn.lives) + '\uD83D\uDDA4'.repeat(Math.max(0, 3 - rn.lives));
     document.getElementById('rnSpeedFill').style.width = Math.min(rn.speedLevel * 15, 100) + '%';
 }
@@ -1409,7 +1491,7 @@ function spawnObstacle() {
     const world = document.getElementById('rnWorld');
     const el = document.createElement('div');
     el.className = 'rn-obstacle';
-    el.textContent = RN_OBSTACLES[Math.floor(Math.random() * RN_OBSTACLES.length)];
+    el.textContent = getObstacleForLevel();
     world.appendChild(el);
     rn.obstacleEl = el;
     let pos = 105;
@@ -1432,17 +1514,16 @@ function spawnObstacle() {
 function showRunnerQuestion() {
     if (!rn.active) return;
     rn.answering = true;
-    const a = Math.floor(Math.random() * 9) + 2;
-    const b = Math.floor(Math.random() * 9) + 2;
-    rn.question = { a, b, answer: a * b };
-    const opts = new Set([rn.question.answer]);
+    const q = getRunnerQuestion();
+    rn.question = q;
+    const opts = new Set([q.answer]);
     while (opts.size < 3) {
-        const f = rn.question.answer + Math.floor(Math.random() * 18) - 8;
-        if (f > 0 && f !== rn.question.answer) opts.add(f);
+        const f = q.answer + Math.floor(Math.random() * 14) - 6;
+        if (f >= 0 && f !== q.answer) opts.add(f);
     }
     const arr = shuffleArr([...opts]);
     document.getElementById('rnQText').innerHTML =
-        '<span style="color:var(--primary)">' + a + '</span> \u00D7 <span style="color:var(--primary)">' + b + '</span> = ?';
+        '<span style="color:var(--primary)">' + q.text + '</span> = ?';
     const optsDiv = document.getElementById('rnOpts');
     optsDiv.innerHTML = '';
     arr.forEach(opt => {
@@ -1506,6 +1587,39 @@ let bl = {
     spawnTimeout: null
 };
 
+function getBlModeName() {
+    const s = bl.score;
+    if (s < 8)  return '➕ Adição';
+    if (s < 18) return '➖ Subtração';
+    if (s < 32) return '× Mult. Fácil';
+    return '🔥 Mestre!';
+}
+function getBlModeBg() {
+    const s = bl.score;
+    if (s < 8)  return '#4CAF50';
+    if (s < 18) return '#2196F3';
+    if (s < 32) return '#FF9800';
+    return '#FF5252';
+}
+function getBlQuestion() {
+    const s = bl.score;
+    let a, b, text, answer;
+    if (s < 8) {
+        a = Math.floor(Math.random() * 12) + 1; b = Math.floor(Math.random() * 12) + 1;
+        text = a + ' + ' + b; answer = a + b;
+    } else if (s < 18) {
+        a = Math.floor(Math.random() * 15) + 10; b = Math.floor(Math.random() * 9) + 1;
+        text = a + ' - ' + b; answer = a - b;
+    } else if (s < 32) {
+        a = Math.floor(Math.random() * 4) + 2; b = Math.floor(Math.random() * 9) + 1;
+        text = a + ' \u00D7 ' + b; answer = a * b;
+    } else {
+        a = Math.floor(Math.random() * 5) + 6; b = Math.floor(Math.random() * 9) + 1;
+        text = a + ' \u00D7 ' + b; answer = a * b;
+    }
+    return { text, answer };
+}
+
 function openBalloonGame() {
     showScreen('sBalloon', 'Estoura Balao', 'Estoure o balao certo!');
     startBalloonGame();
@@ -1530,14 +1644,15 @@ function stopBalloonGame() {
 function updateBalloonUI() {
     document.getElementById('blScore').textContent = bl.score;
     document.getElementById('blLives').textContent = '\u2764\uFE0F'.repeat(bl.lives) + '\uD83D\uDDA4'.repeat(Math.max(0, 3 - bl.lives));
+    const badge = document.getElementById('blModeBadge');
+    if (badge) { badge.textContent = getBlModeName(); badge.style.background = getBlModeBg(); }
 }
 
 function newBalloonQuestion() {
-    const a = Math.floor(Math.random() * 9) + 2;
-    const b = Math.floor(Math.random() * 9) + 2;
-    bl.question = { a, b, answer: a * b };
+    const q = getBlQuestion();
+    bl.question = q;
     document.getElementById('blQuestion').innerHTML =
-        '<span style="color:var(--primary)">' + a + '</span> \u00D7 <span style="color:var(--primary)">' + b + '</span> = ?';
+        '<span style="color:var(--primary)">' + q.text + '</span> = ?';
 }
 
 function spawnBalloons() {

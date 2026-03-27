@@ -1,5 +1,5 @@
 {
-  "version": "2.0.1",
-  "notes": "Correcao: notificacao de atualizacao corrigida, bugs do desafio resolvidos.",
+  "version": "2.3.0",
+  "notes": "Niveis progressivos na corrida e baloes: adicao, subtracao, multiplicacao facil e mestre.",
   "apk": "https://github.com/MaDrugaGG/tabuada-divertida/releases/download/v2.0.1/tabuada-divertida.apk"
 }
