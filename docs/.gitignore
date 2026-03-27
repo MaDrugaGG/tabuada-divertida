@@ -1,3 +1,8 @@
-# APKs sao grandes demais para o GitHub (limite 100MB)
-# Use GitHub Releases para distribuir APKs
+node_modules/
+android/.gradle/
+android/**/build/
+android/local.properties
 *.apk
+*.keystore
+keystore.properties
+android/keystore.properties

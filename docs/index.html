@@ -37,7 +37,7 @@
         .header {
             background: linear-gradient(135deg, #6C63FF, #FF6584);
             color: white;
-            padding: 16px 20px 14px;
+            padding: calc(16px + env(safe-area-inset-top)) 20px 14px;
             text-align: center;
             position: relative;
             box-shadow: 0 4px 15px rgba(108,99,255,.3);
@@ -54,13 +54,13 @@
         }
         .back-btn {
             position: absolute;
-            left: 12px;
-            top: 12px;
+            left: calc(12px + env(safe-area-inset-left));
+            top: calc(12px + env(safe-area-inset-top));
             background: rgba(255,255,255,.25);
             border: none;
             color: white;
-            width: 56px;
-            height: 56px;
+            width: clamp(44px, 10vw, 56px);
+            height: clamp(44px, 10vw, 56px);
             border-radius: 50%;
             cursor: pointer;
             align-items: center;
@@ -69,10 +69,16 @@
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
             outline: none;
-            font-size: 1.8em;
+            font-size: clamp(22px, 5vw, 28px);
+            line-height: 1;
             display: none;
             transition: background .15s;
             z-index: 2;
+        }
+        .back-btn .back-icon {
+            display: block;
+            line-height: 1;
+            transform: translateX(-1px);
         }
         .back-btn.visible { display: flex; }
         .back-btn:active { background: rgba(255,255,255,.4); }
@@ -606,7 +612,7 @@
 
 <!-- HEADER -->
 <div class="header">
-    <button class="back-btn" id="backBtn" onclick="goBack()" aria-label="Voltar">◀</button>
+    <button class="back-btn" id="backBtn" onclick="goBack()" aria-label="Voltar"><span class="back-icon">◀</span></button>
     <h1 id="hTitle">Tabuada Divertida</h1>
     <p class="subtitle" id="hSub">Aprenda brincando!</p>
     <div class="score-bar">
@@ -686,7 +692,7 @@
         </div>
     </div>
 
-    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><small style="opacity:.6;font-size:.9em">v2.3.2</small></div>
+    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><small style="opacity:.6;font-size:.9em">v2.3.4</small></div>
 </div>
 
 <!-- ══ ESTUDO: ESCOLHER TABUADA ══ -->
@@ -853,6 +859,7 @@
     <div class="adv-map" id="advMap"></div>
 </div>
 
+<script src="capacitor.js"></script>
 <script>
 // ══════════════════════════════════════════
 //  ESTADO
@@ -2116,7 +2123,7 @@ updateHeader();
 })();
 
 // ── VERSAO ATUAL DO APP ──
-const APP_VERSION = '2.3.3';
+const APP_VERSION = '2.3.4';
 
 function getVersionJsonBaseUrl() {
     if (window.Capacitor || window.cordova) {
