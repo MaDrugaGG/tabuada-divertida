@@ -37,7 +37,7 @@
         .header {
             background: linear-gradient(135deg, #6C63FF, #FF6584);
             color: white;
-            padding: calc(16px + env(safe-area-inset-top)) 20px 14px;
+            padding: 16px 20px 14px;
             text-align: center;
             position: relative;
             box-shadow: 0 4px 15px rgba(108,99,255,.3);
@@ -53,32 +53,14 @@
             padding: 3px 12px; border-radius: 20px;
         }
         .back-btn {
-            position: absolute;
-            left: calc(12px + env(safe-area-inset-left));
-            top: calc(12px + env(safe-area-inset-top));
-            background: rgba(255,255,255,.25);
-            border: none;
-            color: white;
-            width: clamp(44px, 10vw, 56px);
-            height: clamp(44px, 10vw, 56px);
-            border-radius: 50%;
-            cursor: pointer;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
+            position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,.2); border: none; color: white;
+            width: 48px; height: 48px;
+            border-radius: 50%; cursor: pointer; display: none;
+            align-items: center; justify-content: center; padding: 0;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
             outline: none;
-            font-size: clamp(22px, 5vw, 28px);
-            line-height: 1;
-            display: none;
-            transition: background .15s;
-            z-index: 2;
-        }
-        .back-btn .back-icon {
-            display: block;
-            line-height: 1;
-            transform: translateX(-1px);
         }
         .back-btn.visible { display: flex; }
         .back-btn:active { background: rgba(255,255,255,.4); }
@@ -145,12 +127,9 @@
 
         /* ── MODAL POS-ATUALIZACAO ── */
         #updatedModal {
-            display: none !important; position: fixed; inset: 0; z-index: 10000 !important;
+            display: none; position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,0,0,.55); align-items: center; justify-content: center;
-            padding: 20px; flex-direction: column; width: 100%; height: 100vh;
-        }
-        #updatedModal.show {
-            display: flex !important;
+            padding: 20px;
         }
         #updatedModal .um-card {
             background: white; border-radius: 24px; padding: 32px 24px;
@@ -337,20 +316,7 @@
             opacity: 0; transition: opacity .2s;
         }
         .feedback-overlay.show { opacity: 1; }
-        .feedback-content {
-            display: flex; flex-direction: column; align-items: center; gap: 12px;
-        }
         .feedback-emoji { font-size: 5em; animation: popIn .45s ease; }
-        .feedback-answer {
-            font-size: 1.1em; color: var(--text); font-weight: bold;
-            background: rgba(255,255,255,.95); padding: 14px 20px;
-            border-radius: 12px; max-width: 280px; text-align: center;
-            animation: slideUp .4s ease;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
         @keyframes popIn {
             0%  { transform: scale(0); }
             55% { transform: scale(1.3); }
@@ -583,6 +549,72 @@
         .adv-prog-bar { background: #E0E0E0; height: 10px; border-radius: 5px; overflow: hidden; }
         .adv-prog-fill { height: 100%; background: linear-gradient(90deg,var(--primary),#FF6584); border-radius: 5px; transition: width .6s ease; }
         .adv-prog-label { font-size: .82em; color: var(--muted); margin-top: 5px; }
+
+        /* ── OPERACOES ── */
+        .ops-grid { display: flex; flex-direction: column; gap: 14px; margin: 8px 0; }
+        .op-card {
+            background: var(--card); border-radius: 20px; padding: 20px 22px;
+            display: flex; align-items: center; gap: 18px;
+            cursor: pointer; transition: transform .18s, box-shadow .18s;
+            box-shadow: 0 4px 16px rgba(0,0,0,.08); position: relative; overflow: hidden;
+            touch-action: manipulation;
+        }
+        .op-card:active { transform: scale(.97); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+        .op-card::after {
+            content: ''; position: absolute; right: -24px; top: -24px;
+            width: 90px; height: 90px; border-radius: 50%; opacity: .07;
+            background: currentColor;
+        }
+        .op-symbol {
+            font-size: 2.2em; font-weight: 900; width: 62px; height: 62px;
+            border-radius: 18px; display: flex; align-items: center; justify-content: center;
+            color: white; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,.2);
+        }
+        .op-info { flex: 1; }
+        .op-info h2 { font-size: 1.12em; margin-bottom: 4px; }
+        .op-info p  { font-size: .82em; color: var(--muted); }
+        .op-badge {
+            font-size: .72em; font-weight: bold; background: rgba(0,0,0,.06);
+            padding: 4px 10px; border-radius: 20px; color: var(--muted); white-space: nowrap; flex-shrink: 0;
+        }
+
+        .diff-grid { display: flex; flex-direction: column; gap: 12px; margin: 8px 0; }
+        .diff-card {
+            background: var(--card); border-radius: 18px; padding: 18px 20px;
+            display: flex; align-items: center; gap: 14px;
+            cursor: pointer; transition: transform .15s, box-shadow .15s;
+            box-shadow: 0 3px 12px rgba(0,0,0,.07);
+            border-left: 5px solid transparent; touch-action: manipulation;
+        }
+        .diff-card:active { transform: scale(.97); }
+        .diff-icon { font-size: 2em; flex-shrink: 0; }
+        .diff-info { flex: 1; }
+        .diff-info h2 { font-size: 1.1em; margin-bottom: 4px; }
+        .diff-info p  { font-size: .82em; color: var(--muted); line-height: 1.4; }
+        .diff-age {
+            font-size: .75em; font-weight: bold; padding: 4px 10px;
+            border-radius: 20px; white-space: nowrap; color: white; flex-shrink: 0;
+        }
+
+        .op-header {
+            display: flex; align-items: center; gap: 12px;
+            background: var(--card); border-radius: 16px; padding: 14px 16px;
+            margin-bottom: 14px; box-shadow: 0 3px 10px rgba(0,0,0,.06);
+        }
+        .op-header-symbol {
+            width: 46px; height: 46px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.7em; font-weight: 900; color: white; flex-shrink: 0;
+        }
+        .op-header-info h3 { font-size: 1em; margin-bottom: 2px; }
+        .op-header-info p  { font-size: .8em; color: var(--muted); }
+
+        .op-card { animation: fadeIn .3s ease both; }
+        .op-card:nth-child(2) { animation-delay: .07s; }
+        .op-card:nth-child(3) { animation-delay: .14s; }
+        .diff-card { animation: fadeIn .3s ease both; }
+        .diff-card:nth-child(2) { animation-delay: .07s; }
+        .diff-card:nth-child(3) { animation-delay: .14s; }
     </style>
 </head>
 <body>
@@ -612,7 +644,7 @@
 
 <!-- HEADER -->
 <div class="header">
-    <button class="back-btn" id="backBtn" onclick="goBack()" aria-label="Voltar"><span class="back-icon">◀</span></button>
+    <button class="back-btn" id="backBtn" onclick="goBack()" aria-label="Voltar">◀</button>
     <h1 id="hTitle">Tabuada Divertida</h1>
     <p class="subtitle" id="hSub">Aprenda brincando!</p>
     <div class="score-bar">
@@ -623,10 +655,7 @@
 
 <!-- OVERLAYS -->
 <div class="feedback-overlay" id="feedbackOverlay">
-    <div class="feedback-content">
-        <div class="feedback-emoji" id="feedbackEmoji"></div>
-        <div class="feedback-answer" id="feedbackAnswer" style="display:none"></div>
-    </div>
+    <div class="feedback-emoji" id="feedbackEmoji"></div>
 </div>
 <div class="confetti-container" id="confettiBox"></div>
 
@@ -648,11 +677,32 @@
             <p>Complete licoes e ganhe estrelas!</p>
         </div>
     </div>
+    <div class="menu-card" onclick="openOps()">
+        <div class="icon" style="background:linear-gradient(135deg,#E3F2FD,#90CAF9)">&#10010;</div>
+        <div class="info">
+            <h2>Operacoes</h2>
+            <p>Adicao, subtracao, multiplicacao e divisao!</p>
+        </div>
+    </div>
+    <div class="menu-card" onclick="openAdventure()">
+        <div class="icon icon-adventure">&#127758;</div>
+        <div class="info">
+            <h2>Aventura Matematica</h2>
+            <p>Fase a fase do mais facil ao mais dificil!</p>
+        </div>
+    </div>
     <div class="menu-card" onclick="openChallenge()">
         <div class="icon icon-challenge">&#9889;</div>
         <div class="info">
             <h2>Desafio Relampago</h2>
             <p>Responda o maximo que puder em 60 segundos!</p>
+        </div>
+    </div>
+    <div class="menu-card" onclick="openGames()">
+        <div class="icon" style="background:linear-gradient(135deg,#FFF9C4,#FFF176)">&#127918;</div>
+        <div class="info">
+            <h2>Jogos</h2>
+            <p>Corrida, Baloes, Conecta e mais!</p>
         </div>
     </div>
     <div class="menu-card" onclick="openStats()">
@@ -662,37 +712,8 @@
             <p>Veja suas estatisticas e conquistas</p>
         </div>
     </div>
-    <div class="menu-card" onclick="openRunnerGame()">
-        <div class="icon icon-runner">&#127939;</div>
-        <div class="info">
-            <h2>Corrida Matematica</h2>
-            <p>Responda e desvie dos obstaculos!</p>
-        </div>
-    </div>
-    <div class="menu-card" onclick="openBalloonGame()">
-        <div class="icon icon-balloon">&#127880;</div>
-        <div class="info">
-            <h2>Estoura Balao</h2>
-            <p>Estoure o balao com a resposta certa!</p>
-        </div>
-    </div>
-    <div class="menu-card" onclick="openOrderGame()">
-        <div class="icon icon-order">&#128279;</div>
-        <div class="info">
-            <h2>Conecta Matematica</h2>
-            <p>Conecte cada conta com seu resultado!</p>
-        </div>
-    </div>
 
-    <div class="menu-card" onclick="openAdventure()">
-        <div class="icon icon-adventure">&#127758;</div>
-        <div class="info">
-            <h2>Aventura Matematica</h2>
-            <p>Fase a fase do mais facil ao mais dificil!</p>
-        </div>
-    </div>
-
-    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><small style="opacity:.6;font-size:.9em">v2.3.4</small></div>
+    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><small style="opacity:.6;font-size:.9em">v2.3.5</small></div>
 </div>
 
 <!-- ══ ESTUDO: ESCOLHER TABUADA ══ -->
@@ -859,6 +880,35 @@
     <div class="adv-map" id="advMap"></div>
 </div>
 
+<!-- ══ JOGOS ══ -->
+<div class="screen" id="sGames">
+    <div class="section-title">Escolha um Jogo:</div>
+    <div class="ops-grid" id="gamesGrid"></div>
+</div>
+
+<!-- ══ OPERACOES: ESCOLHER ══ -->
+<div class="screen" id="sOps">
+    <div class="section-title">Escolha a Operacao:</div>
+    <div class="ops-grid" id="opsGrid"></div>
+</div>
+
+<!-- ══ OPERACOES: DIFICULDADE ══ -->
+<div class="screen" id="sOpDiff">
+    <div class="section-title" id="opDiffTitle">Escolha a dificuldade:</div>
+    <div class="diff-grid" id="diffGrid"></div>
+</div>
+
+<!-- ══ OPERACOES: LICOES ══ -->
+<div class="screen" id="sOpLessons">
+    <div id="opLessonsHeader"></div>
+    <div class="level-info">
+        <span id="opLvlText">Nivel 1</span>
+        <span id="opLvlXP">0 / 100 XP</span>
+    </div>
+    <div class="level-bar"><div class="level-bar-fill" id="opLvlBar" style="width:0%"></div></div>
+    <div id="opLessonsList"></div>
+</div>
+
 <script src="capacitor.js"></script>
 <script>
 // ══════════════════════════════════════════
@@ -909,8 +959,7 @@ function showScreen(id, title, sub) {
     document.getElementById(id).classList.add('active');
     currentScreen = id;
 
-    const backBtn = document.getElementById('backBtn');
-    if (backBtn) backBtn.classList.toggle('visible', id !== 'sMenu');
+    document.getElementById('backBtn').classList.toggle('visible', id !== 'sMenu');
     document.getElementById('hTitle').textContent = title || 'Tabuada Divertida';
     document.getElementById('hSub').textContent   = sub   || 'Aprenda brincando!';
 
@@ -937,10 +986,12 @@ function goBack() {
         'sLessons':     () => showScreen('sMenu'),
         'sQuiz':        () => {
             if (quizOrigin === 'lesson') { showScreen('sLessons','Licoes','Complete todas!'); renderLessons(); }
+            else if (quizOrigin === 'oplesson') { openOpLessons(currentOp, currentDiff); }
             else { showScreen('sStudy', 'Tabuada do ' + currentTabuada, 'Estude e memorize!'); }
         },
         'sResult':      () => {
             if (quizOrigin === 'lesson') { showScreen('sLessons','Licoes','Complete todas!'); renderLessons(); }
+            else if (quizOrigin === 'oplesson') { openOpLessons(currentOp, currentDiff); }
             else if (quizOrigin === 'challenge') showScreen('sMenu');
             else { showScreen('sStudy', 'Tabuada do ' + currentTabuada, 'Estude e memorize!'); }
         },
@@ -950,6 +1001,10 @@ function goBack() {
         'sBalloon':     () => showScreen('sMenu'),
         'sOrder':       () => showScreen('sMenu'),
         'sAdventure':   () => showScreen('sMenu'),
+        'sGames':       () => showScreen('sMenu'),
+        'sOps':         () => showScreen('sMenu'),
+        'sOpDiff':      () => openOps(),
+        'sOpLessons':   () => openOpDiff(currentOp),
     };
     const fn = map[currentScreen];
     if (fn) fn(); else showScreen('sMenu');
@@ -1064,28 +1119,9 @@ let quizAnswered   = false;
 let quizOrigin     = 'practice'; // 'practice' | 'lesson' | 'challenge'
 let quizLessonId   = null;
 let pendingTimeout = null;
-let quizDifficulty = 1; // 1=fácil(1-5), 2=médio(1-7), 3=difícil(1-10)
-let quizConsecutiveWrong = 0; // consecutivos errados
 
 function cancelQuizTimeout() {
     if (pendingTimeout) { clearTimeout(pendingTimeout); pendingTimeout = null; }
-}
-
-function getMaxMultiplierByDifficulty(diff) {
-    // 1=fácil(1-5), 2=médio(1-7), 3=difícil(1-10)
-    return [5, 7, 10][Math.min(Math.max(diff - 1, 0), 2)];
-}
-
-function generateQuestionsByDifficulty(tables, difficulty) {
-    const maxMult = getMaxMultiplierByDifficulty(difficulty);
-    const questions = [];
-    tables.forEach(t => {
-        for (let i = 1; i <= maxMult; i++) {
-            questions.push({ a:t, b:i, answer:t*i });
-        }
-    });
-    shuffleArr(questions);
-    return questions.slice(0, 10);
 }
 
 function startQuiz(type, tables, lessonId) {
@@ -1096,10 +1132,14 @@ function startQuiz(type, tables, lessonId) {
     quizCorrect  = 0;
     quizErrors   = [];
     quizAnswered = false;
-    quizDifficulty = 1; // sempre comece fácil
-    quizConsecutiveWrong = 0;
 
-    quizQuestions = generateQuestionsByDifficulty(tables, quizDifficulty);
+    quizQuestions = [];
+    tables.forEach(t => {
+        for (let i = 1; i <= 10; i++) quizQuestions.push({ a:t, b:i, answer:t*i });
+    });
+    shuffleArr(quizQuestions);
+    quizQuestions = quizQuestions.slice(0, 10);
+
     showScreen('sQuiz', type === 'lesson' ? 'Licao' : 'Pratica', 'Pergunta 1 de 10');
     renderQuiz();
 }
@@ -1122,10 +1162,12 @@ function renderQuiz() {
         prog.appendChild(d);
     });
 
+    const opSymMap = { 'x': '&times;', '+': '+', '-': '&minus;', '/': '&divide;' };
+    const opSym = q.op ? (opSymMap[q.op] || '&times;') : '&times;';
     document.getElementById('qQuestion').innerHTML =
-        `<span class="hl">${q.a}</span> &times; <span class="hl">${q.b}</span> = ?`;
+        `<span class="hl">${q.a}</span> ${opSym} <span class="hl">${q.b}</span> = ?`;
 
-    if (quizOrigin === 'lesson') {
+    if (quizOrigin === 'lesson' || quizOrigin === 'oplesson') {
         document.getElementById('qOptions').style.display = 'grid';
         document.getElementById('qInputWrap').style.display = 'none';
         renderOptions(q);
@@ -1143,11 +1185,12 @@ function renderOptions(q) {
     // Gerar 4 opcoes unicas
     const choices = new Set([q.answer]);
     let attempts = 0;
-    while (choices.size < 4 && attempts < 200) {
+    const spread = q.op === '/' ? 5 : q.answer > 50 ? Math.round(q.answer * 0.3) : 15;
+    while (choices.size < 4 && attempts < 300) {
         attempts++;
-        const delta = Math.floor(Math.random() * 19) - 9; // -9 a +9
+        const delta = Math.floor(Math.random() * (spread * 2 + 1)) - spread;
         const fake  = q.answer + delta;
-        if (fake > 0 && fake !== q.answer) choices.add(fake);
+        if (fake > 0 && fake !== q.answer && Number.isInteger(fake)) choices.add(fake);
     }
     const arr = shuffleArr([...choices]);
 
@@ -1238,7 +1281,6 @@ function doCorrect() {
     quizCorrect++;
     state.totalCorrect++;
     state.points += 10;
-    quizConsecutiveWrong = 0; // reseta contador de erros
     const q = quizQuestions[quizIndex];
     if (q) {
         [q.a, q.b].forEach(t => {
@@ -1247,46 +1289,25 @@ function doCorrect() {
         });
     }
     showFeedback('\u2705');
-
-    // Aumenta dificuldade a cada 3 acertos consecutivos
-    if ((quizCorrect % 3 === 0) && quizDifficulty < 3) {
-        quizDifficulty++;
-    }
     saveState();
 }
 
 function doWrong(q) {
     quizErrors.push({ qi: quizIndex, a: q.a, b: q.b, answer: q.answer });
     state.totalWrong++;
-    quizConsecutiveWrong++;
     [q.a, q.b].forEach(t => {
         if (!state.tableStats[t]) state.tableStats[t] = { correct: 0, wrong: 0 };
         state.tableStats[t].wrong++;
     });
-    const answerText = `✓ Correta: ${q.a} × ${q.b} = ${q.answer}`;
-    showFeedback('\u274C', answerText);
-
-    // Diminui dificuldade se errar 2+ vezes consecutivas
-    if (quizConsecutiveWrong >= 2 && quizDifficulty > 1) {
-        quizDifficulty--;
-        quizConsecutiveWrong = 0;
-    }
+    showFeedback('\u274C');
     saveState();
 }
 
-function showFeedback(emoji, answerText) {
+function showFeedback(emoji) {
     const el = document.getElementById('feedbackOverlay');
     document.getElementById('feedbackEmoji').textContent = emoji;
-    const answerEl = document.getElementById('feedbackAnswer');
-    if (answerText) {
-        answerEl.textContent = answerText;
-        answerEl.style.display = 'block';
-    } else {
-        answerEl.style.display = 'none';
-    }
     el.classList.add('show');
-    const duration = answerText ? 1800 : 700;
-    setTimeout(() => el.classList.remove('show'), duration);
+    setTimeout(() => el.classList.remove('show'), 700);
 }
 
 // ══════════════════════════════════════════
@@ -1344,8 +1365,9 @@ function showResult() {
     if (quizErrors.length > 0) {
         let html = '<div class="section-title">Revise estes:</div>';
         quizErrors.forEach(e => {
-            html += `<div class="study-row" style="justify-content:center;font-size:1.1em;">
-                ${e.a} &times; ${e.b} = <span class="result">${e.answer}</span>
+            const errSym = e.op ? ({'+':'+','-':'&minus;','/':'&divide;'}[e.op]) : '&times;';
+        html += `<div class="study-row" style="justify-content:center;font-size:1.1em;">
+                ${e.a} ${errSym} ${e.b} = <span class="result">${e.answer}</span>
             </div>`;
         });
         errDiv.innerHTML = html;
@@ -1361,7 +1383,10 @@ function showResult() {
 }
 
 function retryQuiz() {
-    if (quizOrigin === 'lesson' && quizLessonId) {
+    if (quizOrigin === 'oplesson' && opLessonCurrentId) {
+        const lesson = OPS_CONFIG[currentOp].lessons[currentDiff].find(l => l.id === opLessonCurrentId);
+        if (lesson) startOpQuiz(lesson, currentOp, currentDiff);
+    } else if (quizOrigin === 'lesson' && quizLessonId) {
         const lesson = LESSONS.find(l => l.id === quizLessonId);
         if (lesson) startQuiz('lesson', lesson.tables, lesson.id);
     } else if (quizOrigin === 'adventure' && advCurrentPhase) {
@@ -1372,7 +1397,9 @@ function retryQuiz() {
 }
 
 function resultContinue() {
-    if (quizOrigin === 'lesson') {
+    if (quizOrigin === 'oplesson') {
+        openOpLessons(currentOp, currentDiff);
+    } else if (quizOrigin === 'lesson') {
         renderLessons();
         showScreen('sLessons','Licoes','Complete todas!');
     } else if (quizOrigin === 'challenge') {
@@ -2117,13 +2144,13 @@ updateHeader();
         const s = document.createElement('span');
         s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
         const sz = 14 + Math.floor(Math.random() * 22);
-        s.style.cssText = 'left:' + (Math.random()*100) + '%;top:' + (Math.random()*100) + '%;font-size:' + sz + 'px;color:' + colors[Math.floor(Math.random()*colors.length)] + ';opacity:0.12;transform:rotate(' + (Math.random()*60-30) + 'deg)';
+        s.style.cssText = 'left:' + (Math.random()*100) + '%;top:' + (Math.random()*100) + '%;font-size:' + sz + 'px;color:' + colors[Math.floor(Math.random()*colors.length)] + ';opacity:0.22;transform:rotate(' + (Math.random()*60-30) + 'deg)';
         bg.appendChild(s);
     }
 })();
 
 // ── VERSAO ATUAL DO APP ──
-const APP_VERSION = '2.3.4';
+const APP_VERSION = '2.3.5';
 
 function getVersionJsonBaseUrl() {
     if (window.Capacitor || window.cordova) {
@@ -2151,14 +2178,13 @@ function fetchVersionJson() {
             document.getElementById('umVersion').textContent = 'Versao ' + data.version;
             const notesEl = document.getElementById('umNotes');
             if (data.notes) { notesEl.textContent = data.notes; notesEl.style.display = 'block'; }
-            modal.classList.add('show');
-            document.getElementById('updatedOk').onclick = () => { modal.classList.remove('show'); };
+            modal.style.display = 'flex';
+            document.getElementById('updatedOk').onclick = () => { modal.style.display = 'none'; };
         });
 })();
 
 // ── SISTEMA DE ATUALIZACAO ──
 (function initUpdater() {
-    // No app nativo (Capacitor/Cordova) o update e via APK, nao via Service Worker
     if (window.Capacitor || window.cordova) return;
     if (!('serviceWorker' in navigator)) return;
 
@@ -2314,6 +2340,285 @@ function fetchVersionJson() {
     // E a cada 30 minutos
     setInterval(checkForAppUpdate, 30 * 60 * 1000);
 })();
+
+// ══════════════════════════════════════════
+//  OPERACOES (ADICAO, SUBTRACAO, DIVISAO)
+// ══════════════════════════════════════════
+let currentOp         = '+';
+let currentDiff       = 'easy';
+let opLessonCurrentId = null;
+
+const OPS_CONFIG = {
+    'x': {
+        name: 'Multiplicacao', symbol: '\u00D7', color: '#2196F3',
+        desc: 'Domine a tabuada nivel por nivel',
+        lessons: {
+            easy: [
+                { id:'mul_e1', title:'Tabuada do 1 e 2', desc:'Os mais faceis!',       tables:[1,2]         },
+                { id:'mul_e2', title:'Tabuada do 3 e 4', desc:'Continuando...',        tables:[3,4]         },
+                { id:'mul_e3', title:'Tabuada do 5',     desc:'De cinco em cinco',     tables:[5]           },
+                { id:'mul_e4', title:'Revisao 1 a 5',    desc:'Mistura das primeiras', tables:[1,2,3,4,5]   },
+                { id:'mul_e5', title:'Campeao facil!',   desc:'Desafio final do nivel',tables:[1,2,3,4,5]   },
+            ],
+            medium: [
+                { id:'mul_m1', title:'Tabuada do 6',     desc:'Ficando serio!',        tables:[6]           },
+                { id:'mul_m2', title:'Tabuada do 7',     desc:'Numero da sorte',       tables:[7]           },
+                { id:'mul_m3', title:'Tabuada do 8 e 9', desc:'Quase la!',             tables:[8,9]         },
+                { id:'mul_m4', title:'Tabuada do 10',    desc:'O mais elegante',       tables:[10]          },
+                { id:'mul_m5', title:'Revisao 6 a 10',   desc:'Mistura das avancadas', tables:[6,7,8,9,10]  },
+            ],
+            hard: [
+                { id:'mul_h1', title:'Todas as tabuadas',desc:'Mistura total',         tables:[1,2,3,4,5,6,7,8,9,10] },
+                { id:'mul_h2', title:'Desafio mestre',   desc:'Velocidade maxima!',    tables:[1,2,3,4,5,6,7,8,9,10] },
+                { id:'mul_h3', title:'Mestre da mult.!', desc:'Desafio absoluto',      tables:[1,2,3,4,5,6,7,8,9,10] },
+            ],
+        }
+    },
+    '+': {
+        name: 'Adicao', symbol: '+', color: '#4CAF50',
+        desc: 'Some numeros de forma progressiva',
+        lessons: {
+            easy: [
+                { id:'add_e1', title:'Primeiros passos',  desc:'Parcelas de 1 a 5',       maxA:5,  maxB:5  },
+                { id:'add_e2', title:'Somando ate 20',    desc:'Parcelas de 1 a 10',      maxA:10, maxB:10 },
+                { id:'add_e3', title:'Dezenas faceis',    desc:'Somas com dezenas',       maxA:30, maxB:10 },
+                { id:'add_e4', title:'Mistura simples',   desc:'Variedade de 1 a 15',     maxA:15, maxB:15 },
+                { id:'add_e5', title:'Campeao facil!',    desc:'Desafio final do nivel',  maxA:20, maxB:20 },
+            ],
+            medium: [
+                { id:'add_m1', title:'Dois digitos',      desc:'Somas de 10 a 50',        maxA:50,  maxB:50,  minA:10 },
+                { id:'add_m2', title:'Passando de 100',   desc:'Resultados ate 100',      maxA:60,  maxB:60,  minA:20 },
+                { id:'add_m3', title:'Tres digitos',      desc:'Somas variadas',          maxA:80,  maxB:80,  minA:30 },
+                { id:'add_m4', title:'Grandes somas',     desc:'Ate 150 de resultado',    maxA:90,  maxB:90,  minA:10 },
+                { id:'add_m5', title:'Mestre medio!',     desc:'Desafio final do nivel',  maxA:99,  maxB:99,  minA:10 },
+            ],
+            hard: [
+                { id:'add_h1', title:'Centenas',          desc:'Numeros de 100 a 300',    maxA:300, maxB:300, minA:100 },
+                { id:'add_h2', title:'Grandes somas',     desc:'Ate 500',                 maxA:500, maxB:500, minA:200 },
+                { id:'add_h3', title:'Mestre da Adicao!', desc:'Desafio maximo',          maxA:999, maxB:999, minA:100 },
+            ],
+        }
+    },
+    '-': {
+        name: 'Subtracao', symbol: '\u2212', color: '#FF9800',
+        desc: 'Subtraia com precisao e rapidez',
+        lessons: {
+            easy: [
+                { id:'sub_e1', title:'Primeiras subracoes', desc:'Numeros de 1 a 10',      maxA:10, maxB:5  },
+                { id:'sub_e2', title:'Ate 20',              desc:'Resultados positivos',   maxA:20, maxB:10 },
+                { id:'sub_e3', title:'Dezenas menos uns',   desc:'30-x, 20-x...',          maxA:30, maxB:9  },
+                { id:'sub_e4', title:'Mistura simples',     desc:'Variedade ate 30',       maxA:30, maxB:15 },
+                { id:'sub_e5', title:'Campeao facil!',      desc:'Desafio final do nivel', maxA:40, maxB:20 },
+            ],
+            medium: [
+                { id:'sub_m1', title:'Dois digitos',        desc:'Subtraia de 20 a 100',   maxA:100, maxB:50,  minA:20 },
+                { id:'sub_m2', title:'Com emprestimo',      desc:'Mais desafiador',        maxA:100, maxB:99,  minA:30 },
+                { id:'sub_m3', title:'Variedade media',     desc:'Resultado de 1 a 100',   maxA:150, maxB:80,  minA:50 },
+                { id:'sub_m4', title:'Somas inversas',      desc:'Grandes subracoes',      maxA:200, maxB:150, minA:50 },
+                { id:'sub_m5', title:'Mestre medio!',       desc:'Desafio final do nivel', maxA:200, maxB:180, minA:50 },
+            ],
+            hard: [
+                { id:'sub_h1', title:'Centenas',            desc:'100 a 500',              maxA:500,  maxB:400, minA:100 },
+                { id:'sub_h2', title:'Grandes subracoes',   desc:'Ate 1000',               maxA:1000, maxB:900, minA:200 },
+                { id:'sub_h3', title:'Mestre da Subtracao!',desc:'Desafio maximo',         maxA:999,  maxB:990, minA:100 },
+            ],
+        }
+    },
+    '/': {
+        name: 'Divisao', symbol: '\u00F7', color: '#9C27B0',
+        desc: 'Divida e conquiste cada nivel',
+        lessons: {
+            easy: [
+                { id:'div_e1', title:'Dividindo por 2',     desc:'So divisoes por 2',          divisors:[2],             maxResult:10 },
+                { id:'div_e2', title:'Dividindo por 5',     desc:'So divisoes por 5',          divisors:[5],             maxResult:10 },
+                { id:'div_e3', title:'Dividindo por 10',    desc:'So divisoes por 10',         divisors:[10],            maxResult:10 },
+                { id:'div_e4', title:'2, 5 e 10',           desc:'Mistura dos tres',           divisors:[2,5,10],        maxResult:10 },
+                { id:'div_e5', title:'Campeao facil!',      desc:'Desafio final do nivel',     divisors:[2,5,10],        maxResult:15 },
+            ],
+            medium: [
+                { id:'div_m1', title:'Dividindo por 3 e 4', desc:'Novos divisores',            divisors:[3,4],           maxResult:12 },
+                { id:'div_m2', title:'Dividindo por 6 e 7', desc:'Mais desafiador',            divisors:[6,7],           maxResult:12 },
+                { id:'div_m3', title:'Tabuada inversa 1-5', desc:'Divisores de 2 a 5',         divisors:[2,3,4,5],       maxResult:12 },
+                { id:'div_m4', title:'Tabuada inversa 6-9', desc:'Divisores de 6 a 9',         divisors:[6,7,8,9],       maxResult:12 },
+                { id:'div_m5', title:'Mestre medio!',       desc:'Todos divisores 2-9',        divisors:[2,3,4,5,6,7,8,9], maxResult:12 },
+            ],
+            hard: [
+                { id:'div_h1', title:'Divisoes grandes',    desc:'Resultados ate 15',          divisors:[2,3,4,5,6,7,8,9,10],    maxResult:15 },
+                { id:'div_h2', title:'Divisores maiores',   desc:'Divisores ate 12',           divisors:[2,3,4,5,6,7,8,9,10,11,12], maxResult:15 },
+                { id:'div_h3', title:'Mestre da Divisao!',  desc:'Desafio maximo',             divisors:[2,3,4,5,6,7,8,9,10,11,12], maxResult:20 },
+            ],
+        }
+    }
+};
+
+const DIFF_CONFIG = {
+    easy:   { name:'Facil',   icon:'\uD83C\uDF31', color:'#4CAF50', age:'6\u20138 anos',  desc:'Numeros pequenos, progressao suave' },
+    medium: { name:'Medio',   icon:'\u26A1',        color:'#FF9800', age:'9\u201311 anos', desc:'Dois digitos, mais desafiador'      },
+    hard:   { name:'Dificil', icon:'\uD83D\uDD25',  color:'#F44336', age:'12+ anos',       desc:'Numeros grandes, velocidade maxima' },
+};
+
+function openGames() {
+    const GAMES = [
+        { icon:'\uD83C\uDFC3', color:'#FF9800', grad:'linear-gradient(135deg,#FF9800,#FFB74D)',
+          name:'Corrida Matematica', desc:'Responda e desvie dos obstaculos!', fn: openRunnerGame },
+        { icon:'\uD83C\uDF88', color:'#E91E63', grad:'linear-gradient(135deg,#E91E63,#F48FB1)',
+          name:'Estoura Balao',      desc:'Estoure o balao com a resposta certa!', fn: openBalloonGame },
+        { icon:'\uD83D\uDD17', color:'#00BCD4', grad:'linear-gradient(135deg,#00BCD4,#80DEEA)',
+          name:'Conecta Matematica', desc:'Conecte cada conta com seu resultado!', fn: openOrderGame },
+    ];
+    const grid = document.getElementById('gamesGrid');
+    grid.innerHTML = '';
+    GAMES.forEach(g => {
+        const card = document.createElement('div');
+        card.className = 'op-card';
+        card.innerHTML =
+            '<div class="op-symbol" style="background:' + g.color + ';font-size:1.7em">' + g.icon + '</div>' +
+            '<div class="op-info"><h2>' + g.name + '</h2><p>' + g.desc + '</p></div>';
+        card.onclick = g.fn;
+        grid.appendChild(card);
+    });
+    showScreen('sGames', 'Jogos', 'Escolha e divirta-se!');
+}
+
+function openOps() {
+    const grid = document.getElementById('opsGrid');
+    grid.innerHTML = '';
+    ['x', '+', '-', '/'].forEach(op => {
+        const cfg  = OPS_CONFIG[op];
+        const card = document.createElement('div');
+        card.className = 'op-card';
+        card.innerHTML =
+            '<div class="op-symbol" style="background:' + cfg.color + '">' + cfg.symbol + '</div>' +
+            '<div class="op-info"><h2>' + cfg.name + '</h2><p>' + cfg.desc + '</p></div>' +
+            '<div class="op-badge">3 niveis</div>';
+        card.onclick = () => openOpDiff(op);
+        grid.appendChild(card);
+    });
+    showScreen('sOps', 'Operacoes', 'Escolha o que praticar!');
+}
+
+function openOpDiff(op) {
+    currentOp = op;
+    const cfg = OPS_CONFIG[op];
+    document.getElementById('opDiffTitle').textContent = cfg.name + ' \u2014 Dificuldade';
+
+    const grid = document.getElementById('diffGrid');
+    grid.innerHTML = '';
+    ['easy', 'medium', 'hard'].forEach(diff => {
+        const d    = DIFF_CONFIG[diff];
+        const card = document.createElement('div');
+        card.className = 'diff-card';
+        card.style.borderLeftColor = d.color;
+        card.innerHTML =
+            '<div class="diff-icon">' + d.icon + '</div>' +
+            '<div class="diff-info"><h2>' + d.name + '</h2><p>' + d.desc + '</p></div>' +
+            '<span class="diff-age" style="background:' + d.color + '">' + d.age + '</span>';
+        card.onclick = () => openOpLessons(op, diff);
+        grid.appendChild(card);
+    });
+    showScreen('sOpDiff', cfg.name, 'Escolha a dificuldade!');
+}
+
+function openOpLessons(op, diff) {
+    currentOp = op; currentDiff = diff;
+    const cfg     = OPS_CONFIG[op];
+    const dCfg    = DIFF_CONFIG[diff];
+    const lessons = cfg.lessons[diff];
+
+    document.getElementById('opLessonsHeader').innerHTML =
+        '<div class="op-header">' +
+            '<div class="op-header-symbol" style="background:' + cfg.color + '">' + cfg.symbol + '</div>' +
+            '<div class="op-header-info"><h3>' + cfg.name + ' \u2014 ' + dCfg.name + '</h3>' +
+            '<p>' + dCfg.age + ' &bull; ' + dCfg.desc + '</p></div>' +
+        '</div>';
+
+    const xpProgress = state.xp % 100;
+    document.getElementById('opLvlText').textContent = 'Nivel ' + state.level;
+    document.getElementById('opLvlXP').textContent   = xpProgress + ' / 100 XP';
+    document.getElementById('opLvlBar').style.width  = xpProgress + '%';
+
+    const list = document.getElementById('opLessonsList');
+    list.innerHTML = '';
+    lessons.forEach((lesson, idx) => {
+        const prevKey  = idx > 0 ? 'op_' + lessons[idx - 1].id : null;
+        const unlocked = idx === 0 || state.lessonsCompleted[prevKey];
+        const stars    = state.lessonStars['op_' + lesson.id] || 0;
+        const card     = document.createElement('div');
+        card.className = 'lesson-card' + (unlocked ? '' : ' locked');
+        card.innerHTML =
+            '<div class="lesson-number" style="background:' + (unlocked ? cfg.color : '#9E9E9E') + '">' + (idx + 1) + '</div>' +
+            '<div class="lesson-info"><h3>' + lesson.title + '</h3><p>' + lesson.desc + '</p></div>' +
+            '<div class="lesson-stars">' + (unlocked ? starDisplay(stars) : '\uD83D\uDD12') + '</div>';
+        if (unlocked) card.onclick = () => startOpQuiz(lesson, op, diff);
+        list.appendChild(card);
+    });
+
+    showScreen('sOpLessons', cfg.name, dCfg.name);
+}
+
+function rndInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function generateOpQuestion(op, lessonCfg) {
+    let a, b, answer;
+    if (op === 'x') {
+        const tables = lessonCfg.tables;
+        a = tables[Math.floor(Math.random() * tables.length)];
+        b = rndInt(1, 10);
+        answer = a * b;
+    } else if (op === '+') {
+        const minA = lessonCfg.minA || 1;
+        a = rndInt(minA, lessonCfg.maxA);
+        b = rndInt(1, lessonCfg.maxB);
+        answer = a + b;
+    } else if (op === '-') {
+        const minA = lessonCfg.minA || 2;
+        a = rndInt(Math.max(minA, 2), lessonCfg.maxA);
+        b = rndInt(1, Math.max(1, Math.min(a - 1, lessonCfg.maxB)));
+        answer = a - b;
+    } else if (op === '/') {
+        const divisors = lessonCfg.divisors;
+        b = divisors[Math.floor(Math.random() * divisors.length)];
+        const result = rndInt(1, lessonCfg.maxResult);
+        a = b * result;
+        answer = result;
+    }
+    return { a, b, op, answer };
+}
+
+function startOpQuiz(lesson, op, diff) {
+    cancelQuizTimeout();
+    opLessonCurrentId = lesson.id;
+    quizOrigin   = 'oplesson';
+    quizLessonId = 'op_' + lesson.id;
+    quizIndex    = 0; quizCorrect = 0; quizErrors = []; quizAnswered = false;
+
+    quizQuestions = [];
+    for (let i = 0; i < 10; i++) quizQuestions.push(generateOpQuestion(op, lesson));
+
+    const cfg = OPS_CONFIG[op];
+    showScreen('sQuiz', cfg.name, 'Pergunta 1 de 10');
+    renderQuiz();
+}
+
+// ── RESULTADO: salvar progresso das licoes de operacoes ──
+const _origShowResult = showResult;
+showResult = function() {
+    if (quizOrigin === 'oplesson' && quizLessonId) {
+        const total = quizQuestions.length;
+        const pct   = total > 0 ? Math.round((quizCorrect / total) * 100) : 0;
+        const stars = pct >= 90 ? 3 : pct >= 70 ? 2 : pct >= 50 ? 1 : 0;
+        const prev  = state.lessonStars[quizLessonId] || 0;
+        if (stars > prev) { state.stars += stars - prev; state.lessonStars[quizLessonId] = stars; }
+        if (stars >= 1) state.lessonsCompleted[quizLessonId] = true;
+        const xpGain = quizCorrect * 5 + stars * 10;
+        state.xp += xpGain;
+        state.level = Math.floor(state.xp / 100) + 1;
+        saveState();
+    }
+    _origShowResult();
+};
 
 // ── ADMOB ──
 // ID de teste: use ate criar seu bloco de anuncio no AdMob
