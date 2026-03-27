@@ -2133,6 +2133,61 @@ const APP_VERSION = '2.3.1';
         }).catch(() => {});
 })();
 
+// ── UPDATE IN-APP (APK) ──
+// Verifica atualizacoes do APK automaticamente
+(function initAppUpdate() {
+    if (!window.cordova || !window.cordova.plugins || !window.cordova.plugins.AppUpdate) return;
+
+    const AppUpdate = window.cordova.plugins.AppUpdate;
+
+    async function checkForAppUpdate() {
+        try {
+            const versionRes = await fetch('version.json?t=' + Date.now(), { cache: 'no-store' });
+            const versionData = await versionRes.json();
+            const remoteVersion = versionData.version;
+
+            // Obtem versao instalada do app
+            const AppVersion = window.cordova.plugins.AppVersion;
+            AppVersion.version(version => {
+                // Compara versoes (simples: string comparison)
+                if (remoteVersion > version) {
+                    // Versao nova disponivel!
+                    showAppUpdateNotification(remoteVersion, versionData.apk, versionData.notes);
+                }
+            });
+        } catch(e) { console.log('Update check failed:', e); }
+    }
+
+    function showAppUpdateNotification(newVersion, apkUrl, notes) {
+        const banner = document.getElementById('updateBanner');
+        if (!banner) return;
+        banner.style.display = 'flex';
+
+        const textDiv = banner.querySelector('.ub-text');
+        textDiv.innerHTML = '<strong>&#128640; Nova versao ' + newVersion + '!</strong> Toque para baixar e instalar.';
+
+        document.getElementById('updateClose').onclick = () => {
+            banner.style.display = 'none';
+        };
+
+        document.getElementById('updateBtn').onclick = () => {
+            banner.style.display = 'none';
+            downloadAndInstallAPK(apkUrl);
+        };
+    }
+
+    function downloadAndInstallAPK(apkUrl) {
+        // Abre navegador para download
+        // Android vai oferecer instalar automaticamente
+        window.open(apkUrl, '_system');
+    }
+
+    // Verifica atualizacao ao abrir o app
+    setTimeout(checkForAppUpdate, 2000);
+    // E a cada 30 minutos
+    setInterval(checkForAppUpdate, 30 * 60 * 1000);
+})();
+
 // ── ADMOB ──
 // ID de teste: use ate criar seu bloco de anuncio no AdMob
 // Depois substitua pelo ID real do seu bloco (ex: ca-app-pub-8537968127598634/XXXXXXXXX)
