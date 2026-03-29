@@ -10,8 +10,21 @@ export default {
     }
 
     try {
-      if (!env.ELEVENLABS_API_KEY) {
-        return new Response('missing_elevenlabs_api_key', { status: 500, headers: corsHeaders(request) });
+      // Debug: log environment variables (without exposing secrets)
+      const apiKey = env.ELEVENLABS_API_KEY || '';
+      console.log('Environment check:', {
+        hasApiKey: !!apiKey,
+        apiKeyLength: apiKey.length,
+        voiceId: env.ELEVENLABS_VOICE_ID,
+        hasToken: !!env.APP_TTS_TOKEN
+      });
+
+      if (!apiKey) {
+        console.error('Missing ElevenLabs API key');
+        return new Response(JSON.stringify({ error: 'missing_elevenlabs_api_key', debug: { hasApiKey: !!apiKey, apiKeyLength: apiKey.length } }), { 
+          status: 500, 
+          headers: { ...corsHeaders(request), 'content-type': 'application/json' }
+        });
       }
 
       if (url.pathname === '/voices') {
@@ -22,7 +35,7 @@ export default {
         const elevenRes = await fetch('https://api.elevenlabs.io/v1/voices', {
           method: 'GET',
           headers: {
-            'xi-api-key': env.ELEVENLABS_API_KEY,
+            'xi-api-key': apiKey,
             'accept': 'application/json',
           },
         });
@@ -86,7 +99,7 @@ export default {
       const elevenRes = await fetch(elevenUrl, {
         method: 'POST',
         headers: {
-          'xi-api-key': env.ELEVENLABS_API_KEY,
+          'xi-api-key': apiKey,
           'accept': 'audio/mpeg',
           'content-type': 'application/json',
         },
