@@ -6,4 +6,12 @@ android/local.properties
 *.keystore
 keystore.properties
 android/keystore.properties
+.idea/
+android/.idea/
+android/app/release/
+android/app/src/main/assets/
+android/gradle/gradle-daemon-jvm.properties
 www/
+!www/index.html
+!www/version.json
+!www/download.html

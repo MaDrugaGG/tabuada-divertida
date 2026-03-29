@@ -117,7 +117,7 @@ sizes.forEach(({ dir, size }) => {
     const outDir = path.join(resDir, dir);
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
-    ['ic_launcher.png', 'ic_launcher_round.png'].forEach(name => {
+    ['ic_launcher.png', 'ic_launcher_round.png', 'ic_launcher_foreground.png'].forEach(name => {
         fs.writeFileSync(path.join(outDir, name), buf);
     });
     generated++;
