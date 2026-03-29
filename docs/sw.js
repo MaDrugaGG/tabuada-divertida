@@ -1,4 +1,4 @@
-const APP_VERSION = '2.3.9';
+const APP_VERSION = '2.3.10';
 const CACHE_NAME = 'tabuada-v' + APP_VERSION;
 const ASSETS = [
     '/',
