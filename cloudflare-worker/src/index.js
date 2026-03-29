@@ -56,13 +56,6 @@ export default {
         return new Response('method_not_allowed', { status: 405, headers: corsHeaders(request) });
       }
 
-      if (env.APP_TTS_TOKEN && env.APP_TTS_TOKEN.trim()) {
-        const token = request.headers.get('x-tts-token') || '';
-        if (token !== env.APP_TTS_TOKEN) {
-          return new Response('unauthorized', { status: 401, headers: corsHeaders(request) });
-        }
-      }
-
       let voiceId = (env.ELEVENLABS_VOICE_ID || '').trim();
       if (!voiceId) {
         // Auto-pick a "childlike" voice if not configured.
