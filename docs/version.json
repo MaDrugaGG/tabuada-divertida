@@ -1,5 +1,5 @@
 {
-  "version": "2.3.10-2",
-  "notes": "Hotfix: voz infantil Jessica (ElevenLabs) funcional + splash ajustado + ícone menina",
-  "apk": "https://github.com/MaDrugaGG/tabuada-divertida/releases/download/v2.3.10-2/tabuada-divertida.apk"
+  "version": "2.3.10-3",
+  "notes": "Fila de fala: voz infantil sem overlap, fala tudo sequencialmente",
+  "apk": "https://github.com/MaDrugaGG/tabuada-divertida/releases/download/v2.3.10-3/tabuada-divertida.apk"
 }
