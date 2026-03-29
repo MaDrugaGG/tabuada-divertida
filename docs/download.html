@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baixar Tabuada Divertida</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
@@ -73,6 +74,23 @@
             background: #f9f9f9; border-radius: 10px; padding: 10px 14px;
             text-align: left; line-height: 1.5;
         }
+        .qr-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .qr-title {
+            font-size: .9em;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        #qrcode {
+            display: flex;
+            justify-content: center;
+        }
         .btn-download {
             display: block; background: #6C63FF; color: white;
             text-decoration: none; padding: 16px 24px;
@@ -106,11 +124,16 @@
     <p>App educativo para criancas aprenderem a tabuada com licoes, pontuacao e desafios!</p>
 
     <div class="version-badge" id="versionBadge">&#8987; carregando...</div>
-    <div class="beta-note" id="betaNote"><span class="pill">Beta</span><span class="sub">Em desenvolvimento • no app</span></div>
+    <div class="beta-note" id="betaNote"><span class="pill">Beta</span><span class="sub">Em desenvolvimento • v2.3.12</span></div>
     <div class="notes" id="versionNotes" style="display:none"></div>
 
-    <a class="btn-download" id="btnDownload" href="tabuada-divertida.apk" download="tabuada-divertida.apk">
-        &#11015; Baixar APK
+    <div class="qr-section">
+        <div class="qr-title">&#128247; Aponte a camera do celular</div>
+        <div id="qrcode"></div>
+    </div>
+
+    <a class="btn-download" id="btnDownload" href="https://github.com/MaDrugaGG/tabuada-divertida/releases/download/v2.3.12/tabuada-divertida.apk" download>
+        &#11015; Baixar APK v2.3.12
     </a>
     <a class="btn-open" href="index.html">
         &#127760; Abrir no Navegador
@@ -121,13 +144,24 @@
         1. Baixe o APK<br>
         2. Abra o arquivo baixado<br>
         3. Se aparecer aviso, va em <b>Configuracoes &gt; Instalar apps desconhecidos</b> e permita<br>
-        4. Instale e aproveite!
+        4. Se o Play Protect bloquear, toque em "Mais detalhes" -> "Instalar mesmo assim"
     </div>
 
     <div class="creator">Criado por <span>David Duarte</span> &#11088;</div>
 </div>
 
 <script>
+// Gerar QR Code automaticamente
+const apkUrl = "https://github.com/MaDrugaGG/tabuada-divertida/releases/download/v2.3.12/tabuada-divertida.apk";
+new QRCode(document.getElementById("qrcode"), {
+    text: apkUrl,
+    width: 180,
+    height: 180,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+});
+
 (function makeBgPattern() {
     const symbols = ['×','÷','+','=','−','2×4','3×3','5×5','6×7','8×9','4×6','7×8','2','3','5','7','9','0'];
     const colors  = ['rgba(255,255,255,.95)','rgba(255,255,255,.75)','rgba(255,255,255,.55)'];
