@@ -4,63 +4,60 @@
     android:viewportHeight="108"
     android:viewportWidth="108">
     <group
-        android:scaleX="0.85"
-        android:scaleY="0.85"
-        android:translateX="8.1"
-        android:translateY="8.1">
-        <!-- Criança com quadro simplificada -->
+        android:scaleX="0.9"
+        android:scaleY="0.9"
+        android:translateX="5.4"
+        android:translateY="5.4">
+        
+        <!-- Fundo circular colorido -->
         <path
-            android:fillColor="#2E7D32"
-            android:pathData="M24,30c0,-4 4,-8 8,-8h40c4,0 8,4 8,8v30c0,4 -4,8 -8,8H32c-4,0 -8,-4 -8,-8z" />
+            android:fillColor="#7E57C2"
+            android:pathData="M54,20c18,0 34,14 34,34c0,18 -16,34 -34,34c-18,0 -34,-16 -34,-34c0,-20 16,-34 34,-34z" />
+        
+        <!-- Brilho no fundo -->
         <path
-            android:fillColor="#1B5E20"
-            android:fillAlpha="0.3"
-            android:pathData="M28,34h40v22H28z" />
+            android:fillColor="#9575CD"
+            android:pathData="M54,26c14,0 28,12 28,28c0,4 -1,8 -2,12c-6,-8 -16,-14 -28,-14c-12,0 -22,6 -28,14c-1,-4 -2,-8 -2,-12c0,-16 14,-28 28,-28z" />
+        
+        <!-- Círculo interno -->
         <path
-            android:fillColor="#FFF8E1"
-            android:pathData="M30,34h36c1,0 2,1 2,2v1H28v-1c0,-1 1,-2 2,-2z" />
+            android:fillColor="#FFFFFF"
+            android:pathData="M54,38c10,0 18,8 18,18c0,10 -8,16 -18,16c-10,0 -18,-6 -18,-16c0,-10 8,-18 18,-18z" />
+        
+        <!-- Número 1 estilizado -->
         <path
-            android:fillColor="#FAFAFA"
-            android:fillAlpha="0.9"
-            android:pathData="M32,44h28v2H32z" />
+            android:fillColor="#FF6F00"
+            android:pathData="M52,46h4v16h-4z" />
         <path
-            android:fillColor="#FAFAFA"
-            android:fillAlpha="0.9"
-            android:pathData="M32,48h32v2H32z" />
+            android:fillColor="#FF6F00"
+            android:pathData="M48,48l6,-6l2,2l-4,4z" />
+        
+        <!-- Sinal de multiplicação X -->
         <path
-            android:fillColor="#FAFAFA"
-            android:fillAlpha="0.9"
-            android:pathData="M32,52h24v2H32z" />
-        <!-- Cabeça da criança -->
+            android:fillColor="#00BCD4"
+            android:pathData="M38,62l2,-2l4,4l4,-4l2,2l-4,4l4,4l-2,2l-4,-4l-4,4l-2,-2l4,-4z" />
+        
+        <!-- Sinal de igual -->
         <path
-            android:fillColor="#FFCCBC"
-            android:pathData="M30,58c0,-8 8,-16 16,-16c8,0 16,8 16,16c0,8 -8,14 -16,14c-8,0 -16,-6 -16,-14z" />
-        <!-- Cabelo -->
+            android:fillColor="#66BB6A"
+            android:pathData="M62,62h12v2H62z" />
         <path
-            android:fillColor="#6D4C41"
-            android:pathData="M32,48c2,-4 8,-8 14,-8c6,0 12,4 14,8c-6,-2 -10,-4 -14,-4c-4,0 -8,2 -14,4z" />
-        <!-- Corpo -->
+            android:fillColor="#66BB6A"
+            android:pathData="M62,66h12v2H62z" />
+        
+        <!-- Estrelinhas decorativas -->
         <path
-            android:fillColor="#4DB6AC"
-            android:pathData="M28,74c2,-6 8,-12 18,-12c10,0 16,6 18,12c-6,4 -12,6 -18,6c-6,0 -12,-2 -18,-6z" />
-        <!-- Braços -->
+            android:fillColor="#FFD54F"
+            android:pathData="M30,36l1,2l2,0l-1.5,1.5l0.5,2l-2,-1l-2,1l0.5,-2l-1.5,-1.5l2,0z" />
         <path
-            android:fillColor="#FFAB91"
-            android:pathData="M26,66c2,-4 6,-6 12,-6c2,0 4,0 6,1c-2,2 -4,4 -6,8c-2,0 -4,-1 -12,-3z" />
+            android:fillColor="#FFD54F"
+            android:pathData="M78,36l1,2l2,0l-1.5,1.5l0.5,2l-2,-1l-2,1l0.5,-2l-1.5,-1.5l2,0z" />
         <path
-            android:fillColor="#FFAB91"
-            android:pathData="M74,66c-2,-4 -6,-6 -12,-6c-2,0 -4,0 -6,1c2,2 4,4 6,8c2,0 4,-1 12,-3z" />
-        <!-- Detalhes do rosto -->
+            android:fillColor="#FFD54F"
+            android:pathData="M24,54l1,2l2,0l-1.5,1.5l0.5,2l-2,-1l-2,1l0.5,-2l-1.5,-1.5l2,0z" />
         <path
-            android:fillColor="#000000"
-            android:pathData="M38,54c1,-1 2,-1 3,-1c1,0 2,0 3,1c-1,0 -2,1 -3,1c-1,0 -2,-1 -3,-1z" />
-        <path
-            android:fillColor="#000000"
-            android:pathData="M50,54c1,-1 2,-1 3,-1c1,0 2,0 3,1c-1,0 -2,1 -3,1c-1,0 -2,-1 -3,-1z" />
-        <!-- Sorriso -->
-        <path
-            android:fillColor="#000000"
-            android:fillAlpha="0.3"
-            android:pathData="M42,60c2,-2 6,-2 8,0c-2,2 -6,2 -8,0z" />
+            android:fillColor="#FFD54F"
+            android:pathData="M84,54l1,2l2,0l-1.5,1.5l0.5,2l-2,-1l-2,1l0.5,-2l-1.5,-1.5l2,0z" />
+        
     </group>
 </vector>

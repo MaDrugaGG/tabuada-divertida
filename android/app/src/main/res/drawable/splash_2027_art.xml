@@ -5,52 +5,140 @@
     android:viewportWidth="512"
     android:viewportHeight="512">
 
+    <!-- Chão/Sombra -->
     <path
         android:fillColor="#000000"
-        android:fillAlpha="0.08"
-        android:pathData="M64,396c80,60 304,60 384,0c-14,62 -94,96 -192,96S78,458 64,396z" />
+        android:fillAlpha="0.06"
+        android:pathData="M80,420c100,50 252,50 352,0c-10,45 -90,75 -176,75S90,465 80,420z" />
 
+    <!-- === MENINA (esquerda) === -->
+    <!-- Corpo/cabelo menina -->
     <path
-        android:fillColor="#2E7D32"
-        android:pathData="M138,168c0,-18 14,-32 32,-32h204c18,0 32,14 32,32v170c0,18 -14,32 -32,32H170c-18,0 -32,-14 -32,-32z" />
-    <path
-        android:fillColor="#1B5E20"
-        android:fillAlpha="0.25"
-        android:pathData="M154,184h236v138H154z" />
-
-    <path
-        android:fillColor="#FFF8E1"
-        android:pathData="M162,184h220c8,0 14,6 14,14v6H148v-6c0,-8 6,-14 14,-14z" />
-
-    <path
-        android:fillColor="#FAFAFA"
-        android:fillAlpha="0.92"
-        android:pathData="M174,244h165v12H174z" />
-    <path
-        android:fillColor="#FAFAFA"
-        android:fillAlpha="0.92"
-        android:pathData="M174,270h194v12H174z" />
-    <path
-        android:fillColor="#FAFAFA"
-        android:fillAlpha="0.92"
-        android:pathData="M174,296h144v12H174z" />
-
+        android:fillColor="#5D4037"
+        android:pathData="M140,200c0,-35 25,-60 55,-60c30,0 55,25 55,60c0,15 -5,30 -15,40c-15,-10 -30,-15 -40,-15c-10,0 -25,5 -40,15c-10,-10 -15,-25 -15,-40z" />
+    <!-- Rosto menina -->
     <path
         android:fillColor="#FFCCBC"
-        android:pathData="M170,258c0,-45 36,-82 82,-82c46,0 82,37 82,82c0,44 -36,80 -82,80c-46,0 -82,-36 -82,-80z" />
+        android:pathData="M155,220c0,-20 15,-35 40,-35c25,0 40,15 40,35c0,20 -15,38 -40,38c-25,0 -40,-18 -40,-38z" />
+    <!-- Olhos menina -->
+    <path
+        android:fillColor="#3E2723"
+        android:pathData="M168,230c0,4 3,7 7,7c4,0 7,-3 7,-7c0,-4 -3,-7 -7,-7c-4,0 -7,3 -7,7z" />
+    <path
+        android:fillColor="#3E2723"
+        android:pathData="M208,230c0,4 3,7 7,7c4,0 7,-3 7,-7c0,-4 -3,-7 -7,-7c-4,0 -7,3 -7,7z" />
+    <!-- Sorriso menina -->
+    <path
+        android:fillColor="#D84315"
+        android:pathData="M175,248c5,8 22,8 27,0c-3,5 -8,8 -13.5,8c-5.5,0 -10.5,-3 -13.5,-8z" />
+    <!-- Vestido menina -->
+    <path
+        android:fillColor="#E91E63"
+        android:pathData="M135,280c10,-25 30,-35 60,-35c30,0 50,10 60,35c-15,20 -35,30 -60,30c-25,0 -45,-10 -60,-30z" />
+    <path
+        android:fillColor="#F48FB1"
+        android:pathData="M145,295c12,15 30,22 50,22c20,0 38,-7 50,-22c-10,8 -25,12 -50,12c-25,0 -40,-4 -50,-12z" />
+    <!-- Braço menina segurando quadro -->
+    <path
+        android:fillColor="#FFCCBC"
+        android:pathData="M130,300c-8,-15 -5,-30 10,-35c8,-2 15,0 20,5l-5,15c-8,5 -15,12 -20,15c-3,-2 -5,-2 -5,0z" />
 
+    <!-- === MENINO (direita) === -->
+    <!-- Cabelo menino -->
     <path
-        android:fillColor="#6D4C41"
-        android:pathData="M188,226c6,-22 26,-38 52,-38c26,0 46,16 52,38c-18,-10 -38,-14 -52,-14c-14,0 -34,4 -52,14z" />
+        android:fillColor="#3E2723"
+        android:pathData="M317,195c0,-32 22,-55 50,-55c28,0 50,23 50,55c0,20 -8,35 -20,45l-15,-5c-8,-2 -15,0 -15,0c-5,0 -10,2 -15,5l-15,5c-12,-10 -20,-25 -20,-45z" />
+    <!-- Rosto menino -->
+    <path
+        android:fillColor="#FFCCBC"
+        android:pathData="M330,218c0,-18 14,-32 37,-32c23,0 37,14 37,32c0,18 -14,35 -37,35c-23,0 -37,-17 -37,-35z" />
+    <!-- Olhos menino -->
+    <path
+        android:fillColor="#3E2723"
+        android:pathData="M342,228c0,4 3,7 6,7c3,0 6,-3 6,-7c0,-4 -3,-7 -6,-7c-3,0 -6,3 -6,7z" />
+    <path
+        android:fillColor="#3E2723"
+        android:pathData="M378,228c0,4 3,7 6,7c3,0 6,-3 6,-7c0,-4 -3,-7 -6,-7c-3,0 -6,3 -6,7z" />
+    <!-- Sorriso menino -->
+    <path
+        android:fillColor="#D84315"
+        android:pathData="M348,244c4,7 18,7 22,0c-2,4 -7,7 -11,7c-4,0 -9,-3 -11,-7z" />
+    <!-- Camisa menino -->
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M312,275c10,-22 28,-32 55,-32c27,0 45,10 55,32c-14,18 -32,28 -55,28c-23,0 -41,-10 -55,-28z" />
+    <path
+        android:fillColor="#42A5F5"
+        android:pathData="M325,288c12,12 28,18 47,18c19,0 35,-6 47,-18c-8,6 -22,10 -47,10c-25,0 -39,-4 -47,-10z" />
+    <!-- Braço menino segurando quadro -->
+    <path
+        android:fillColor="#FFCCBC"
+        android:pathData="M382,295c8,-15 5,-30 -10,-35c-8,-2 -15,0 -20,5l5,15c8,5 15,12 20,15c3,-2 5,-2 5,0z" />
 
+    <!-- === QUADRO CENTRAL === -->
+    <!-- Borda quadro -->
     <path
-        android:fillColor="#4DB6AC"
-        android:pathData="M168,356c6,-38 34,-66 72,-66c38,0 66,28 72,66c-22,18 -44,26 -72,26c-28,0 -50,-8 -72,-26z" />
+        android:fillColor="#5D4037"
+        android:pathData="M180,180c0,-12 10,-22 22,-22h128c12,0 22,10 22,22v140c0,12 -10,22 -22,22H202c-12,0 -22,-10 -22,-22z" />
+    <!-- Área branca quadro -->
+    <path
+        android:fillColor="#FAFAFA"
+        android:pathData="M192,192h148v116H192z" />
+    <!-- Linhas quadriculadas -->
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M192,216h148v2H192z" />
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M192,240h148v2H192z" />
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M192,264h148v2H192z" />
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M216,192v116h2v-116z" />
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M240,192v116h2v-116z" />
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M264,192v116h2v-116z" />
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M288,192v116h2v-116z" />
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M312,192v116h2v-116z" />
+    <!-- Números no quadro -->
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M208,210h4v12h-4z M210,204l4,-4l1,1l-3,3z" />
+    <path
+        android:fillColor="#2196F3"
+        android:pathData="M232,210l2,-2l3,3l3,-3l2,2l-3,3l3,3l-2,2l-3,-3l-3,3l-2,-2l3,-3z" />
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M264,210h12v2h-12z M264,214h12v2h-12z" />
+    <path
+        android:fillColor="#9C27B0"
+        android:pathData="M300,204c3,0 5,2 5,5c0,3 -2,5 -5,5c-3,0 -5,-2 -5,-5c0,-3 2,-5 5,-5z" />
+    <!-- Giz no quadro -->
+    <path
+        android:fillColor="#BDBDBD"
+        android:pathData="M328,290l2,-1l3,3l-1,2z" />
 
+    <!-- Detalhes decorativos -->
     <path
-        android:fillColor="#FFAB91"
-        android:pathData="M146,316c8,-24 28,-38 52,-38c6,0 12,1 18,3c-10,10 -18,23 -24,40c-12,0 -24,-2 -46,-5z" />
+        android:fillColor="#FFD54F"
+        android:pathData="M100,150l3,6l6,0l-4.5,4.5l1.5,6l-6,-3l-6,3l1.5,-6l-4.5,-4.5l6,0z" />
     <path
-        android:fillColor="#FFAB91"
-        android:pathData="M366,316c-8,-24 -28,-38 -52,-38c-6,0 -12,1 -18,3c10,10 18,23 24,40c12,0 24,-2 46,-5z" />
+        android:fillColor="#FFD54F"
+        android:pathData="M412,150l3,6l6,0l-4.5,4.5l1.5,6l-6,-3l-6,3l1.5,-6l-4.5,-4.5l6,0z" />
+    <path
+        android:fillColor="#81C784"
+        android:pathData="M90,380c5,0 10,-3 12,-8c2,5 7,8 12,8c-5,0 -10,5 -12,10c-2,-5 -7,-10 -12,-10z" />
+    <path
+        android:fillColor="#81C784"
+        android:pathData="M422,380c5,0 10,-3 12,-8c2,5 7,8 12,8c-5,0 -10,5 -12,10c-2,-5 -7,-10 -12,-10z" />
+
 </vector>
