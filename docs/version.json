@@ -1,5 +1,5 @@
 {
-  "version": "2.3.5",
-  "notes": "Operacoes completas (+, -, x, div) com 3 niveis. Jogos agrupados. Visual melhorado.",
-  "apk": "https://github.com/MaDrugaGG/tabuada-divertida/releases/download/v2.3.5/tabuada-divertida.apk"
+  "version": "2.3.6",
+  "notes": "Beta: ajustes no botao de voltar, feedback (✅/❌) reposicionado e sons de acerto/erro.",
+  "apk": "https://github.com/MaDrugaGG/tabuada-divertida/releases/download/v2.3.6/tabuada-divertida.apk"
 }
