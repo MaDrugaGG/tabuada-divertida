@@ -43,6 +43,57 @@
             min-height: 100vh;
             overflow-x: hidden;
             letter-spacing: .1px;
+            transition: background .28s ease, color .2s ease;
+        }
+
+        body.theme-learn {
+            background:
+                radial-gradient(circle at 10% 14%, rgba(43,103,216,.18), transparent 38%),
+                radial-gradient(circle at 82% 18%, rgba(14,141,138,.15), transparent 34%),
+                linear-gradient(168deg, #edf3ff 0%, #f7fbff 52%, #ecf8f6 100%) fixed;
+        }
+        body.theme-play {
+            background:
+                radial-gradient(circle at 8% 12%, rgba(255,152,0,.2), transparent 36%),
+                radial-gradient(circle at 86% 20%, rgba(233,30,99,.16), transparent 34%),
+                linear-gradient(165deg, #fff6eb 0%, #fff1f7 48%, #f5f0ff 100%) fixed;
+        }
+        body.theme-growth {
+            background:
+                radial-gradient(circle at 10% 14%, rgba(76,175,80,.2), transparent 36%),
+                radial-gradient(circle at 82% 18%, rgba(0,188,212,.15), transparent 34%),
+                linear-gradient(165deg, #eefaf1 0%, #eef8fc 48%, #f2f6ff 100%) fixed;
+        }
+        body.theme-battle {
+            background:
+                radial-gradient(circle at 12% 18%, rgba(63,81,181,.2), transparent 36%),
+                radial-gradient(circle at 84% 16%, rgba(255,82,82,.15), transparent 34%),
+                linear-gradient(164deg, #eff2ff 0%, #f7f4ff 52%, #eef9ff 100%) fixed;
+        }
+
+        body.screen-sRunner .rn-world {
+            border-color: rgba(255,152,0,.5);
+            box-shadow: 0 16px 28px rgba(255,152,0,.2);
+        }
+        body.screen-sBalloon .bl-world {
+            border-color: rgba(233,30,99,.44);
+            box-shadow: 0 16px 30px rgba(233,30,99,.2);
+        }
+        body.screen-sOrder .od-item {
+            border-color: rgba(0,188,212,.4);
+            box-shadow: 0 10px 18px rgba(0,188,212,.16);
+        }
+        body.screen-sMusicAdd .ma-wrap {
+            border: 1px solid rgba(108,99,255,.34);
+            box-shadow: 0 16px 30px rgba(108,99,255,.22);
+        }
+        body.screen-sSumHunt .sh-grid .sh-bubble {
+            border-color: rgba(76,175,80,.44);
+            box-shadow: 0 9px 17px rgba(76,175,80,.18);
+        }
+        body.screen-sDuel .duel-wrap {
+            border-color: rgba(63,81,181,.42);
+            box-shadow: 0 16px 32px rgba(63,81,181,.22);
         }
 
         /* ── HEADER ── */
@@ -1292,6 +1343,417 @@
             font-weight: 900;
         }
 
+        .level-info {
+            padding: 8px 12px;
+            border-radius: 14px;
+            background: linear-gradient(140deg, rgba(255,255,255,.9), rgba(235,244,255,.82));
+            border: 1px solid rgba(14,58,140,.15);
+            box-shadow: 0 8px 18px rgba(17,47,118,.1);
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #1f3f86;
+        }
+        .level-bar,
+        .adv-prog-bar {
+            position: relative;
+            overflow: hidden;
+            border-radius: 999px;
+            height: 12px;
+            background: linear-gradient(180deg, rgba(198,214,244,.8), rgba(227,235,250,.8));
+            border: 1px solid rgba(14,58,140,.14);
+            box-shadow: inset 0 3px 6px rgba(8,35,89,.12);
+        }
+        .level-bar-fill,
+        .adv-prog-fill {
+            position: relative;
+            border-radius: 999px;
+            background: linear-gradient(90deg,#0d47a1,#1a73e8 52%,#20bfa9);
+            box-shadow: 0 10px 16px rgba(20,86,196,.3);
+            overflow: hidden;
+        }
+        .level-bar-fill::after,
+        .adv-prog-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -35%;
+            width: 35%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.8), transparent);
+            animation: progShine 2.2s linear infinite;
+        }
+
+        .lesson-card,
+        .adv-phase,
+        .op-card,
+        .diff-card {
+            border: 1px solid rgba(11,58,143,.16);
+            background: linear-gradient(148deg, rgba(255,255,255,.98), rgba(239,246,255,.9));
+            box-shadow: 0 14px 30px rgba(17,47,118,.12);
+        }
+        .lesson-card.locked {
+            opacity: .58;
+            filter: grayscale(.15);
+            box-shadow: none;
+        }
+        .lesson-stars {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(14,58,140,.18);
+            background: rgba(255,255,255,.9);
+            box-shadow: 0 8px 14px rgba(17,47,118,.12);
+            font-size: 1em;
+        }
+
+        .menu-hub-tabs {
+            gap: 10px;
+            margin: 14px 0 16px;
+        }
+        .hub-tab {
+            position: relative;
+            overflow: hidden;
+            min-height: 46px;
+            border-radius: 14px;
+            border: 1px solid rgba(11,58,143,.2);
+            background: linear-gradient(145deg,#ffffff,#eef4ff);
+            box-shadow: 0 9px 18px rgba(17,49,122,.12);
+            transition: transform .18s ease, box-shadow .2s ease, filter .18s ease;
+        }
+        .hub-tab::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255,255,255,.34), transparent 38%, transparent 64%, rgba(255,255,255,.2));
+            pointer-events: none;
+        }
+        .hub-tab:active { transform: translateY(1px) scale(.985); }
+        .hub-tab.active {
+            background: linear-gradient(140deg,#0c4ab2,#1b74df 58%, #1aa8be);
+            color: #fff;
+            border-color: rgba(15,77,182,.68);
+            box-shadow: 0 14px 26px rgba(20,79,176,.3);
+        }
+
+        .quiz-progress {
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .quiz-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 999px;
+            background: linear-gradient(180deg,#ced8ee,#e6ecf8);
+            border: 1px solid rgba(14,58,140,.18);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.72);
+        }
+        .quiz-dot.correct { background: linear-gradient(180deg,#22a06b,#3fd690); border-color: rgba(18,126,79,.5); }
+        .quiz-dot.wrong   { background: linear-gradient(180deg,#c83b4e,#f17181); border-color: rgba(184,43,62,.5); }
+        .quiz-dot.current {
+            background: linear-gradient(180deg,#0f4fb7,#2f82f4);
+            border-color: rgba(10,71,170,.52);
+            transform: scale(1.33);
+            box-shadow: 0 8px 14px rgba(28,96,210,.34);
+        }
+
+        .quiz-kpi,
+        .challenge-kpi {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0 12px;
+            flex-wrap: wrap;
+        }
+        .kpi-pill {
+            min-width: 126px;
+            border-radius: 12px;
+            padding: 8px 12px;
+            border: 1px solid rgba(14,58,140,.14);
+            background: linear-gradient(145deg,#ffffff,#f3f8ff);
+            box-shadow: 0 8px 15px rgba(17,47,118,.1);
+            font-weight: 800;
+            color: #1a3f88;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .kpi-pill .v {
+            font-size: 1.12em;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: .2px;
+        }
+        .kpi-pill.good {
+            border-color: rgba(20,131,84,.35);
+            background: linear-gradient(145deg,#eefff6,#f9fffc);
+            color: #0f7e4d;
+        }
+        .kpi-pill.bad {
+            border-color: rgba(194,56,74,.3);
+            background: linear-gradient(145deg,#fff2f4,#fff8f9);
+            color: #b93a4d;
+        }
+
+        .challenge-info {
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .challenge-info > span {
+            border-radius: 12px;
+            padding: 8px 12px;
+            background: linear-gradient(145deg,#ffffff,#f1f6ff);
+            border: 1px solid rgba(12,58,143,.17);
+            box-shadow: 0 7px 14px rgba(17,47,118,.1);
+            font-weight: 700;
+            color: #1a3e86;
+        }
+
+        .quiz-input {
+            width: min(210px, 90%);
+            min-height: 58px;
+            border-radius: 18px;
+            border: 1px solid rgba(11,58,143,.26);
+            background: linear-gradient(155deg,#ffffff,#eef4ff);
+            box-shadow: inset 0 3px 8px rgba(16,48,121,.08), 0 10px 22px rgba(17,47,118,.15);
+            font-size: clamp(2.2em, 7vw, 2.8em);
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #123883;
+            font-variant-numeric: tabular-nums;
+            margin: 0 auto 12px;
+        }
+        .quiz-input.correct { border-color: rgba(20,131,84,.55); background: linear-gradient(145deg,#eefff6,#f9fffc); }
+        .quiz-input.wrong   { border-color: rgba(194,56,74,.52); background: linear-gradient(145deg,#fff1f4,#fff8f9); }
+
+        .numpad {
+            max-width: min(360px, 100%);
+            gap: 11px;
+        }
+        .numpad-btn {
+            min-height: 58px;
+            border-radius: 16px;
+            border: 1px solid rgba(11,58,143,.22);
+            background: linear-gradient(150deg,#ffffff,#edf4ff);
+            box-shadow: 0 10px 18px rgba(17,47,118,.12);
+            font-size: clamp(1.5em, 4vw, 1.72em);
+            font-weight: 900;
+            letter-spacing: .25px;
+            color: #173d89;
+            font-variant-numeric: tabular-nums;
+            transition: transform .14s ease, box-shadow .16s ease, filter .16s ease;
+        }
+        .numpad-btn:active {
+            transform: translateY(1px) scale(.98);
+            box-shadow: 0 6px 10px rgba(17,47,118,.1);
+            filter: brightness(.98);
+        }
+        .numpad-btn.confirm {
+            background: linear-gradient(145deg,#15925c,#24b974);
+            border-color: rgba(18,126,79,.55);
+            color: #fff;
+        }
+        .numpad-btn.delete {
+            background: linear-gradient(145deg,#be364a,#e15166);
+            border-color: rgba(184,43,62,.55);
+            color: #fff;
+        }
+
+        .stat-card {
+            border: 1px solid rgba(11,58,143,.14);
+            background: linear-gradient(148deg, rgba(255,255,255,.98), rgba(238,246,255,.9));
+            box-shadow: 0 12px 24px rgba(17,47,118,.11);
+        }
+        .stat-card .val {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: .4px;
+        }
+
+        .result-errors {
+            border-radius: 16px;
+            border: 1px solid rgba(11,58,143,.14);
+            background: linear-gradient(145deg,#ffffff,#f4f8ff);
+            box-shadow: 0 8px 16px rgba(17,47,118,.1);
+            padding: 8px 10px;
+        }
+
+        .achievements-wrap {
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .ach-item {
+            border-radius: 14px;
+            border: 1px solid rgba(11,58,143,.15);
+            background: linear-gradient(145deg,#ffffff,#f3f8ff);
+            box-shadow: 0 8px 16px rgba(17,47,118,.1);
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 62px;
+            transition: transform .18s ease, filter .2s ease;
+        }
+        .ach-item.locked {
+            filter: grayscale(.38) saturate(.8);
+            opacity: .72;
+        }
+        .ach-item:active { transform: translateY(1px) scale(.99); }
+        .ach-item.new {
+            animation: achUnlock .6s cubic-bezier(.18,.89,.32,1.2);
+        }
+        .ach-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            background: linear-gradient(145deg,#eef4ff,#ffffff);
+            border: 1px solid rgba(11,58,143,.16);
+            flex-shrink: 0;
+        }
+        .ach-item.done .ach-icon {
+            background: linear-gradient(145deg,#e9fff2,#f8fffc);
+            border-color: rgba(20,131,84,.36);
+        }
+        .ach-info h4 {
+            font-size: .8em;
+            margin-bottom: 1px;
+            color: #1a3f88;
+            font-weight: 900;
+        }
+        .ach-info p {
+            font-size: .71em;
+            color: #5a6c96;
+            line-height: 1.25;
+        }
+        .ach-secret {
+            display: inline-block;
+            margin-top: 4px;
+            font-size: .62em;
+            font-weight: 900;
+            color: #5a6c96;
+            background: rgba(14,58,140,.1);
+            border: 1px solid rgba(14,58,140,.18);
+            border-radius: 999px;
+            padding: 2px 8px;
+            letter-spacing: .25px;
+            text-transform: uppercase;
+        }
+        @keyframes achUnlock {
+            0% { transform: scale(.86); opacity: .2; }
+            60% { transform: scale(1.04); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .duel-wrap {
+            border-radius: 18px;
+            border: 1px solid rgba(11,58,143,.16);
+            background: linear-gradient(155deg, rgba(255,255,255,.96), rgba(238,246,255,.9));
+            box-shadow: 0 14px 28px rgba(17,47,118,.13);
+            padding: 14px;
+        }
+        .duel-top {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .duel-chip {
+            text-align: center;
+            border-radius: 12px;
+            padding: 8px;
+            border: 1px solid rgba(11,58,143,.16);
+            background: linear-gradient(145deg,#fff,#f2f7ff);
+            font-weight: 800;
+            color: #1c408a;
+            font-size: .85em;
+            box-shadow: 0 8px 14px rgba(17,47,118,.1);
+        }
+        .duel-chip .v {
+            display: block;
+            margin-top: 2px;
+            font-size: 1.35em;
+            font-weight: 900;
+            font-variant-numeric: tabular-nums;
+        }
+        .duel-q {
+            text-align: center;
+            font-size: clamp(2.1em, 8vw, 2.8em);
+            font-weight: 900;
+            color: #123a86;
+            margin: 8px 0 12px;
+            letter-spacing: .6px;
+        }
+        .duel-opts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .duel-opt {
+            border-radius: 14px;
+            border: 1px solid rgba(11,58,143,.2);
+            min-height: 56px;
+            font-size: 1.45em;
+            font-weight: 900;
+            color: #163d88;
+            background: linear-gradient(145deg,#fff,#eff4ff);
+            box-shadow: 0 8px 16px rgba(17,47,118,.12);
+            transition: transform .15s ease, box-shadow .18s ease;
+        }
+        .duel-opt:active { transform: translateY(1px) scale(.985); }
+        .duel-opt.good {
+            background: linear-gradient(145deg,#eafff3,#f6fffa);
+            border-color: rgba(20,131,84,.48);
+            color: #167548;
+        }
+        .duel-opt.bad {
+            background: linear-gradient(145deg,#fff1f3,#fff8f9);
+            border-color: rgba(194,56,74,.42);
+            color: #b73a4c;
+        }
+        .duel-note {
+            text-align: center;
+            margin-top: 10px;
+            color: #4f6292;
+            font-size: .88em;
+            font-weight: 700;
+        }
+
+        @keyframes progShine {
+            from { left: -35%; }
+            to { left: 120%; }
+        }
+
+        @media (max-width: 560px) {
+            .menu-hub-tabs {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .numpad {
+                max-width: 100%;
+            }
+            .numpad-btn {
+                min-height: 54px;
+                font-size: 1.42em;
+            }
+            .kpi-pill {
+                min-width: 0;
+                flex: 1 1 calc(50% - 6px);
+            }
+            .duel-opts {
+                grid-template-columns: 1fr;
+            }
+            .achievements-wrap {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .feedback-overlay {
             padding-bottom: calc(190px + env(safe-area-inset-bottom));
         }
@@ -1749,6 +2211,10 @@
         <div class="quiz-progress" id="qProgress"></div>
         <div class="quiz-question" id="qQuestion"></div>
         <div class="quiz-options" id="qOptions"></div>
+        <div class="quiz-kpi">
+            <div class="kpi-pill good">✅ Acertos <span class="v" id="qCorrectCount">0</span></div>
+            <div class="kpi-pill bad">❌ Erros <span class="v" id="qWrongCount">0</span></div>
+        </div>
         <div id="qInputWrap" style="display:none">
             <input type="text" class="quiz-input" id="qInput" inputmode="numeric" readonly>
             <div class="numpad" id="qNumpad"></div>
@@ -1782,6 +2248,10 @@
             <span>&#127942; <span class="val" id="cScore">0</span> pts</span>
         </div>
         <div class="quiz-question" id="cQuestion"></div>
+        <div class="challenge-kpi">
+            <div class="kpi-pill good">✅ Acertos <span class="v" id="cHits">0</span></div>
+            <div class="kpi-pill bad">❌ Erros <span class="v" id="cMiss">0</span></div>
+        </div>
         <input type="text" class="quiz-input" id="cInput" inputmode="numeric" readonly>
         <div class="numpad" id="cNumpad"></div>
     </div>
@@ -1801,6 +2271,8 @@
     <div class="tabuada-grid" id="statsGrid"></div>
     <div class="section-title">Foco de Melhoria</div>
     <div class="weak-tables" id="weakTablesDiv"></div>
+    <div class="section-title">Emblemas da Jornada</div>
+    <div class="achievements-wrap" id="achievementsWrap"></div>
     <button class="btn btn-danger" style="margin-top:18px" onclick="resetProgress()">&#128465; Resetar Progresso</button>
     <div class="creator-badge">Criado por <span>David Duarte</span></div>
 </div>
@@ -1889,6 +2361,21 @@
 <div class="screen" id="sGames">
     <div class="section-title">Arcade Inteligente</div>
     <div class="ops-grid" id="gamesGrid"></div>
+</div>
+
+<div class="screen" id="sDuel">
+    <div class="section-title">Duelo Relampago</div>
+    <div class="duel-wrap">
+        <div class="duel-top">
+            <div class="duel-chip">Voce<div class="v" id="duelMe">0</div></div>
+            <div class="duel-chip">Tempo<div class="v" id="duelTimer">6</div></div>
+            <div class="duel-chip">Bot<div class="v" id="duelBot">0</div></div>
+        </div>
+        <div class="duel-q" id="duelQ">2 × 3 = ?</div>
+        <div class="duel-opts" id="duelOpts"></div>
+        <div class="duel-note" id="duelNote">Primeiro a 5 pontos vence.</div>
+    </div>
+    <button class="btn btn-success" style="margin-top:10px" onclick="startDuelGame()">&#9654; Novo duelo</button>
 </div>
 
 <div class="screen" id="sMusicAdd">
@@ -2027,6 +2514,7 @@ function showScreen(id, title, sub) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     currentScreen = id;
+    applyThemeForScreen(id);
 
     document.getElementById('backBtn').classList.toggle('visible', id !== 'sMenu' && id !== 'sWelcome');
     document.getElementById('hTitle').textContent = title || 'Tabuada Divertida';
@@ -2041,6 +2529,27 @@ function showScreen(id, title, sub) {
 
     // Rolar para o topo
     window.scrollTo(0, 0);
+}
+
+function applyThemeForScreen(id) {
+    const body = document.body;
+    if (!body) return;
+    body.classList.remove('theme-learn', 'theme-play', 'theme-growth', 'theme-battle');
+    Array.from(body.classList).forEach(cls => {
+        if (cls.indexOf('screen-') === 0) body.classList.remove(cls);
+    });
+
+    const learn = new Set(['sWelcome', 'sMenu', 'sStudySelect', 'sStudy', 'sLessons', 'sQuiz', 'sResult', 'sOps', 'sOpDiff', 'sOpLessons']);
+    const play = new Set(['sChallenge', 'sRunner', 'sBalloon', 'sOrder', 'sGames', 'sMusicAdd', 'sSumHunt']);
+    const growth = new Set(['sStats', 'sAdventure']);
+    const battle = new Set(['sDuel']);
+
+    if (learn.has(id)) body.classList.add('theme-learn');
+    else if (play.has(id)) body.classList.add('theme-play');
+    else if (growth.has(id)) body.classList.add('theme-growth');
+    else if (battle.has(id)) body.classList.add('theme-battle');
+
+    body.classList.add('screen-' + id);
 }
 
 function goToMenu() {
@@ -2086,6 +2595,7 @@ function goBack() {
     stopRunnerGame();
     stopBalloonGame();
     stopOrderGame();
+    stopDuelGame();
     stopMusicAddGame();
     stopSumHunt();
 
@@ -2111,6 +2621,7 @@ function goBack() {
         'sOrder':       () => showScreen('sMenu'),
         'sAdventure':   () => showScreen('sMenu'),
         'sGames':       () => showScreen('sMenu'),
+        'sDuel':        () => openGames(),
         'sMusicAdd':    () => openGames(),
         'sSumHunt':     () => openGames(),
         'sOps':         () => showScreen('sMenu'),
@@ -2412,6 +2923,15 @@ function renderQuiz() {
         document.getElementById('qInputWrap').style.display = 'block';
         buildNumpad('qInput', 'qNumpad', val => checkPracticeAnswer(parseInt(val), q));
     }
+
+    updateQuizKpi();
+}
+
+function updateQuizKpi() {
+    const good = document.getElementById('qCorrectCount');
+    const bad  = document.getElementById('qWrongCount');
+    if (good) good.textContent = String(quizCorrect);
+    if (bad) bad.textContent = String(quizErrors.length);
 }
 
 function renderOptions(q) {
@@ -2525,8 +3045,11 @@ function doCorrect() {
         });
     }
     playSfx('correct');
+    const qOp = (quizQuestions[quizIndex] && quizQuestions[quizIndex].op) || (currentStudyOp || 'x');
+    playOpSfx(qOp);
     narratorSpeak('Muito bem!');
     showFeedback('\u2705');
+    updateQuizKpi();
     saveState();
 }
 
@@ -2538,8 +3061,10 @@ function doWrong(q) {
         state.tableStats[t].wrong++;
     });
     playSfx('wrong');
+    playOpSfx((q && q.op) || currentStudyOp || 'x');
     narratorSpeak('Ops! Tente de novo!');
     showFeedback('\u274C');
+    updateQuizKpi();
     saveState();
 }
 
@@ -2625,24 +3150,60 @@ function playSfx(kind) {
             const now = Date.now();
             if (now - __lastUiSfxTs < 45) return;
             __lastUiSfxTs = now;
-            playTone(620, 40, 'triangle', 0.03);
+            playTone(560, 32, 'triangle', 0.028);
+            setTimeout(() => playTone(740, 34, 'triangle', 0.018), 20);
         } else if (kind === 'nav') {
             const now = Date.now();
             if (now - __lastUiSfxTs < 120) return;
             __lastUiSfxTs = now;
-            playTone(440, 55, 'sine', 0.028);
-            setTimeout(() => playTone(660, 70, 'sine', 0.022), 40);
+            playTone(430, 50, 'sine', 0.025);
+            setTimeout(() => playTone(620, 60, 'triangle', 0.02), 35);
+            setTimeout(() => playTone(780, 70, 'sine', 0.017), 78);
         } else if (kind === 'correct') {
-            playTone(880, 90, 'triangle', 0.05);
-            setTimeout(() => playTone(1320, 110, 'triangle', 0.045), 70);
+            playTone(760, 70, 'triangle', 0.05);
+            setTimeout(() => playTone(1040, 90, 'triangle', 0.04), 56);
+            setTimeout(() => playTone(1360, 105, 'sine', 0.034), 116);
         } else if (kind === 'wrong') {
-            playTone(220, 140, 'sawtooth', 0.05);
+            playTone(240, 80, 'square', 0.04);
+            setTimeout(() => playTone(180, 130, 'sawtooth', 0.036), 45);
         } else if (kind === 'win') {
-            playTone(660, 90, 'triangle', 0.05);
-            setTimeout(() => playTone(880, 90, 'triangle', 0.05), 90);
-            setTimeout(() => playTone(1100, 140, 'triangle', 0.05), 180);
+            playTone(640, 75, 'triangle', 0.046);
+            setTimeout(() => playTone(860, 85, 'triangle', 0.045), 72);
+            setTimeout(() => playTone(1090, 100, 'triangle', 0.042), 144);
+            setTimeout(() => playTone(1440, 145, 'sine', 0.03), 230);
+        } else if (kind === 'combo') {
+            playTone(520, 45, 'sine', 0.028);
+            setTimeout(() => playTone(680, 48, 'sine', 0.024), 32);
+            setTimeout(() => playTone(880, 62, 'triangle', 0.02), 72);
+        } else if (kind === 'countdown') {
+            playTone(420, 55, 'square', 0.03);
+        } else if (kind === 'duelWin') {
+            playTone(720, 75, 'triangle', 0.05);
+            setTimeout(() => playTone(960, 85, 'triangle', 0.045), 62);
+            setTimeout(() => playTone(1260, 110, 'triangle', 0.04), 136);
+        } else if (kind === 'duelLose') {
+            playTone(230, 120, 'sawtooth', 0.04);
+            setTimeout(() => playTone(170, 140, 'sawtooth', 0.032), 82);
+        } else if (kind === 'opPlus') {
+            playTone(700, 60, 'sine', 0.03);
+            setTimeout(() => playTone(930, 70, 'triangle', 0.022), 40);
+        } else if (kind === 'opMinus') {
+            playTone(520, 70, 'triangle', 0.03);
+            setTimeout(() => playTone(400, 80, 'sine', 0.024), 45);
+        } else if (kind === 'opMul') {
+            playTone(620, 52, 'square', 0.03);
+            setTimeout(() => playTone(820, 60, 'square', 0.022), 36);
+        } else if (kind === 'opDiv') {
+            playTone(760, 60, 'sine', 0.028);
+            setTimeout(() => playTone(640, 68, 'triangle', 0.02), 44);
         }
     } catch (e) {}
+}
+
+function playOpSfx(op) {
+    const map = { '+': 'opPlus', '-': 'opMinus', 'x': 'opMul', '*': 'opMul', '/': 'opDiv' };
+    const kind = map[op || 'x'] || 'opMul';
+    playSfx(kind);
 }
 
 // ══════════════════════════════════════════
@@ -2819,13 +3380,25 @@ let challengeTimer    = null;
 let challengeTimeLeft = 60;
 let challengePts      = 0;
 let challengeQ        = null;
+let challengeHits     = 0;
+let challengeMiss     = 0;
+
+function updateChallengeKpi() {
+    const hitsEl = document.getElementById('cHits');
+    const missEl = document.getElementById('cMiss');
+    if (hitsEl) hitsEl.textContent = String(challengeHits);
+    if (missEl) missEl.textContent = String(challengeMiss);
+}
 
 function openChallenge() {
     cancelQuizTimeout();
     challengeTimeLeft = 60;
     challengePts      = 0;
+    challengeHits     = 0;
+    challengeMiss     = 0;
     document.getElementById('cTime').textContent  = 60;
     document.getElementById('cScore').textContent = 0;
+    updateChallengeKpi();
 
     showScreen('sChallenge','Desafio Relampago','60 segundos!');
     nextChallengeQ();
@@ -2834,6 +3407,7 @@ function openChallenge() {
         challengeTimeLeft--;
         document.getElementById('cTime').textContent = challengeTimeLeft;
         if (challengeTimeLeft <= 10) document.getElementById('cTime').style.color = '#FF5252';
+        if (challengeTimeLeft > 0 && challengeTimeLeft <= 5) playSfx('countdown');
         if (challengeTimeLeft <= 0) endChallenge();
     }, 1000);
 }
@@ -2847,13 +3421,18 @@ function nextChallengeQ() {
     buildNumpad('cInput', 'cNumpad', val => {
         if (parseInt(val) === challengeQ.answer) {
             challengePts += 10;
+            challengeHits++;
             state.totalCorrect++;
             showFeedback('\u2705');
+            playOpSfx('x');
         } else {
+            challengeMiss++;
             state.totalWrong++;
             showFeedback('\u274C');
+            playOpSfx('x');
         }
         document.getElementById('cScore').textContent = challengePts;
+        updateChallengeKpi();
         saveState();
         nextChallengeQ();
     });
@@ -2962,7 +3541,68 @@ function openStats() {
         weakDiv.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:.88em;padding:10px">Jogue mais para ver sua analise de desempenho!</div>';
     }
 
+    renderAchievements(pctGlobal);
+
     showScreen('sStats','Meu Progresso','Veja como esta indo!');
+}
+
+function renderAchievements(globalAccuracy) {
+    const wrap = document.getElementById('achievementsWrap');
+    if (!wrap) return;
+
+    const lessons = Object.keys(state.lessonsCompleted || {}).length;
+    const mastery = Object.keys(state.tabuadasMastered || {}).length;
+    const stars = Number(state.stars || 0);
+    const challenge = Number(state.challengeRecord || 0);
+    const total = Number(state.totalCorrect || 0) + Number(state.totalWrong || 0);
+
+    const cards = [
+        { token:'stars-15', icon:'🏅', title:'Primeiras Estrelas', desc:'Conquiste 15 estrelas', done: stars >= 15 },
+        { token:'lessons-8', icon:'📚', title:'Trilha Concluída', desc:'Complete 8 lições', done: lessons >= 8 },
+        { token:'master-7', icon:'🧠', title:'Mestre das Tabuadas', desc:'Domine 7 tabuadas', done: mastery >= 7 },
+        { token:'acc-85', icon:'🎯', title:'Precisão Elite', desc:'Acerte 85% ou mais', done: globalAccuracy >= 85 && total >= 20 },
+        { token:'challenge-80', icon:'⚡', title:'Velocista', desc:'Faça 80+ no desafio', done: challenge >= 80 },
+        { token:'veteran-200', icon:'🔥', title:'Veterano', desc:'Responda 200 questões', done: total >= 200 },
+        { token:'secret-perfect', icon:'👑', title:'Coroa Secreta', desc:'Domine 10 tabuadas e 120+ no desafio', done: mastery >= 10 && challenge >= 120, secret: true },
+        { token:'secret-legend', icon:'🛡️', title:'Lenda da Arena', desc:'70 estrelas e precisão acima de 92%', done: stars >= 70 && globalAccuracy >= 92 && total >= 80, secret: true },
+    ];
+
+    let unlocked = {};
+    try {
+        unlocked = JSON.parse(localStorage.getItem('tabuada_ach_unlock_v1') || '{}') || {};
+    } catch(e) {
+        unlocked = {};
+    }
+
+    const freshUnlocks = [];
+
+    wrap.innerHTML = '';
+    cards.forEach(c => {
+        const known = !!unlocked[c.token];
+        const isNew = c.done && !known;
+        if (isNew) {
+            unlocked[c.token] = 1;
+            freshUnlocks.push(c);
+        }
+
+        const el = document.createElement('div');
+        el.className = 'ach-item ' + (c.done ? 'done' : 'locked') + (isNew ? ' new' : '');
+        const title = (c.secret && !c.done) ? 'Emblema Secreto' : c.title;
+        const desc = (c.secret && !c.done) ? 'Continue jogando para descobrir' : c.desc;
+        el.innerHTML = '<div class="ach-icon">' + (c.done || !c.secret ? c.icon : '❔') + '</div>' +
+            '<div class="ach-info"><h4>' + title + '</h4><p>' + desc + '</p>' +
+            (c.secret ? '<span class="ach-secret">Secreto</span>' : '') + '</div>';
+        wrap.appendChild(el);
+    });
+
+    try {
+        localStorage.setItem('tabuada_ach_unlock_v1', JSON.stringify(unlocked));
+    } catch(e) {}
+
+    if (freshUnlocks.length > 0) {
+        playSfx('win');
+        setTimeout(() => launchConfetti(), 120);
+    }
 }
 
 // ══════════════════════════════════════════
@@ -3958,6 +4598,8 @@ function openGames() {
           name:'Estoura Balao',      desc:'Estoure o balao com a resposta certa!', fn: openBalloonGame },
         { icon:'\uD83D\uDD17', color:'#00BCD4', grad:'linear-gradient(135deg,#00BCD4,#80DEEA)',
           name:'Conecta Matematica', desc:'Conecte cada conta com seu resultado!', fn: openOrderGame },
+        { icon:'\u2694\uFE0F', color:'#3F51B5', grad:'linear-gradient(135deg,#3F51B5,#5C6BC0)',
+          name:'Duelo Relampago',    desc:'Voce contra o bot: primeiro a 5 pontos!', fn: openDuelGame },
         { icon:'\uD83C\uDFB5', color:'#6C63FF', grad:'linear-gradient(135deg,#6C63FF,#FF6584)',
           name:'Soma Musical',        desc:'Ritmo + soma com narrador!', fn: openMusicAddGame },
         { icon:'\uD83D\uDD0E', color:'#4CAF50', grad:'linear-gradient(135deg,#4CAF50,#8BC34A)',
@@ -3975,6 +4617,121 @@ function openGames() {
         grid.appendChild(card);
     });
     showScreen('sGames', 'Jogos', 'Escolha e divirta-se!');
+}
+
+let duel = { active:false, me:0, bot:0, timer:6, q:null, countdown:null, lock:false };
+
+function openDuelGame() {
+    showScreen('sDuel', 'Duelo Relampago', 'Primeiro a 5 pontos vence');
+    startDuelGame();
+}
+
+function stopDuelGame() {
+    if (duel.countdown) {
+        clearInterval(duel.countdown);
+        duel.countdown = null;
+    }
+}
+
+function startDuelGame() {
+    stopDuelGame();
+    duel.active = true;
+    duel.me = 0;
+    duel.bot = 0;
+    duel.lock = false;
+    document.getElementById('duelMe').textContent = '0';
+    document.getElementById('duelBot').textContent = '0';
+    document.getElementById('duelNote').textContent = 'Primeiro a 5 pontos vence.';
+    nextDuelRound();
+}
+
+function nextDuelRound() {
+    if (!duel.active) return;
+    duel.lock = false;
+    duel.timer = 6;
+    const a = Math.floor(Math.random() * 10) + 1;
+    const b = Math.floor(Math.random() * 10) + 1;
+    const answer = a * b;
+    duel.q = { a, b, answer };
+
+    const pool = new Set([answer]);
+    while (pool.size < 4) {
+        const fake = answer + (Math.floor(Math.random() * 13) - 6);
+        if (fake > 0 && fake !== answer) pool.add(fake);
+    }
+    const arr = shuffleArr([...pool]);
+
+    document.getElementById('duelQ').innerHTML = `<span class="hl">${a}</span> &times; <span class="hl">${b}</span> = ?`;
+    document.getElementById('duelTimer').textContent = String(duel.timer);
+
+    const opts = document.getElementById('duelOpts');
+    opts.innerHTML = '';
+    arr.forEach(v => {
+        const bEl = document.createElement('button');
+        bEl.className = 'duel-opt';
+        bEl.textContent = String(v);
+        bEl.onclick = () => chooseDuelAnswer(v, bEl);
+        opts.appendChild(bEl);
+    });
+
+    stopDuelGame();
+    duel.countdown = setInterval(() => {
+        if (!duel.active) { stopDuelGame(); return; }
+        duel.timer--;
+        document.getElementById('duelTimer').textContent = String(duel.timer);
+        if (duel.timer <= 0) {
+            stopDuelGame();
+            if (duel.lock) return;
+            duel.lock = true;
+            duel.bot++;
+            document.getElementById('duelBot').textContent = String(duel.bot);
+            document.getElementById('duelNote').textContent = 'Tempo esgotado! O bot marcou ponto.';
+            checkDuelEndOrContinue();
+        }
+    }, 1000);
+}
+
+function chooseDuelAnswer(val, btn) {
+    if (!duel.active || duel.lock) return;
+    duel.lock = true;
+    stopDuelGame();
+
+    const isRight = val === duel.q.answer;
+    if (isRight) {
+        duel.me++;
+        btn.classList.add('good');
+        playSfx('correct');
+        document.getElementById('duelNote').textContent = 'Excelente reflexo!';
+    } else {
+        duel.bot++;
+        btn.classList.add('bad');
+        playSfx('wrong');
+        document.getElementById('duelNote').textContent = `Quase! Resposta correta: ${duel.q.answer}`;
+    }
+    document.getElementById('duelMe').textContent = String(duel.me);
+    document.getElementById('duelBot').textContent = String(duel.bot);
+
+    checkDuelEndOrContinue();
+}
+
+function checkDuelEndOrContinue() {
+    if (duel.me >= 5 || duel.bot >= 5) {
+        duel.active = false;
+        if (duel.me > duel.bot) {
+            state.points += 40;
+            state.stars += 1;
+            saveState();
+            playSfx('duelWin');
+            document.getElementById('duelNote').textContent = 'Vitoria epica! +40 pts e +1 estrela.';
+            launchConfetti();
+        } else {
+            playSfx('duelLose');
+            document.getElementById('duelNote').textContent = 'O bot venceu desta vez. Tente outra!';
+        }
+        return;
+    }
+    playSfx('combo');
+    setTimeout(nextDuelRound, 700);
 }
 
 let ma = { active:false, score:0, streak:0, q:null, beatTimer:null, beatStep:0 };
