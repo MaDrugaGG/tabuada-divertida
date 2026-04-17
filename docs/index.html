@@ -5,42 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#6C63FF">
+    <meta name="theme-color" content="#1240AB">
     <title>Tabuada Divertida</title>
     <link rel="manifest" href="manifest.json">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
         :root {
-            --primary: #6C63FF;
-            --success: #4CAF50;
-            --danger: #FF5252;
-            --warning: #FFB74D;
-            --bg: #F3EEFF;
-            --card: #FFFFFF;
-            --text: #333333;
-            --muted: #777777;
+            --primary: #1240AB;
+            --primary-soft: #3A69D3;
+            --success: #1E8E5A;
+            --danger: #D9384B;
+            --warning: #E58A00;
+            --bg: #EEF3FF;
+            --card: rgba(255, 255, 255, 0.9);
+            --text: #1A2140;
+            --muted: #5A658A;
+            --border: rgba(18, 64, 171, 0.12);
+            --shadow-soft: 0 8px 30px rgba(15, 41, 102, 0.12);
+            --shadow-strong: 0 16px 42px rgba(12, 34, 90, 0.22);
         }
 
         html {
-            background: linear-gradient(160deg, #f3eeff 0%, #fff0f8 50%, #eef3ff 100%) fixed;
+            background:
+                radial-gradient(circle at 12% 12%, rgba(58, 105, 211, 0.2) 0 18%, transparent 42%),
+                radial-gradient(circle at 86% 8%, rgba(20, 164, 132, 0.16) 0 12%, transparent 38%),
+                linear-gradient(165deg, #eaf0ff 0%, #f8fbff 45%, #e9f7f3 100%) fixed;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Avenir Next', 'Nunito', 'Trebuchet MS', sans-serif;
             background: transparent;
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
+            letter-spacing: .1px;
         }
 
         /* ── HEADER ── */
         .header {
-            background: linear-gradient(135deg, #6C63FF, #FF6584);
+            background:
+                radial-gradient(circle at 90% -40%, rgba(255,255,255,.24), transparent 50%),
+                linear-gradient(135deg, #123A9C 0%, #1A5AD4 48%, #167A90 100%);
             color: white;
-            padding: 16px 20px 14px;
+            padding: 18px 20px 16px;
             text-align: center;
             position: relative;
-            box-shadow: 0 4px 15px rgba(108,99,255,.3);
+            box-shadow: var(--shadow-strong);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            border: 1px solid rgba(255,255,255,.14);
         }
         .header-stickers { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
         .hdr-sticker {
@@ -90,8 +103,8 @@
             0%,100% { transform: translateY(0) rotate(var(--rr, 0deg)); opacity: .65; }
             50%     { transform: translateY(-5px) rotate(var(--rr, 0deg)); opacity: .95; }
         }
-        .header h1 { font-size: 1.6em; }
-        .header .subtitle { font-size: .85em; opacity: .9; margin-top: 2px; }
+        .header h1 { font-size: 1.62em; font-weight: 900; letter-spacing: .3px; }
+        .header .subtitle { font-size: .84em; opacity: .92; margin-top: 2px; }
         .score-bar {
             display: flex; justify-content: center; gap: 14px;
             margin-top: 8px; font-size: .9em;
@@ -99,7 +112,9 @@
         .badge {
             display: inline-block;
             background: rgba(255,255,255,.2);
+            border: 1px solid rgba(255,255,255,.24);
             padding: 3px 12px; border-radius: 20px;
+            backdrop-filter: blur(4px);
         }
         .back-btn {
             position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
@@ -124,7 +139,7 @@
         .back-btn:active { background: rgba(255,255,255,.4); }
 
         /* ── SCREENS ── */
-        .screen { display: none; padding: 16px; max-width: 480px; margin: 0 auto; }
+        .screen { display: none; padding: 18px 16px; max-width: 480px; margin: 0 auto; }
         .screen.active { display: block; animation: fadeIn .25s ease; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
@@ -133,30 +148,50 @@
 
         /* ── MENU ── */
         .menu-card {
-            background: var(--card); border-radius: 18px; padding: 18px 20px;
-            margin-bottom: 12px; box-shadow: 0 3px 12px rgba(0,0,0,.07);
-            cursor: pointer; display: flex; align-items: center; gap: 14px;
-            transition: transform .15s;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: transform .18s, box-shadow .18s, border-color .18s;
+            backdrop-filter: blur(8px);
         }
-        .menu-card:active { transform: scale(.97); }
+        .menu-card:active {
+            transform: scale(.98);
+            border-color: rgba(18, 64, 171, 0.25);
+            box-shadow: 0 10px 28px rgba(15, 41, 102, 0.2);
+        }
         .menu-card .icon {
-            font-size: 2.2em; width: 54px; height: 54px;
+            font-size: 2.05em; width: 54px; height: 54px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 14px; flex-shrink: 0;
+            border-radius: 16px; flex-shrink: 0;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.35);
         }
-        .menu-card .info h2 { font-size: 1.1em; margin-bottom: 3px; }
-        .menu-card .info p  { font-size: .82em; color: var(--muted); }
-        .icon-study     { background: linear-gradient(135deg,#E8F5E9,#C8E6C9); }
-        .icon-lesson    { background: linear-gradient(135deg,#E3F2FD,#BBDEFB); }
-        .icon-challenge { background: linear-gradient(135deg,#FFF3E0,#FFE0B2); }
-        .icon-stats     { background: linear-gradient(135deg,#F3E5F5,#E1BEE7); }
-        .icon-runner  { background: linear-gradient(135deg,#FFF9C4,#FFF176); }
-        .icon-balloon { background: linear-gradient(135deg,#FCE4EC,#F8BBD0); }
-        .icon-order   { background: linear-gradient(135deg,#E0F2F1,#B2DFDB); }
+        .menu-card .info h2 { font-size: 1.08em; margin-bottom: 3px; font-weight: 800; color: #1A2450; }
+        .menu-card .info p  { font-size: .8em; color: var(--muted); }
+        .icon-study     { background: linear-gradient(135deg,#d8f4e5,#c0ebd8); }
+        .icon-lesson    { background: linear-gradient(135deg,#d9e8ff,#bcd5ff); }
+        .icon-challenge { background: linear-gradient(135deg,#ffe7cb,#ffd49b); }
+        .icon-stats     { background: linear-gradient(135deg,#e8e2ff,#d6cbff); }
+        .icon-runner    { background: linear-gradient(135deg,#fff1b8,#ffe084); }
+        .icon-balloon   { background: linear-gradient(135deg,#ffe0ea,#ffc6d8); }
+        .icon-order     { background: linear-gradient(135deg,#d5f4f2,#b8ebe5); }
 
         .creator-badge {
-            text-align: center; margin-top: 10px; padding: 10px;
-            color: var(--muted); font-size: .78em;
+            text-align: center;
+            margin-top: 10px;
+            padding: 12px;
+            color: var(--muted);
+            font-size: .76em;
+            background: rgba(255,255,255,.62);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(14, 35, 88, .08);
         }
         .creator-badge span { font-weight: bold; color: var(--primary); }
 
@@ -243,18 +278,26 @@
             display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin: 12px 0;
         }
         .tabuada-btn {
-            background: var(--card); border: 3px solid #E0E0E0;
-            border-radius: 18px; padding: 10px 4px 8px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-            cursor: pointer; transition: all .18s; position: relative;
-            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+            background: var(--card);
+            border: 2px solid rgba(18, 64, 171, .14);
+            border-radius: 18px;
+            padding: 10px 4px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            cursor: pointer;
+            transition: all .18s;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(14, 35, 88, .08);
         }
         .tabuada-btn .tb-animal { font-size: 1.7em; line-height: 1; }
         .tabuada-btn .tb-num {
-            font-size: 1.05em; font-weight: bold; color: var(--primary); line-height: 1;
+            font-size: 1.05em; font-weight: 800; color: var(--primary); line-height: 1;
         }
-        .tabuada-btn:active { background: #ede9ff; border-color: var(--primary); transform: scale(.93); }
-        .tabuada-btn.completed { border-color: var(--success); background: linear-gradient(145deg,#f0fff4,#fff); }
+        .tabuada-btn:active { background: #e8efff; border-color: var(--primary); transform: scale(.94); }
+        .tabuada-btn.completed { border-color: var(--success); background: linear-gradient(145deg,#e9fff2,#fff); }
         .tabuada-btn.completed .tb-num { color: var(--success); }
         .tabuada-btn.completed::after {
             content: '⭐'; position: absolute; top: -7px; right: -5px; font-size: .75em;
@@ -422,13 +465,15 @@
         /* ── BOTOES ── */
         .btn {
             display: block; width: 100%; padding: 14px; border: none;
-            border-radius: 14px; font-size: 1.05em; font-weight: bold;
-            cursor: pointer; margin: 8px 0; transition: transform .15s, opacity .15s;
+            border-radius: 14px; font-size: 1.02em; font-weight: 800;
+            cursor: pointer; margin: 8px 0;
+            transition: transform .15s, opacity .15s, box-shadow .15s, filter .15s;
+            box-shadow: 0 8px 22px rgba(16, 40, 102, .16);
         }
-        .btn:active { transform: scale(.96); opacity: .9; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-success { background: var(--success); color: white; }
-        .btn-danger  { background: var(--danger);  color: white; }
+        .btn:active { transform: scale(.97); opacity: .96; }
+        .btn-primary { background: linear-gradient(135deg, #123FA8, #2F66D7); color: white; }
+        .btn-success { background: linear-gradient(135deg, #1b8f58, #30ab73); color: white; }
+        .btn-danger  { background: linear-gradient(135deg, #c92f46, #e14f63);  color: white; }
         .btn-secondary {
             background: white;
             color: var(--text);
@@ -471,19 +516,24 @@
 
         /* ── FUNDO PADRAO ── */
         #bgPattern {
-            position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: .95;
         }
         #bgPattern::before {
             content: '';
-            position: absolute; inset: 0;
+            position: absolute;
+            inset: 0;
             background:
-                radial-gradient(circle at 10% 15%, rgba(108,99,255,0.15) 60px, transparent 60px),
-                radial-gradient(circle at 90% 10%, rgba(255,101,132,0.13) 50px, transparent 50px),
-                radial-gradient(circle at 50% 48%, rgba(108,99,255,0.09) 80px, transparent 80px),
-                radial-gradient(circle at 80% 72%, rgba(255,101,132,0.12) 65px, transparent 65px),
-                radial-gradient(circle at 18% 78%, rgba(108,99,255,0.11) 55px, transparent 55px),
-                radial-gradient(circle at 62% 88%, rgba(255,101,132,0.10) 45px, transparent 45px),
-                radial-gradient(circle at 35% 35%, rgba(76,175,80,0.07)   40px, transparent 40px);
+                radial-gradient(circle at 8% 18%, rgba(58,105,211,0.18) 58px, transparent 58px),
+                radial-gradient(circle at 92% 12%, rgba(22,122,144,0.15) 46px, transparent 46px),
+                radial-gradient(circle at 54% 45%, rgba(18,64,171,0.11) 72px, transparent 72px),
+                radial-gradient(circle at 76% 75%, rgba(30,142,90,0.10) 62px, transparent 62px),
+                radial-gradient(circle at 16% 78%, rgba(58,105,211,0.11) 48px, transparent 48px),
+                radial-gradient(circle at 60% 90%, rgba(22,122,144,0.09) 42px, transparent 42px);
         }
         #bgPattern span { position: absolute; font-weight: bold; user-select: none; line-height: 1; }
 
@@ -936,7 +986,7 @@
         </div>
     </div>
 
-    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><small style="opacity:.6;font-size:.9em">v2.3.10</small><br><small style="opacity:.55;font-size:.82em">Beta &bull; Em desenvolvimento</small></div>
+    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><small style="opacity:.6;font-size:.9em">v2.4.0</small><br><small style="opacity:.55;font-size:.82em">Visual Premium &bull; Atualização segura</small></div>
 </div>
 
 <!-- ══ ESTUDO: ESCOLHER TABUADA ══ -->
@@ -2772,7 +2822,7 @@ initHeaderStickers();
 })();
 
 // ── VERSAO ATUAL DO APP ──
-const APP_VERSION = '2.3.12';
+const APP_VERSION = '2.4.0';
 
 function getVersionJsonBaseUrl() {
     if (window.Capacitor || window.cordova) {
