@@ -963,6 +963,405 @@
             color: var(--muted);
             margin-bottom: 6px;
         }
+
+        /* ── REVOLUTION UI: GLOBAL OVERRIDES ── */
+        :root {
+            --primary: #0b3a8f;
+            --primary-soft: #2f73ea;
+            --accent: #0d8c86;
+            --text: #0f1b3d;
+            --muted: #53628f;
+            --border: rgba(11, 58, 143, 0.16);
+            --card: rgba(255, 255, 255, 0.94);
+            --surface-grad: linear-gradient(145deg, rgba(255,255,255,.96), rgba(245,250,255,.88));
+            --shadow-soft: 0 12px 30px rgba(14, 38, 99, 0.14);
+            --shadow-mid: 0 18px 38px rgba(10, 31, 86, 0.2);
+            --shadow-strong: 0 24px 54px rgba(8, 24, 66, 0.28);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            width: 320px;
+            height: 320px;
+            right: -150px;
+            top: 26%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(43,115,234,.2), transparent 68%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .screen {
+            position: relative;
+            padding: 18px 16px 26px;
+        }
+        .screen.active {
+            animation: screenReveal .32s cubic-bezier(.2,.8,.25,1);
+        }
+        @keyframes screenReveal {
+            from { opacity: 0; transform: translateY(10px) scale(.994); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .section-title {
+            font-size: 1.02em;
+            letter-spacing: .28px;
+            text-transform: uppercase;
+            font-weight: 900;
+            color: #25396d;
+            margin: 14px 0 12px;
+        }
+
+        .study-table,
+        .lesson-card,
+        .stat-card,
+        .weak-table-item,
+        .adv-progress,
+        .adv-phase,
+        .op-card,
+        .diff-card,
+        .op-header,
+        .ma-wrap,
+        .rn-question,
+        .bl-qbox,
+        .od-item,
+        .od-result,
+        .quiz-area,
+        .result-wrap {
+            background: var(--surface-grad);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .quiz-area,
+        .result-wrap,
+        .ma-wrap,
+        .od-result {
+            border-radius: 22px;
+            padding: 16px 14px;
+        }
+
+        .tabuada-btn {
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--surface-grad);
+            box-shadow: 0 10px 20px rgba(17, 48, 120, .12);
+            min-height: 86px;
+        }
+        .tabuada-btn:active { transform: translateY(1px) scale(.98); }
+        .tabuada-btn.completed {
+            background: linear-gradient(145deg,#ebfff6,#f9fffc);
+            box-shadow: 0 10px 24px rgba(30,142,90,.18);
+        }
+
+        .study-row {
+            border-bottom: 1px dashed rgba(24, 56, 130, .17);
+            font-size: 1.2em;
+            padding: 12px;
+        }
+        .study-row .result {
+            color: #0a4ca2;
+            min-width: 42px;
+            text-shadow: 0 2px 8px rgba(43,115,234,.18);
+        }
+
+        .study-op-btn,
+        .study-narrator {
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: linear-gradient(140deg,#fff,#f2f7ff);
+            box-shadow: 0 8px 16px rgba(17,49,122,.1);
+        }
+        .study-op-btn.active {
+            background: linear-gradient(140deg,#e7efff,#f8fbff);
+            border-color: rgba(11,58,143,.42);
+        }
+
+        .level-bar,
+        .adv-prog-bar,
+        .rn-speed-track,
+        .weak-mini-bar {
+            height: 11px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, rgba(181,198,232,.75), rgba(220,230,247,.72));
+        }
+        .level-bar-fill,
+        .adv-prog-fill {
+            background: linear-gradient(90deg,#0e4db8,#22a39d);
+        }
+
+        .lesson-card,
+        .adv-phase,
+        .op-card,
+        .diff-card {
+            border-radius: 20px;
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        .lesson-card::before,
+        .adv-phase::before,
+        .op-card::before,
+        .diff-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255,255,255,.4), transparent 34%, transparent 68%, rgba(255,255,255,.2));
+            pointer-events: none;
+        }
+        .lesson-card:active,
+        .adv-phase:active,
+        .op-card:active,
+        .diff-card:active {
+            transform: translateY(1px) scale(.988);
+            border-color: rgba(11,58,143,.32);
+            box-shadow: var(--shadow-mid);
+        }
+        .lesson-number,
+        .adv-phase-icon,
+        .op-symbol,
+        .op-header-symbol {
+            box-shadow: 0 10px 18px rgba(10,29,80,.22);
+        }
+
+        .quiz-progress {
+            gap: 7px;
+            margin-bottom: 18px;
+        }
+        .quiz-dot {
+            width: 10px;
+            height: 10px;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.75);
+        }
+        .quiz-question {
+            margin: 14px 0 18px;
+            font-size: clamp(2em, 7vw, 2.6em);
+            letter-spacing: .5px;
+            color: #132759;
+        }
+        .quiz-options {
+            gap: 12px;
+            max-width: 330px;
+        }
+        .quiz-option {
+            border-radius: 16px;
+            border: 1px solid rgba(14,58,140,.24);
+            background: linear-gradient(145deg,#ffffff,#f3f7ff);
+            box-shadow: 0 10px 18px rgba(17,47,118,.12);
+            padding: 17px;
+            color: #0f2e73;
+        }
+        .quiz-option:active { transform: translateY(1px) scale(.985); }
+        .quiz-option.correct {
+            background: linear-gradient(145deg,#eafff3,#f4fff8);
+            border-color: rgba(30,142,90,.45);
+            color: #147549;
+        }
+        .quiz-option.wrong {
+            background: linear-gradient(145deg,#fff0f2,#fff7f8);
+            border-color: rgba(217,56,75,.44);
+            color: #b73343;
+        }
+
+        .quiz-input {
+            border-radius: 16px;
+            border: 1px solid rgba(13,58,140,.28);
+            width: 154px;
+            box-shadow: 0 10px 18px rgba(17,47,118,.12);
+            background: linear-gradient(145deg,#fff,#f2f7ff);
+        }
+        .numpad {
+            gap: 10px;
+            max-width: 290px;
+        }
+        .numpad-btn {
+            border-radius: 14px;
+            border: 1px solid rgba(13,58,140,.24);
+            box-shadow: 0 8px 16px rgba(17,47,118,.1);
+            background: linear-gradient(145deg,#fff,#f2f7ff);
+        }
+        .numpad-btn:active { transform: translateY(1px) scale(.985); }
+
+        .challenge-info,
+        .rn-stats,
+        .bl-stats,
+        .od-stats {
+            background: linear-gradient(140deg, rgba(255,255,255,.84), rgba(239,246,255,.86));
+            border: 1px solid rgba(11,58,143,.15);
+            border-radius: 14px;
+            padding: 10px 12px;
+            box-shadow: 0 8px 18px rgba(17,47,118,.1);
+            margin-bottom: 10px;
+        }
+        .challenge-info { justify-content: space-around; }
+
+        .result-score {
+            font-size: 2em;
+            letter-spacing: .25px;
+            color: #0b3a8f;
+        }
+        .result-msg {
+            border: 1px solid rgba(30,142,90,.24);
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(30,142,90,.14);
+        }
+        .result-msg.warn {
+            border-color: rgba(229,138,0,.28);
+            box-shadow: 0 8px 16px rgba(229,138,0,.14);
+        }
+
+        .stats-grid {
+            gap: 12px;
+        }
+        .stat-card {
+            border-radius: 16px;
+            padding: 16px 14px;
+        }
+        .stat-card .val {
+            font-size: 2em;
+            color: #0e418f;
+            text-shadow: 0 3px 12px rgba(47,115,234,.16);
+        }
+
+        .weak-table-item {
+            border-radius: 14px;
+            border: 1px solid rgba(12,58,143,.12);
+        }
+
+        .btn {
+            border-radius: 16px;
+            min-height: 50px;
+            letter-spacing: .2px;
+            box-shadow: 0 14px 24px rgba(11,43,111,.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255,255,255,.3), transparent 35%, transparent 65%, rgba(255,255,255,.14));
+            pointer-events: none;
+        }
+        .btn:active { transform: translateY(1px) scale(.988); }
+        .btn-primary { background: linear-gradient(136deg, #0d3f9f, #2d6ee6); }
+        .btn-success { background: linear-gradient(136deg, #167f51, #23a06a); }
+        .btn-danger  { background: linear-gradient(136deg, #b92e43, #d84d61); }
+        .btn-secondary {
+            background: linear-gradient(140deg,#fff,#f1f6ff);
+            border: 1px solid rgba(11,58,143,.28);
+            color: #133a88;
+            box-shadow: 0 10px 18px rgba(16,48,121,.12);
+        }
+
+        .rn-world,
+        .bl-world {
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,.42);
+            box-shadow: var(--shadow-mid);
+        }
+        .rn-question {
+            border-radius: 16px;
+            border: 1px solid rgba(11,58,143,.28);
+        }
+        .rn-opt,
+        .od-item,
+        .ma-opt,
+        .sh-bubble {
+            border-radius: 14px;
+            border: 1px solid rgba(11,58,143,.24);
+            background: linear-gradient(145deg,#fff,#f3f8ff);
+            box-shadow: 0 8px 16px rgba(16,47,119,.12);
+        }
+
+        .od-area {
+            gap: 12px;
+        }
+        .od-hint {
+            font-size: .84em;
+            margin-bottom: 12px;
+        }
+
+        .adv-phase-badge,
+        .op-badge,
+        .diff-age,
+        .menu-tag,
+        .rn-mode-badge {
+            letter-spacing: .3px;
+            font-weight: 900;
+        }
+
+        .feedback-overlay {
+            padding-bottom: calc(190px + env(safe-area-inset-bottom));
+        }
+
+        @media (min-width: 780px) {
+            .screen {
+                max-width: 640px;
+                padding: 22px 18px 28px;
+            }
+            .quiz-options {
+                max-width: 390px;
+            }
+            .menu-card {
+                padding: 18px 20px;
+            }
+            .op-card,
+            .diff-card,
+            .lesson-card,
+            .adv-phase {
+                padding: 20px 22px;
+            }
+            .rn-world,
+            .bl-world {
+                height: 320px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .screen {
+                padding: 16px 12px 24px;
+            }
+            .menu-hero {
+                padding: 14px 14px 13px;
+                border-radius: 16px;
+            }
+            .tabuada-grid {
+                gap: 8px;
+            }
+            .tabuada-btn {
+                min-height: 80px;
+            }
+            .quiz-question,
+            .ma-q,
+            .sh-q {
+                font-size: clamp(1.78em, 9vw, 2.25em);
+            }
+            .quiz-options {
+                max-width: 100%;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .stat-card[style*='grid-column:span 2'] {
+                grid-column: auto !important;
+            }
+            .od-area {
+                flex-direction: column;
+            }
+            .rn-world,
+            .bl-world {
+                height: 250px;
+            }
+            .sh-grid {
+                gap: 8px;
+            }
+            .sh-bubble {
+                padding: 12px 8px;
+                font-size: 1.28em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -995,7 +1394,7 @@
 <div class="header">
     <button class="back-btn" id="backBtn" aria-label="Voltar">◀</button>
     <h1 id="hTitle">Tabuada Divertida</h1>
-    <p class="subtitle" id="hSub">Aprenda brincando!</p>
+    <p class="subtitle" id="hSub">Aprendizado de alta performance</p>
     <div class="score-bar">
         <span id="hStars">0 &#11088;</span>
         <span id="hPoints">0 pts</span>
@@ -1103,7 +1502,7 @@
 
 <!-- ══ ESTUDO: ESCOLHER TABUADA ══ -->
 <div class="screen" id="sStudySelect">
-    <div class="section-title">Escolha a tabuada:</div>
+    <div class="section-title">Selecione seu modulo de estudo</div>
     <div class="study-topbar">
         <div class="study-ops" id="studyOps"></div>
         <button class="study-narrator" id="narratorBtn" type="button"></button>
@@ -1122,7 +1521,7 @@
 
 <!-- ══ LICOES ══ -->
 <div class="screen" id="sLessons">
-    <div class="section-title">Licoes</div>
+    <div class="section-title">Trilha de Licoes</div>
     <div class="level-info">
         <span id="lvlText">Nivel 1</span>
         <span id="lvlXP">0 / 100 XP</span>
@@ -1159,7 +1558,7 @@
         <button class="btn btn-secondary" id="rStudy" onclick="resultStudyMore()" style="display:none">&#128218; Continuar estudando</button>
         <button class="btn btn-secondary" id="rHome" onclick="resultHome()" style="display:none">&#127968; Voltar ao inicio</button>
     </div>
-    <div class="creator-badge">Criado por <span>David Duarte</span><br><small style="opacity:.55;font-size:.82em">Beta &bull; Em desenvolvimento</small></div>
+    <div class="creator-badge">Criado por <span>David Duarte</span><br><small style="opacity:.55;font-size:.82em">Signature Experience</small></div>
 </div>
 
 <!-- ══ DESAFIO ══ -->
@@ -1177,7 +1576,7 @@
 
 <!-- ══ ESTATISTICAS ══ -->
 <div class="screen" id="sStats">
-    <div class="section-title">Suas Estatisticas</div>
+    <div class="section-title">Painel de Performance</div>
     <div class="stats-grid">
         <div class="stat-card"><h3>Estrelas</h3><div class="val" id="stStars">0</div></div>
         <div class="stat-card"><h3>Pontos</h3><div class="val" id="stPoints">0</div></div>
@@ -1185,9 +1584,9 @@
         <div class="stat-card"><h3>Recorde Desafio</h3><div class="val" id="stChallenge">0</div></div>
         <div class="stat-card" style="grid-column:span 2"><h3>Precisao Global</h3><div class="val" id="stAccuracy">0%</div></div>
     </div>
-    <div class="section-title">Tabuadas Dominadas</div>
+    <div class="section-title">Competencias Dominadas</div>
     <div class="tabuada-grid" id="statsGrid"></div>
-    <div class="section-title">Onde Melhorar</div>
+    <div class="section-title">Foco de Melhoria</div>
     <div class="weak-tables" id="weakTablesDiv"></div>
     <button class="btn btn-danger" style="margin-top:18px" onclick="resetProgress()">&#128465; Resetar Progresso</button>
     <div class="creator-badge">Criado por <span>David Duarte</span></div>
@@ -1275,7 +1674,7 @@
 
 <!-- ══ JOGOS ══ -->
 <div class="screen" id="sGames">
-    <div class="section-title">Escolha um Jogo:</div>
+    <div class="section-title">Arcade Inteligente</div>
     <div class="ops-grid" id="gamesGrid"></div>
 </div>
 
@@ -1311,7 +1710,7 @@
 
 <!-- ══ OPERACOES: ESCOLHER ══ -->
 <div class="screen" id="sOps">
-    <div class="section-title">Escolha a Operacao:</div>
+    <div class="section-title">Laboratorio de Operacoes</div>
     <div class="ops-grid" id="opsGrid"></div>
 </div>
 
@@ -1416,7 +1815,7 @@ function showScreen(id, title, sub) {
 
     document.getElementById('backBtn').classList.toggle('visible', id !== 'sMenu');
     document.getElementById('hTitle').textContent = title || 'Tabuada Divertida';
-    document.getElementById('hSub').textContent   = sub   || 'Aprenda brincando!';
+    document.getElementById('hSub').textContent   = sub   || 'Aprendizado de alta performance';
 
     try { playSfx('nav'); } catch(e) {}
 
@@ -1444,12 +1843,12 @@ function goBack() {
         'sStudy':       () => { initStudyOpsUI(); showScreen('sStudySelect','Estudar','Escolha uma tabuada'); renderStudyGrid(); },
         'sLessons':     () => showScreen('sMenu'),
         'sQuiz':        () => {
-            if (quizOrigin === 'lesson') { showScreen('sLessons','Licoes','Complete todas!'); renderLessons(); }
+            if (quizOrigin === 'lesson') { showScreen('sLessons','Trilha de Licoes','Complete todas!'); renderLessons(); }
             else if (quizOrigin === 'oplesson') { openOpLessons(currentOp, currentDiff); }
             else { showStudyTable(currentTabuada); }
         },
         'sResult':      () => {
-            if (quizOrigin === 'lesson') { showScreen('sLessons','Licoes','Complete todas!'); renderLessons(); }
+            if (quizOrigin === 'lesson') { showScreen('sLessons','Trilha de Licoes','Complete todas!'); renderLessons(); }
             else if (quizOrigin === 'oplesson') { openOpLessons(currentOp, currentDiff); }
             else if (quizOrigin === 'challenge') showScreen('sMenu');
             else { showStudyTable(currentTabuada); }
@@ -1654,7 +2053,7 @@ const LESSONS = [
 
 function openLessons() {
     renderLessons();
-    showScreen('sLessons','Licoes','Complete todas!');
+    showScreen('sLessons','Trilha de Licoes','Complete todas!');
 }
 
 function renderLessons() {
@@ -2056,7 +2455,7 @@ function showResult() {
     // Erros para revisar
     const errDiv = document.getElementById('rErrors');
     if (quizErrors.length > 0) {
-        let html = '<div class="section-title">Revise estes:</div>';
+        let html = '<div class="section-title">Revisao estrategica</div>';
         quizErrors.forEach(e => {
             const errSym = e.op ? ({'+':'+','-':'&minus;','/':'&divide;'}[e.op]) : '&times;';
         html += `<div class="study-row" style="justify-content:center;font-size:1.1em;">
@@ -2120,7 +2519,7 @@ function resultContinue() {
         openOpLessons(currentOp, currentDiff);
     } else if (quizOrigin === 'lesson') {
         renderLessons();
-        showScreen('sLessons','Licoes','Complete todas!');
+        showScreen('sLessons','Trilha de Licoes','Complete todas!');
     } else if (quizOrigin === 'challenge') {
         showScreen('sMenu');
     } else if (quizOrigin === 'adventure') {
