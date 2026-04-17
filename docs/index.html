@@ -1296,6 +1296,183 @@
             padding-bottom: calc(190px + env(safe-area-inset-bottom));
         }
 
+        .welcome-shell {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            padding: 24px 18px 20px;
+            background: linear-gradient(160deg, #071936 0%, #0d3f9f 38%, #12a6b4 100%);
+            border: 1px solid rgba(255,255,255,.26);
+            box-shadow: var(--shadow-strong);
+            color: #eaf2ff;
+        }
+        .welcome-shell::before,
+        .welcome-shell::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .welcome-shell::before {
+            width: 230px;
+            height: 230px;
+            right: -105px;
+            top: -84px;
+            background: radial-gradient(circle, rgba(255,255,255,.24), transparent 65%);
+        }
+        .welcome-shell::after {
+            width: 180px;
+            height: 180px;
+            left: -92px;
+            bottom: -92px;
+            background: radial-gradient(circle, rgba(27,242,222,.38), transparent 70%);
+        }
+        .welcome-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.15);
+            border: 1px solid rgba(255,255,255,.32);
+            font-size: .78em;
+            font-weight: 800;
+            letter-spacing: .35px;
+            text-transform: uppercase;
+        }
+        .welcome-title {
+            margin: 14px 0 8px;
+            font-size: clamp(1.7em, 7vw, 2.2em);
+            line-height: 1.1;
+            letter-spacing: .35px;
+            color: #fff;
+        }
+        .welcome-desc {
+            margin: 0;
+            font-size: .95em;
+            line-height: 1.55;
+            color: rgba(233,242,255,.9);
+        }
+        .welcome-grid {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .welcome-chip {
+            border-radius: 12px;
+            padding: 8px 6px;
+            text-align: center;
+            font-size: .78em;
+            font-weight: 800;
+            border: 1px solid rgba(255,255,255,.23);
+            background: rgba(255,255,255,.12);
+        }
+        .welcome-actions {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .welcome-btn {
+            min-height: 52px;
+            border: 0;
+            border-radius: 15px;
+            font-weight: 800;
+            font-size: 1em;
+            letter-spacing: .18px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,.24);
+        }
+        .welcome-btn.primary {
+            background: linear-gradient(135deg, #ffffff, #e9f4ff);
+            color: #0d3888;
+        }
+        .welcome-btn.ghost {
+            background: rgba(7,18,44,.3);
+            color: #eff6ff;
+            border: 1px solid rgba(255,255,255,.34);
+            box-shadow: none;
+        }
+
+        .menu-spotlight {
+            border-radius: 18px;
+            border: 1px solid rgba(11,58,143,.16);
+            background: linear-gradient(145deg, rgba(255,255,255,.93), rgba(231,244,255,.88));
+            box-shadow: 0 14px 30px rgba(12,38,97,.14);
+            padding: 14px 14px 12px;
+            margin-bottom: 12px;
+        }
+        .menu-spotlight h4 {
+            margin: 0;
+            font-size: 1.02em;
+            color: #102b66;
+        }
+        .menu-spotlight p {
+            margin: 6px 0 10px;
+            font-size: .86em;
+            color: #42537d;
+        }
+        .spot-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .spot-item {
+            border-radius: 12px;
+            background: linear-gradient(150deg,#f7fbff,#edf4ff);
+            border: 1px solid rgba(11,58,143,.15);
+            padding: 9px 8px;
+            text-align: center;
+        }
+        .spot-item .v {
+            display: block;
+            font-size: 1.08em;
+            font-weight: 900;
+            color: #0b3a8f;
+        }
+        .spot-item .k {
+            display: block;
+            margin-top: 2px;
+            font-size: .72em;
+            font-weight: 700;
+            letter-spacing: .18px;
+            text-transform: uppercase;
+            color: #5a6b96;
+        }
+
+        .menu-hub-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            margin: 12px 0 14px;
+        }
+        .hub-tab {
+            border: 1px solid rgba(11,58,143,.19);
+            background: linear-gradient(145deg,#fff,#f2f7ff);
+            border-radius: 12px;
+            min-height: 42px;
+            font-size: .82em;
+            font-weight: 800;
+            color: #1e3a7f;
+            letter-spacing: .18px;
+            cursor: pointer;
+            box-shadow: 0 6px 14px rgba(17,49,122,.1);
+        }
+        .hub-tab.active {
+            background: linear-gradient(140deg,#0f4bb5,#1576d5);
+            color: #fff;
+            border-color: rgba(15,77,182,.64);
+            box-shadow: 0 10px 20px rgba(20,79,176,.24);
+        }
+
+        .menu-card {
+            transition: transform .2s ease, opacity .22s ease, filter .22s ease;
+        }
+        .menu-card.hidden {
+            display: none;
+        }
+
         @media (min-width: 780px) {
             .screen {
                 max-width: 640px;
@@ -1426,8 +1603,27 @@
 </div>
 <div class="confetti-container" id="confettiBox"></div>
 
+<!-- ══ WELCOME ══ -->
+<div class="screen active" id="sWelcome">
+    <div class="section-title">Nova geração da tabuada</div>
+    <div class="welcome-shell">
+        <span class="welcome-badge">⚡ Experiência 2026</span>
+        <h2 class="welcome-title">Aprender matemática agora parece um game premium</h2>
+        <p class="welcome-desc">Nova interface completa, trilhas inteligentes e modos interativos para estudar, competir e evoluir com visual de app de última geração.</p>
+        <div class="welcome-grid">
+            <div class="welcome-chip">Trilhas</div>
+            <div class="welcome-chip">Arcade</div>
+            <div class="welcome-chip">Desafios</div>
+        </div>
+        <div class="welcome-actions">
+            <button class="welcome-btn primary" onclick="enterPlatform()">Entrar na plataforma</button>
+            <button class="welcome-btn ghost" onclick="openStats()">Ver meu progresso</button>
+        </div>
+    </div>
+</div>
+
 <!-- ══ MENU ══ -->
-<div class="screen active" id="sMenu">
+<div class="screen" id="sMenu">
     <div class="section-title">Plataforma de Aprendizado</div>
 
     <div class="menu-hero">
@@ -1440,7 +1636,24 @@
         </div>
     </div>
 
-    <div class="menu-card" onclick="openStudy()">
+    <div class="menu-spotlight">
+        <h4>Seu Command Center</h4>
+        <p>Troque de hub para focar no que importa agora: base, competição ou evolução.</p>
+        <div class="spot-grid">
+            <div class="spot-item"><span class="v" id="menuPulseStars">0</span><span class="k">Estrelas</span></div>
+            <div class="spot-item"><span class="v" id="menuPulseLessons">0</span><span class="k">Lições</span></div>
+            <div class="spot-item"><span class="v" id="menuPulseMastery">0/10</span><span class="k">Domínio</span></div>
+        </div>
+    </div>
+
+    <div class="menu-hub-tabs">
+        <button class="hub-tab active" data-hub-tab="all" onclick="setMenuHub('all')">Todos</button>
+        <button class="hub-tab" data-hub-tab="learn" onclick="setMenuHub('learn')">Aprender</button>
+        <button class="hub-tab" data-hub-tab="play" onclick="setMenuHub('play')">Competir</button>
+        <button class="hub-tab" data-hub-tab="growth" onclick="setMenuHub('growth')">Evoluir</button>
+    </div>
+
+    <div class="menu-card" data-hub="learn" onclick="openStudy()">
         <div class="icon icon-study">&#128218;</div>
         <div class="info">
             <h2>Estudar</h2>
@@ -1448,7 +1661,7 @@
             <span class="menu-tag">Base</span>
         </div>
     </div>
-    <div class="menu-card" onclick="openLessons()">
+    <div class="menu-card" data-hub="learn" onclick="openLessons()">
         <div class="icon icon-lesson">&#127891;</div>
         <div class="info">
             <h2>Licoes</h2>
@@ -1456,7 +1669,7 @@
             <span class="menu-tag">Progressivo</span>
         </div>
     </div>
-    <div class="menu-card" onclick="openOps()">
+    <div class="menu-card" data-hub="learn" onclick="openOps()">
         <div class="icon" style="background:linear-gradient(135deg,#E3F2FD,#90CAF9)">&#10010;</div>
         <div class="info">
             <h2>Operacoes</h2>
@@ -1464,7 +1677,7 @@
             <span class="menu-tag">Completo</span>
         </div>
     </div>
-    <div class="menu-card" onclick="openAdventure()">
+    <div class="menu-card" data-hub="play" onclick="openAdventure()">
         <div class="icon icon-adventure">&#127758;</div>
         <div class="info">
             <h2>Aventura Matematica</h2>
@@ -1472,7 +1685,7 @@
             <span class="menu-tag">Campanha</span>
         </div>
     </div>
-    <div class="menu-card" onclick="openChallenge()">
+    <div class="menu-card" data-hub="play" onclick="openChallenge()">
         <div class="icon icon-challenge">&#9889;</div>
         <div class="info">
             <h2>Desafio Relampago</h2>
@@ -1480,7 +1693,7 @@
             <span class="menu-tag">Sprint</span>
         </div>
     </div>
-    <div class="menu-card" onclick="openGames()">
+    <div class="menu-card" data-hub="play" onclick="openGames()">
         <div class="icon" style="background:linear-gradient(135deg,#FFF9C4,#FFF176)">&#127918;</div>
         <div class="info">
             <h2>Jogos</h2>
@@ -1488,7 +1701,7 @@
             <span class="menu-tag">Arcade</span>
         </div>
     </div>
-    <div class="menu-card" onclick="openStats()">
+    <div class="menu-card" data-hub="growth" onclick="openStats()">
         <div class="icon icon-stats">&#128200;</div>
         <div class="info">
             <h2>Meu Progresso</h2>
@@ -1767,8 +1980,9 @@ function resetProgress() {
 }
 
 function updateHeader() {
-    document.getElementById('hStars').textContent  = state.stars  + ' \u2B50';
+    document.getElementById('hStars').textContent  = state.stars  + ' ⭐';
     document.getElementById('hPoints').textContent = state.points + ' pts';
+    updateMenuPulse();
 }
 
 function initHeaderStickers() {
@@ -1806,16 +2020,22 @@ function initHeaderStickers() {
 // ══════════════════════════════════════════
 //  NAVEGACAO
 // ══════════════════════════════════════════
-let currentScreen = 'sMenu';
+let currentScreen = 'sWelcome';
+let currentMenuHub = 'all';
 
 function showScreen(id, title, sub) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     currentScreen = id;
 
-    document.getElementById('backBtn').classList.toggle('visible', id !== 'sMenu');
+    document.getElementById('backBtn').classList.toggle('visible', id !== 'sMenu' && id !== 'sWelcome');
     document.getElementById('hTitle').textContent = title || 'Tabuada Divertida';
     document.getElementById('hSub').textContent   = sub   || 'Aprendizado de alta performance';
+
+    if (id === 'sMenu') {
+        setMenuHub(currentMenuHub);
+        updateMenuPulse();
+    }
 
     try { playSfx('nav'); } catch(e) {}
 
@@ -1826,7 +2046,38 @@ function showScreen(id, title, sub) {
 function goToMenu() {
     stopChallenge();
     cancelQuizTimeout();
-    showScreen('sMenu');
+    enterPlatform();
+}
+
+function enterPlatform() {
+    showScreen('sMenu', 'Central de Missoes', 'Escolha sua proxima jornada');
+}
+
+function setMenuHub(hub) {
+    currentMenuHub = hub || 'all';
+    const cards = document.querySelectorAll('#sMenu .menu-card[data-hub]');
+    cards.forEach(card => {
+        const tag = card.getAttribute('data-hub');
+        const visible = currentMenuHub === 'all' || tag === currentMenuHub;
+        card.classList.toggle('hidden', !visible);
+    });
+
+    const tabs = document.querySelectorAll('[data-hub-tab]');
+    tabs.forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-hub-tab') === currentMenuHub);
+    });
+}
+
+function updateMenuPulse() {
+    const stars = state && typeof state.stars === 'number' ? state.stars : 0;
+    const lessons = state && state.lessonsCompleted ? Object.keys(state.lessonsCompleted).length : 0;
+    const mastery = state && state.tabuadasMastered ? Object.keys(state.tabuadasMastered).length : 0;
+    const elStars = document.getElementById('menuPulseStars');
+    const elLessons = document.getElementById('menuPulseLessons');
+    const elMastery = document.getElementById('menuPulseMastery');
+    if (elStars) elStars.textContent = stars;
+    if (elLessons) elLessons.textContent = lessons;
+    if (elMastery) elMastery.textContent = mastery + '/10';
 }
 
 function goBack() {
@@ -3317,6 +3568,7 @@ function launchConfetti() {
 // ══════════════════════════════════════════
 updateHeader();
 initHeaderStickers();
+setMenuHub('all');
 
 (function() {
     const symbols = ['\u00D7','\u00F7','+','=','\u2212','2\u00D74','3\u00D73','5\u00D75','6\u00D77','8\u00D79','4\u00D76','7\u00D78','2','3','5','7','9'];
