@@ -1,5 +1,5 @@
-const APP_VERSION = '2.4.2';
-// release-refresh: ui-revolution-2026-04-17-r2
+const APP_VERSION = '2.4.3';
+// release-refresh: ui-revolution-2026-04-17-r3
 const CACHE_NAME = 'tabuada-v' + APP_VERSION;
 const ASSETS = [
     '/',
