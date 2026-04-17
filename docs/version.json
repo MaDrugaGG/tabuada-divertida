@@ -1,5 +1,5 @@
 {
-  "version": "2.4.1",
-  "notes": "v2.4.1: Visual premium refinado + correção para não repetir o aviso de atualização toda vez que abrir.",
-  "apk": "https://github.com/MaDrugaGG/tabuada-divertida/releases/download/v2.4.1/tabuada-divertida.apk"
+  "version": "2.4.2",
+  "notes": "v2.4.2: Redesign completo do app + atualização consistente para dispositivos já instalados.",
+  "apk": "https://github.com/MaDrugaGG/tabuada-divertida/releases/download/v2.4.2/tabuada-divertida.apk"
 }

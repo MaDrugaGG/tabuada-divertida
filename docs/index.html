@@ -1497,7 +1497,7 @@
         </div>
     </div>
 
-    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><small style="opacity:.6;font-size:.9em">v2.4.1</small><br><small style="opacity:.55;font-size:.82em">Design Signature Edition</small></div>
+    <div class="creator-badge">Criado por <span>David Duarte</span> &#127891;<br><small style="opacity:.6;font-size:.9em">v2.4.2</small><br><small style="opacity:.55;font-size:.82em">Design Signature Edition</small></div>
 </div>
 
 <!-- ══ ESTUDO: ESCOLHER TABUADA ══ -->
@@ -3333,7 +3333,7 @@ initHeaderStickers();
 })();
 
 // ── VERSAO ATUAL DO APP ──
-const APP_VERSION = '2.4.1';
+const APP_VERSION = '2.4.2';
 
 function getVersionJsonBaseUrl() {
     if (window.Capacitor || window.cordova) {
@@ -4045,25 +4045,56 @@ showResult = function() {
 };
 
 // ── ADMOB ──
-// ID de teste: use ate criar seu bloco de anuncio no AdMob
-// Depois substitua pelo ID real do seu bloco (ex: ca-app-pub-8537968127598634/XXXXXXXXX)
-const ADMOB_BANNER_ID = 'ca-app-pub-3940256099942544/6300978111'; // TESTE - trocar pelo real
+// 1) Crie os blocos no AdMob (Android e iOS)
+// 2) Substitua os IDs abaixo
+// 3) O app usa teste automaticamente enquanto o ID estiver como 'REPLACE_ME'
+const ADMOB_IDS = {
+    android: {
+        banner: 'ca-app-pub-8537968127598634/REPLACE_ME_ANDROID_BANNER'
+    },
+    ios: {
+        banner: 'ca-app-pub-8537968127598634/REPLACE_ME_IOS_BANNER'
+    },
+    testBanner: 'ca-app-pub-3940256099942544/6300978111'
+};
+
+function getAdMobPlatform() {
+    try {
+        if (window.Capacitor && typeof window.Capacitor.getPlatform === 'function') {
+            return window.Capacitor.getPlatform();
+        }
+    } catch (e) {}
+    return 'web';
+}
+
+function resolveBannerAdId() {
+    const platform = getAdMobPlatform();
+    const raw = ADMOB_IDS[platform] && ADMOB_IDS[platform].banner ? ADMOB_IDS[platform].banner : '';
+    if (!raw || raw.indexOf('REPLACE_ME') !== -1) return ADMOB_IDS.testBanner;
+    return raw;
+}
 
 async function initAdMob() {
     const AdMob = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob;
-    if (!AdMob) return; // nao e app nativo, ignora no navegador
+    if (!AdMob) return; // navegador web: sem plugin nativo
+
     try {
         await AdMob.initialize({
-            tagForChildDirectedTreatment: true,  // app infantil - COPPA
+            tagForChildDirectedTreatment: true,
             tagForUnderAgeOfConsent: true,
         });
+
+        const bannerId = resolveBannerAdId();
         await AdMob.showBanner({
-            adId: ADMOB_BANNER_ID,
+            adId: bannerId,
             adSize: 'ADAPTIVE_BANNER',
             position: 'BOTTOM_CENTER',
             margin: 0,
+            isTesting: bannerId === ADMOB_IDS.testBanner
         });
-    } catch(e) { console.log('AdMob:', e); }
+    } catch (e) {
+        console.log('AdMob:', e);
+    }
 }
 initAdMob();
 </script>
