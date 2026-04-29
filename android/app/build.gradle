@@ -1,14 +1,21 @@
 apply plugin: 'com.android.application'
+import java.util.Properties
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('keystore.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
 android {
-    namespace "com.tabuada.divertida"
+    namespace "com.tabuadadivertida.app"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.tabuada.divertida"
+        applicationId "com.tabuadadivertida.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 204040
-        versionName "2.4.4"
+        versionCode 204042
+        versionName "2.4.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -18,10 +25,12 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('E:/tabuada-app/tabuada-nova.keystore')
-            storePassword 'tabuada123'
-            keyAlias 'tabuada'
-            keyPassword 'tabuada123'
+            if (keystorePropertiesFile.exists()) {
+                storeFile rootProject.file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
         }
     }
     buildTypes {
