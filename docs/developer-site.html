@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>David Duarte Dev - Tabuada Divertida Infantil</title>
+    <meta
+      name="description"
+      content="Site oficial do desenvolvedor do app Tabuada Divertida Infantil com links para Google Play, politica de privacidade e informacoes de suporte."
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f5f3ff;
+        --card: #ffffff;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --primary: #5b21b6;
+        --accent: #f59e0b;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: radial-gradient(circle at top, #ede9fe 0%, var(--bg) 45%, #ffffff 100%);
+        color: var(--text);
+      }
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 20px 64px;
+      }
+      .hero {
+        background: linear-gradient(135deg, #4c1d95, #6d28d9 60%, #8b5cf6);
+        color: #ffffff;
+        border-radius: 28px;
+        padding: 32px;
+        box-shadow: 0 20px 50px rgba(76, 29, 149, 0.25);
+      }
+      .hero h1 {
+        margin: 0 0 12px;
+        font-size: 2rem;
+      }
+      .hero p {
+        margin: 0;
+        max-width: 620px;
+        line-height: 1.7;
+      }
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 14px 18px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 700;
+      }
+      .btn-primary {
+        background: #ffffff;
+        color: var(--primary);
+      }
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.14);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+      .card {
+        background: var(--card);
+        border-radius: 22px;
+        padding: 22px;
+        box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+      }
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 1.1rem;
+      }
+      .card p,
+      .card li {
+        color: var(--muted);
+        line-height: 1.65;
+      }
+      ul {
+        padding-left: 18px;
+        margin: 0;
+      }
+      .badge {
+        display: inline-block;
+        margin-bottom: 14px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        color: #ede9fe;
+        font-size: 0.92rem;
+      }
+      footer {
+        margin-top: 24px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      a {
+        color: var(--primary);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <span class="badge">Site oficial do desenvolvedor</span>
+        <h1>David Duarte Dev</h1>
+        <p>
+          Desenvolvedor do app <strong>Tabuada Divertida Infantil</strong>, uma experiencia
+          educativa para aprender tabuada com jogos, desafios e exercicios de multiplicacao.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.tabuadadivertida.app">Ver na Google Play</a>
+          <a class="btn btn-secondary" href="/privacy-policy.html">Politica de privacidade</a>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Sobre o app</h2>
+          <p>
+            O Tabuada Divertida Infantil foi criado para tornar o estudo da matematica mais leve,
+            bonito e motivador para criancas, estudantes e familias.
+          </p>
+        </article>
+
+        <article class="card">
+          <h2>Recursos principais</h2>
+          <ul>
+            <li>Treino de tabuada</li>
+            <li>Desafios e exercicios de multiplicacao</li>
+            <li>Visual moderno e facil de usar</li>
+            <li>Experiencia pensada para publico infantil</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h2>Suporte</h2>
+          <p>
+            Duvidas, sugestoes ou suporte:
+            <a href="mailto:davidsant9910@gmail.com">davidsant9910@gmail.com</a>
+          </p>
+          <p>
+            Arquivo de autorizacao de anuncios:
+            <a href="/app-ads.txt">app-ads.txt</a>
+          </p>
+        </article>
+      </section>
+
+      <footer>
+        <p>Tabuada Divertida Infantil • pacote <strong>com.tabuadadivertida.app</strong></p>
+      </footer>
+    </main>
+  </body>
+</html>
